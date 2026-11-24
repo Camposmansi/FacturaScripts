@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Recordatorios por email asociados a eventos del calendario Auralis.
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>idevent</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>notification_name</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>offset_value</name>
+        <type>integer</type>
+        <default>10</default>
+    </column>
+    <column>
+        <name>offset_unit</name>
+        <type>character varying(10)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>scheduled_at</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>idworkevent</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>sent</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>sent_at</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <constraint>
+        <name>auralis_cal_event_notif_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <index>
+        <name>auralis_cal_event_notif_idevent_idx</name>
+        <columns>idevent</columns>
+    </index>
+    <index>
+        <name>auralis_cal_event_notif_scheduled_idx</name>
+        <columns>scheduled_at</columns>
+    </index>
+</table>

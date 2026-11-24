@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Notificaciones in-app nativas de Auralis (calendario + novedades).
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>tipo</name>
+        <type>character varying(20)</type>
+    </column>
+    <column>
+        <name>titulo</name>
+        <type>character varying(200)</type>
+    </column>
+    <column>
+        <name>cuerpo</name>
+        <type>text</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>url</name>
+        <type>character varying(250)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>idevent</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>idcalendarnotif</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>leida</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>missed</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>snoozed_until</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>dedup_key</name>
+        <type>character varying(40)</type>
+    </column>
+    <column>
+        <name>referencia</name>
+        <type>character varying(120)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>created_at</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>push_sent_at</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>push_attempts</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>push_retry_at</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>push_estado</name>
+        <type>character varying(32)</type>
+        <null>yes</null>
+    </column>
+    <constraint>
+        <name>auralis_notificaciones_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>auralis_notificaciones_nick_dedup_unique</name>
+        <type>UNIQUE (nick, dedup_key)</type>
+    </constraint>
+    <index>
+        <name>auralis_notificaciones_nick_leida_idx</name>
+        <columns>nick,leida</columns>
+    </index>
+    <index>
+        <name>auralis_notificaciones_nick_snooze_idx</name>
+        <columns>nick,snoozed_until</columns>
+    </index>
+    <index>
+        <name>auralis_notificaciones_tipo_idx</name>
+        <columns>nick,tipo</columns>
+    </index>
+    <index>
+        <name>auralis_notificaciones_tipo_ref_idx</name>
+        <columns>tipo,referencia</columns>
+    </index>
+    <index>
+        <name>auralis_notificaciones_push_estado_idx</name>
+        <columns>push_estado,push_retry_at</columns>
+    </index>
+    <index>
+        <name>auralis_notificaciones_calnotif_nick_idx</name>
+        <columns>idcalendarnotif,nick</columns>
+    </index>
+</table>

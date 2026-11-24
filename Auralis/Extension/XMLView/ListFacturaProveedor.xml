@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Columnas % pagado / por pagar según recibos de la factura de compra.
+-->
+<view>
+    <columns>
+        <column name="auralis-factura-pagado" display="right" order="345">
+            <widget type="zPctBadge" fieldname="zk_pct_pagado" tonefield="zk_pct_pagado_tone"
+                    titlekey="auralis-factura-pagado-ayuda" readonly="true"/>
+        </column>
+        <column name="auralis-factura-por-pagar" display="none" order="346">
+            <widget type="zPctBadge" fieldname="zk_pct_pendiente" tonefield="zk_pct_pendiente_tone"
+                    titlekey="auralis-factura-por-pagar-ayuda" readonly="true"/>
+        </column>
+    </columns>
+</view>

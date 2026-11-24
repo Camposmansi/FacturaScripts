@@ -1,0 +1,575 @@
+{% extends "Master/MicroTemplate.html.twig" %}
+
+{% block messages %}
+    {% include 'Macro/Toasts.html.twig' %}
+    {% from 'Macro/Utils.html.twig' import message as showMessage %}
+    {% set allMessages = log.read('master', ['error', 'critical', 'warning', 'notice', 'info']) | merge(log.read('database', ['error', 'critical', 'warning', 'notice', 'info'])) %}
+    {% set hasLog = allMessages|length > 0 %}
+    {% if hasLog %}
+        <div class="px-2 pt-2 position-absolute top-0 start-0 w-100 z-3">
+            {{ showMessage(log, ['error', 'critical'], 'danger') }}
+            {{ showMessage(log, ['warning'], 'warning') }}
+            {{ showMessage(log, ['notice'], 'success') }}
+            {{ showMessage(log, ['info'], 'info') }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% set maintenanceWarning = settings('auralis', 'login_maintenance_warning') %}
+    {% set loginLeftText = settings('auralis', 'login_left_text', 'Panel de Gestión\nAccede a tu plataforma empresarial') %}
+    {% set loginFooterText = settings('auralis', 'login_footer_text', '© {year} Diseñado por MansiHost.com')|replace({'{year}': 'now'|date('Y')}) %}
+    
+    {% set loginBg = settings('auralis', 'login_bg_image') %}
+    {% set loginLeftImg = settings('auralis', 'login_left_image') %}
+    
+    {% set loginHeaderLogo = settings('auralis', 'login_header_logo') %}
+    {% set loginHeaderLogoHeight = settings('auralis', 'login_header_logo_height', '40') %}
+
+    {% set loginFormLogo = settings('auralis', 'login_logo') ?: 'Dinamic/Assets/Images/auralis_rectangular_ancho_facturascripts.svg' %}
+    {% set loginFormLogoHeight = settings('auralis', 'login_logo_height', '50') %}
+
+    {% set temaColor = settings('auralis', 'tema_color', 'auralis') %}
+
+    <div class="auralis-portal auralis-theme-{{ temaColor }}{% if loginBg %} auralis-portal--custom-bg{% endif %}"
+         {% if loginBg %}style="--auralis-portal-image: url('{{ asset(loginBg) }}');"{% endif %}>
+        <div class="auralis-portal-backdrop" aria-hidden="true"></div>
+        <div class="auralis-portal-orb auralis-portal-orb--one" aria-hidden="true"></div>
+        <div class="auralis-portal-orb auralis-portal-orb--two" aria-hidden="true"></div>
+
+        {% if loginHeaderLogo %}
+            <div class="auralis-portal-corner-brand" aria-hidden="true">
+                <img src="{{ asset(loginHeaderLogo) }}" alt="" style="height: {{ loginHeaderLogoHeight }}px; width: auto;">
+            </div>
+        {% endif %}
+
+        {% if loginLeftImg %}
+            <img src="{{ asset(loginLeftImg) }}" alt="" class="auralis-portal-art" aria-hidden="true">
+        {% endif %}
+
+        <main class="auralis-portal-main">
+            <section class="auralis-portal-card" aria-label="Acceso a Auralis">
+                {% if maintenanceWarning %}
+                    <div class="alert alert-warning d-flex align-items-center mb-4 border-0 auralis-portal-alert" role="alert">
+                        <i class="fa-solid fa-triangle-exclamation fs-5 me-3 text-warning"></i>
+                        <div>{{ maintenanceWarning|e|nl2br }}</div>
+                    </div>
+                {% endif %}
+
+                <div class="auralis-portal-brand text-center">
+                    {% if loginFormLogo %}
+                        <img src="{{ asset(loginFormLogo) }}" alt="Auralis" style="max-height: {{ loginFormLogoHeight }}px; width: auto; max-width: 100%;">
+                    {% else %}
+                        <div class="auralis-portal-wordmark">Auralis</div>
+                    {% endif %}
+                    {% if loginLeftText %}
+                        <p class="auralis-portal-intro mb-0">{{ loginLeftText|e|nl2br }}</p>
+                    {% endif %}
+                </div>
+
+                <form action="{{ asset('login') }}" method="post" class="form auralis-portal-form">
+                    {{ formToken() }}
+                    <input type="hidden" name="action" value="login">
+                    
+                    <div class="mb-3">
+                        <label class="form-label auralis-portal-label">{{ trans('usuario') }}</label>
+                        <div class="input-group input-group-lg auralis-portal-input">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-user" aria-hidden="true"></i>
+                            </span>
+                            <input type="text" name="fsNick" class="form-control" maxlength="50"
+                                   placeholder="Usuario" required autocomplete="username" autofocus/>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label auralis-portal-label">{{ trans('contrasena') }}</label>
+                        <div class="input-group input-group-lg auralis-portal-input">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            </span>
+                            <input type="password" name="fsPassword" class="form-control" maxlength="50"
+                                   placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required autocomplete="current-password"/>
+                            <button class="btn auralis-portal-password-toggle" type="button" id="togglePassword" aria-label="Mostrar u ocultar contraseña">
+                                <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    {% if settings('auralis', 'login_show_forgot_password', true) %}
+                        <div class="auralis-portal-recovery text-end mb-4">
+                            {% if settings('auralis', 'login_custom_password_recovery', false) %}
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#customPasswordModal">
+                                    {{ trans('solicitud-por-email') }}
+                                </a>
+                            {% else %}
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#newPasswordModal">
+                                    {{ trans('resetear-contrasena') }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg auralis-portal-submit">
+                            {{ trans('acceder') }}
+                            <i class="fa-solid fa-arrow-right-long ms-2" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="auralis-portal-card-mark" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                </div>
+            </section>
+        </main>
+
+        <footer class="auralis-portal-footer">{{ auralisFooterHtml(loginFooterText) }}</footer>
+    </div>
+
+    <!-- Modal Recuperación Personalizada por Email -->
+    {% if settings('auralis', 'login_custom_password_recovery', false) %}
+        <div class="modal fade" id="customPasswordModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content border-0 shadow-lg rounded-4">
+                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold text-dark">
+                            <i class="fa-solid fa-paper-plane me-2 text-primary"></i> {{ trans('recuperar-contrasena') }}
+                        </h5>
+                        <button type="button" class="btn-close bg-light rounded-circle p-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="customPasswordForm" method="post" action="{{ asset('AuralisResetPassword') }}">
+                        {{ formToken() }}
+                        <input type="hidden" name="action" value="request-password-reset">
+                        <div class="modal-body px-4 py-3">
+                            <p class="text-muted small mb-3">
+                                {{ trans('recuperar-contrasena-desc') }}
+                            </p>
+                            <div id="customPasswordMsg" class="d-none alert alert-info small rounded-3 mb-3"></div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-secondary">{{ trans('correo-electronico-email') }}</label>
+                                <div class="input-group input-group-lg bg-light rounded-3 border">
+                                    <span class="input-group-text bg-transparent border-0 text-muted"><i class="fa-solid fa-envelope"></i></span>
+                                    <input type="email" name="recovery_email" id="recovery_email" class="form-control bg-transparent border-0" placeholder="Tu correo electrónico" required autocomplete="off"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
+                            <button type="submit" id="btnSendRecovery" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold">{{ trans('enviar-enlace') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const recoveryForm = document.getElementById('customPasswordForm');
+                const recoveryMsg = document.getElementById('customPasswordMsg');
+                const btnSend = document.getElementById('btnSendRecovery');
+
+                if (recoveryForm) {
+                    recoveryForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        btnSend.disabled = true;
+                        btnSend.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>{{ trans("enviando") }}';
+                        
+                        const formData = new FormData(recoveryForm);
+
+                        fetch('{{ asset("AuralisResetPassword") }}', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            btnSend.disabled = false;
+                            btnSend.textContent = '{{ trans("enviar-enlace") }}';
+                            if (data.newToken) {
+                                const csrfInput = recoveryForm.querySelector('input[name="multireqtoken"]');
+                                if (csrfInput) {
+                                    csrfInput.value = data.newToken;
+                                }
+                            }
+                            recoveryMsg.classList.remove('d-none', 'alert-danger', 'alert-info', 'alert-success');
+                            recoveryMsg.classList.add('alert-info');
+                            recoveryMsg.textContent = data.message || '{{ trans("mensaje-recuperacion-enviado") }}';
+                            recoveryForm.reset();
+                        })
+                        .catch(err => {
+                            btnSend.disabled = false;
+                            btnSend.textContent = '{{ trans("enviar-enlace") }}';
+                            recoveryMsg.classList.remove('d-none', 'alert-danger', 'alert-info', 'alert-success');
+                            recoveryMsg.classList.add('alert-info');
+                            recoveryMsg.textContent = '{{ trans("mensaje-recuperacion-enviado") }}';
+                            recoveryForm.reset();
+                        });
+                    });
+                }
+            });
+        </script>
+    {% endif %}
+
+    <!-- Modal Cambio Contraseña (Core) -->
+    <form action="{{ asset('login') }}" method="post" class="form">
+        {{ formToken() }}
+        <input type="hidden" name="action" value="change-password">
+        <div class="modal fade" id="newPasswordModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content border-0 shadow-lg rounded-4">
+                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold text-dark">
+                            <i class="fa-solid fa-user-lock me-2 text-primary"></i> {{ trans('new-password') }}
+                        </h5>
+                        <button type="button" class="btn-close bg-light rounded-circle p-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body px-4">
+                        <a href="{{ asset('AuralisResetPassword') }}" rel="nofollow"
+                           class="btn w-100 btn-light text-primary fw-bold mb-4 rounded-3 py-2">
+                            {{ trans('need-help-password') }}
+                        </a>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">{{ trans('user') }}</label>
+                            <div class="input-group input-group-lg bg-light rounded-3 border">
+                                <span class="input-group-text bg-transparent border-0 text-muted"><i class="fa-solid fa-user"></i></span>
+                                <input type="text" name="fsNewUserPasswd" class="form-control bg-transparent border-0" maxlength="50" required autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">{{ trans('new-password') }}</label>
+                            <div class="input-group input-group-lg bg-light rounded-3 border">
+                                <span class="input-group-text bg-transparent border-0 text-muted"><i class="fa-solid fa-key"></i></span>
+                                <input type="password" name="fsNewPasswd" class="form-control bg-transparent border-0" maxlength="50" required autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">{{ trans('repeat-new-password') }}</label>
+                            <div class="input-group input-group-lg bg-light rounded-3 border">
+                                <span class="input-group-text bg-transparent border-0 text-muted"><i class="fa-solid fa-eye"></i></span>
+                                <input type="password" name="fsNewPasswd2" class="form-control bg-transparent border-0" maxlength="50" required autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary">{{ trans('database') }} {{ trans('db-password') }}</label>
+                            <div class="input-group input-group-lg bg-light rounded-3 border">
+                                <span class="input-group-text bg-transparent border-0 text-muted"><i class="fa-solid fa-database"></i></span>
+                                <input type="password" name="fsDbPasswd" class="form-control bg-transparent border-0" autocomplete="off"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
+                        <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold">{{ trans('save') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis.css') }}?v={{ auralisAssetVersion('Dinamic/Assets/CSS/auralis.css') }}"/>
+    {% for includeView in getIncludeViews('MenuTemplate', 'CssAfter') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+
+    {% set mobileBreakpoint = settings('auralis', 'mobile_breakpoint', '992') %}
+    {% set borderRadiusCards = settings('auralis', 'border_radius_cards', '12') %}
+    {% set borderRadiusBotones = settings('auralis', 'border_radius_botones', '8') %}
+    {% set borderRadiusInputs = settings('auralis', 'border_radius_inputs', '6') %}
+    {% set fontSizeBase = settings('auralis', 'font_size_base', '16') %}
+    {% set fontSizeH2 = settings('auralis', 'font_size_h2', '24') %}
+    {% set fontSizeH4 = settings('auralis', 'font_size_h4', '18') %}
+    {% set fontFamily = settings('auralis', 'tipografia', 'plus_jakarta_sans') %}
+    {% set temaColor = settings('auralis', 'tema_color', 'auralis') %}
+
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-fonts.css') }}?v={{ auralisAssetVersion('Dinamic/Assets/CSS/auralis-fonts.css') }}"/>
+    <style>
+        /* Fuentes cargadas desde Assets/CSS/auralis-fonts.css (sin Google Fonts) */
+
+        body, html {
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #08162c;
+            font-size: {{ fontSizeBase }}px;
+            {% if fontFamily == 'inter' %}
+                font-family: 'Inter', sans-serif;
+            {% elseif fontFamily == 'lato' %}
+                font-family: 'Lato', sans-serif;
+            {% elseif fontFamily == 'merriweather' %}
+                font-family: 'Merriweather', Georgia, serif;
+            {% elseif fontFamily == 'montserrat' %}
+                font-family: 'Montserrat', sans-serif;
+            {% elseif fontFamily == 'nunito' %}
+                font-family: 'Nunito', sans-serif;
+            {% elseif fontFamily == 'open_sans' %}
+                font-family: 'Open Sans', sans-serif;
+            {% elseif fontFamily == 'roboto' %}
+                font-family: 'Roboto', sans-serif;
+            {% elseif fontFamily == 'poppins' %}
+                font-family: 'Poppins', sans-serif;
+            {% elseif fontFamily == 'outfit' %}
+                font-family: 'Outfit', sans-serif;
+            {% elseif fontFamily == 'plus_jakarta_sans' %}
+                font-family: 'Plus Jakarta Sans', sans-serif;
+            {% else %}
+                font-family: system-ui, -apple-system, sans-serif;
+            {% endif %}
+        }
+        
+        body { overflow-x: hidden; }
+
+        .auralis-portal {
+            position: relative;
+            isolation: isolate;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            padding: clamp(1.25rem, 4vw, 3rem) clamp(1rem, 4vw, 3rem) 5.5rem;
+            background:
+                radial-gradient(circle at 16% 18%, rgba(116, 92, 255, .42), transparent 34%),
+                radial-gradient(circle at 84% 82%, rgba(126, 226, 255, .24), transparent 30%),
+                linear-gradient(135deg, #07152b 0%, #15375f 48%, #285eae 100%);
+        }
+
+        .auralis-portal--custom-bg {
+            background-image:
+                linear-gradient(135deg, rgba(5, 18, 39, .88), rgba(28, 74, 128, .62)),
+                var(--auralis-portal-image);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .auralis-portal-backdrop {
+            position: absolute;
+            inset: 0;
+            z-index: -3;
+            opacity: .18;
+            background-image:
+                linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px);
+            background-size: 44px 44px;
+            mask-image: linear-gradient(to bottom, transparent, #000 28%, #000 72%, transparent);
+        }
+
+        .auralis-portal-orb {
+            position: absolute;
+            z-index: -2;
+            width: min(42vw, 560px);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            filter: blur(12px);
+            opacity: .38;
+            pointer-events: none;
+        }
+
+        .auralis-portal-orb--one {
+            top: -24%;
+            left: -12%;
+            background: radial-gradient(circle, rgba(143, 116, 255, .62), transparent 68%);
+        }
+
+        .auralis-portal-orb--two {
+            right: -14%;
+            bottom: -30%;
+            background: radial-gradient(circle, rgba(86, 214, 255, .52), transparent 68%);
+        }
+
+        .auralis-portal-corner-brand {
+            position: absolute;
+            top: clamp(1.25rem, 3vw, 2.25rem);
+            left: clamp(1.25rem, 3vw, 2.5rem);
+            z-index: 2;
+            padding: .65rem .9rem;
+            border: 1px solid rgba(255,255,255,.18);
+            border-radius: 14px;
+            background: rgba(255,255,255,.1);
+            backdrop-filter: blur(12px);
+        }
+
+        .auralis-portal-art {
+            position: absolute;
+            right: clamp(-4rem, 2vw, 2rem);
+            bottom: 1rem;
+            z-index: -1;
+            max-width: min(34vw, 490px);
+            max-height: 62vh;
+            object-fit: contain;
+            opacity: .18;
+            filter: saturate(.85);
+            pointer-events: none;
+        }
+
+        .auralis-portal-main {
+            position: relative;
+            z-index: 1;
+            width: min(100%, 480px);
+        }
+
+        .auralis-portal-card {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(1.55rem, 5vw, 2.65rem);
+            border: 1px solid rgba(255,255,255,.58);
+            border-radius: max({{ borderRadiusCards }}px, 22px);
+            background: rgba(255,255,255,.94);
+            box-shadow: 0 28px 80px rgba(1, 12, 32, .38), inset 0 1px 0 rgba(255,255,255,.72);
+            backdrop-filter: blur(22px);
+        }
+
+        .auralis-portal-alert { border-radius: {{ borderRadiusCards }}px; }
+
+        .auralis-portal-brand { margin-bottom: 2rem; }
+
+        .auralis-portal-intro {
+            margin-top: 1.15rem;
+            color: #617089;
+            font-size: .94rem;
+            line-height: 1.65;
+        }
+
+        .auralis-portal-wordmark {
+            color: #102743;
+            font-size: {{ fontSizeH2 }}px;
+            font-weight: 800;
+            letter-spacing: -.03em;
+        }
+
+        .auralis-portal-label {
+            color: #31435c;
+            font-size: .79rem;
+            font-weight: 750;
+            letter-spacing: .055em;
+            text-transform: uppercase;
+        }
+
+        .auralis-portal-input {
+            overflow: hidden;
+            border: 1px solid #dce4ef;
+            border-radius: {{ borderRadiusInputs }}px;
+            background: #f7f9fc;
+            transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+        }
+
+        .auralis-portal-input:focus-within {
+            border-color: var(--v-primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--v-primary) 13%, transparent);
+        }
+
+        .auralis-portal-input .input-group-text,
+        .auralis-portal-input .form-control,
+        .auralis-portal-password-toggle {
+            border: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        .auralis-portal-input .input-group-text { color: #78869a; }
+        .auralis-portal-input .form-control { color: #14243a; font-size: .98rem; }
+        .auralis-portal-password-toggle { color: #78869a; }
+        .auralis-portal-password-toggle:hover { color: var(--v-primary); }
+
+        .auralis-portal-recovery a {
+            color: var(--v-primary);
+            font-size: .87rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .auralis-portal-recovery a:hover { text-decoration: underline; }
+
+        .auralis-portal-submit {
+            min-height: 54px;
+            border: 0 !important;
+            border-radius: {{ borderRadiusBotones }}px !important;
+            background: linear-gradient(135deg, var(--v-primary), var(--v-primary-hover)) !important;
+            box-shadow: 0 12px 26px color-mix(in srgb, var(--v-primary) 30%, transparent);
+            color: #fff !important;
+            font-weight: 750;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .auralis-portal-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 32px color-mix(in srgb, var(--v-primary) 38%, transparent);
+        }
+
+        .auralis-portal-card-mark {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 4px;
+            opacity: .38;
+        }
+
+        .auralis-portal-card-mark span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--v-primary);
+        }
+
+        .auralis-portal-footer {
+            position: absolute;
+            bottom: 1.4rem;
+            left: 1rem;
+            right: 1rem;
+            z-index: 1;
+            color: rgba(255,255,255,.78);
+            font-size: .78rem;
+            font-weight: 600;
+            letter-spacing: .025em;
+            text-align: center;
+            text-shadow: 0 1px 4px rgba(0,0,0,.25);
+        }
+
+        .auralis-portal-footer a {
+            color: inherit;
+            font-weight: 750;
+            text-decoration: underline;
+            text-decoration-color: rgba(255,255,255,.45);
+            text-underline-offset: 3px;
+        }
+
+        @media (max-width: {{ mobileBreakpoint - 1 }}px) {
+            .auralis-portal { align-items: center; padding-bottom: 4.5rem; overflow-y: auto; }
+            .auralis-portal-corner-brand, .auralis-portal-art { display: none; }
+            .auralis-portal-card { border-radius: max({{ borderRadiusCards }}px, 18px); }
+            .auralis-portal-backdrop { background-size: 34px 34px; }
+        }
+
+        @media (max-width: 420px) {
+            .auralis-portal { padding-left: .75rem; padding-right: .75rem; }
+            .auralis-portal-card { padding: 1.4rem 1.15rem; }
+            .auralis-portal-brand { margin-bottom: 1.5rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .auralis-portal-submit { transition: none; }
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.getElementById('togglePassword');
+            if (togglePassword) {
+                togglePassword.addEventListener('click', function() {
+                    const passInput = document.querySelector('input[name="fsPassword"]');
+                    if (passInput) {
+                        const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passInput.setAttribute('type', type);
+                        this.querySelector('i').classList.toggle('fa-eye');
+                        this.querySelector('i').classList.toggle('fa-eye-slash');
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="auralis_options" title="auralis-apariencia" icon="fa-solid fa-palette" numcolumns="12">
+            <column name="auralis-modo-menu" title="auralis-modo-menu" numcolumns="6" order="100">
+                <widget type="select" fieldname="auralis_modo_menu" translate="true">
+                    <values title="predeterminado-configauralis"></values>
+                    <values title="horizontal">horizontal</values>
+                    <values title="vertical">vertical</values>
+                </widget>
+            </column>
+            <column name="auralis-tema-color" title="auralis-tema-color" numcolumns="6" order="110">
+                <widget type="select" fieldname="auralis_tema_color" translate="true">
+                    <values title="predeterminado-configauralis"></values>
+                    <values title="predeterminado-fs">default</values>
+                    <values title="auralis-claro-desc">auralis</values>
+                    <values title="auralis-oscuro-desc">auralis_dark</values>
+                    <values title="tema-kinetic-desc">kinetic</values>
+                    <values title="tema-nord-desc">nord</values>
+                    <values title="tema-zafiro-desc">zafiro</values>
+                    <values title="tema-pergamino-desc">pergamino</values>
+                    <values title="tema-zen-desc">zen</values>
+                    <values title="tema-prestige-desc">prestige</values>
+                    <values title="tema-nexus-desc">nexus</values>
+                    <values title="tema-cyber-desc">cyber</values>
+                    <values title="tema-crimson-desc">crimson</values>
+                    <values title="tema-blaze-desc">blaze</values>
+                    <values title="tema-serenity-desc">serenity</values>
+                    <values title="tema-terra-desc">terra</values>
+                    <values title="personalizado-desc">custom</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

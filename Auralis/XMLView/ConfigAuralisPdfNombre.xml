@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Nombres de PDF: patrón del nombre del archivo al imprimir o enviar por email documentos de venta y de compra, y ayuda de variables en el pie.
+-->
+<view>
+    <columns>
+        <group name="name" numcolumns="12" display="none">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+        </group>
+        <group name="pdf-nombre" title="auralis-pdf-nombre" icon="fa-solid fa-file-signature" numcolumns="12">
+            <column name="activo" title="auralis-pdf-nombre-activo" numcolumns="12" order="100"
+                    description="auralis-pdf-nombre-activo-help">
+                <widget type="checkbox" fieldname="activo"/>
+            </column>
+            <column name="patron_ventas" title="auralis-pdf-nombre-patron-ventas" numcolumns="4" order="110"
+                    description="auralis-pdf-nombre-patron-ventas-help">
+                <widget type="text" fieldname="patron_ventas" maxlength="200"/>
+            </column>
+            <column name="patron_compras" title="auralis-pdf-nombre-patron-compras" numcolumns="4" order="120"
+                    description="auralis-pdf-nombre-patron-compras-help">
+                <widget type="text" fieldname="patron_compras" maxlength="200"/>
+            </column>
+            <column name="max_longitud" title="auralis-pdf-nombre-max-longitud" numcolumns="4" order="130"
+                    description="auralis-pdf-nombre-max-longitud-help">
+                <widget type="number" fieldname="max_longitud" min="40" max="200" step="1" decimal="0" required="true"/>
+            </column>
+            <column name="previsualizar_adjuntos_email" title="auralis-pdf-nombre-preview-adjuntos" numcolumns="12" order="140"
+                    description="auralis-pdf-nombre-preview-adjuntos-help">
+                <widget type="checkbox" fieldname="previsualizar_adjuntos_email"/>
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="footer">
+            <group name="pdf-nombre-variables" title="auralis-pdf-nombre-variables" numcolumns="12" html="Block/ConfigAuralisPdfNombreVariables.html.twig"/>
+        </row>
+    </rows>
+</view>

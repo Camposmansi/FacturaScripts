@@ -1,0 +1,128 @@
+{#
+# @package FacturaScripts
+# @author MansiHost.com
+# @description Partial de calendario unificado para el tema Auralis.
+#              Headers y celdas comparten el MISMO grid CSS para garantizar
+#              alineación perfecta a cualquier nivel de zoom.
+#
+# Variables esperadas:
+#   calendar_data.days  - Array de días (con is_filler, is_today, cards, etc.)
+#   col_count           - Número de columnas (3, 7...)
+#   view_type           - 'week', '3days' o 'month'
+#}
+
+{% set can_create = allow_create|default(false) %}
+{% set orig_type = origen_tipo|default('general') %}
+
+<div class="z-calendar-wrapper {% if can_create %}z-calendar--creatable{% endif %}"
+     data-allow-create="{{ can_create ? '1' : '0' }}"
+     data-origen-tipo="{{ orig_type }}">
+
+    {#
+     ┌──────────────────────────────────────────────────────────────────┐
+     │  GRID UNIFICADO: headers + fillers + celdas en el mismo grid CSS │
+     │  → alineación perfecta sin importar zoom ni ancho de pantalla   │
+     └──────────────────────────────────────────────────────────────────┘
+    #}
+    <div class="z-calendar-grid z-calendar-grid--{{ view_type }}"
+         style="grid-template-columns: repeat({{ col_count }}, 1fr);">
+
+        {# ── FILA 0: Cabeceras de días (solo visible en desktop ≥992px) ── #}
+        {% if view_type == 'month' %}
+            {# Mes: siempre Lun → Dom fijos #}
+            {% for name in [trans('monday'), trans('tuesday'), trans('wednesday'), trans('thursday'), trans('friday'), trans('saturday'), trans('sunday')] %}
+                <div class="z-calendar-header-col">{{ name }}</div>
+            {% endfor %}
+        {% else %}
+            {# Semana / 3 días: cabecera basada en los días del rango #}
+            {% for day in calendar_data.days|slice(0, col_count) %}
+                <div class="z-calendar-header-col {% if day.is_today %}is-today{% endif %}">
+                    {{ day.day_name }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {# ── FILAS 1+: Celdas de días ──────────────────────────────────── #}
+        {% for day in calendar_data.days %}
+
+            {# Celda vacía de alineación (solo en mes cuando el mes no empieza en lunes) #}
+            {% if day.is_filler is defined and day.is_filler %}
+                <div class="z-calendar-day is-filler"></div>
+
+            {% else %}
+                {# Celda normal #}
+                <div class="z-calendar-day {% if day.is_today %}is-today{% endif %} {% if can_create %}is-creatable{% endif %}" data-date="{{ day.date }}">
+
+                    <div class="z-calendar-day-header d-flex align-items-center justify-content-between">
+                        <div>
+                            {# Número grande en desktop / etiqueta completa en móvil #}
+                            <span class="z-calendar-day-label d-none d-lg-inline">{{ day.day_num }}</span>
+                            <span class="z-calendar-day-label d-inline d-lg-none">{{ day.label }}</span>
+                            {% if day.is_today %}
+                                <span class="z-badge badge-today ms-1">{{ trans('today')|default('Hoy') }}</span>
+                            {% endif %}
+                        </div>
+                        {% if can_create %}
+                            <button type="button" class="btn btn-sm btn-link text-decoration-none p-0 text-muted z-btn-add-day-event"
+                                    data-date="{{ day.date }}" title="{{ trans('new-event') }}">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        {% endif %}
+                    </div>
+
+                    <div class="z-calendar-day-body">
+                        {% for card in day.cards %}
+                            <a href="{{ card.url }}" class="z-calendar-card border-left-{{ card.badge_color }}{{ loop.index > 2 ? ' d-none' : '' }}"
+                               data-event-id="{{ card.id|default('') }}"
+                               data-event-json="{{ card|json_encode|escape('html_attr') }}"
+                               title="{{ card.title }} - {{ card.subtitle }}">
+                                <div class="z-calendar-card-header">
+                                    <span class="z-calendar-card-title">
+                                        {% if card.icon %}
+                                            <i class="{{ card.icon }} z-card-icon-inline"></i>
+                                        {% endif %}
+                                        {{ card.title }}
+                                    </span>
+                                    <span class="z-badge z-badge-pill badge-{{ card.badge_color }}">{{ card.badge_text|default('') }}</span>
+                                </div>
+                                <div class="z-calendar-card-body">
+                                    <div class="z-calendar-card-subtitle">{{ card.subtitle }}</div>
+                                </div>
+                            </a>
+                        {% endfor %}
+
+                        {% if can_create and day.cards is empty %}
+                            <div class="z-calendar-day-empty-hint text-center text-muted py-3">
+                                <i class="fa-solid fa-plus-circle fa-lg mb-1 d-block opacity-40"></i>
+                                <span class="x-small opacity-75">{{ trans('new-event')|default('Añadir evento') }}</span>
+                            </div>
+                        {% endif %}
+
+                        {% if day.cards|length > 2 %}
+                            <div class="text-center mt-1">
+                                <button type="button" class="z-btn-more-events"
+                                        data-date="{{ day.date }}"
+                                        data-label="{{ day.label }}">
+                                    +{{ day.cards|length - 2 }} {{ trans('more')|default('más') }}...
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="z-calendar-day-footer {{ day.net_class|default('') }}">
+                        {% if day.net_amount is defined and day.net_amount is not empty %}
+                            <span class="z-calendar-net-value">{{ day.net_amount }}</span>
+                        {% elseif day.cards is defined and day.cards is not empty %}
+                            <span class="z-calendar-events-count text-muted x-small font-monospace">
+                                <i class="fa-solid fa-calendar-check me-1 text-primary opacity-75"></i>
+                                {{- day.cards|length }} {{ day.cards|length == 1 ? (trans('event')|default('evento')) : (trans('events')|default('eventos')) -}}
+                            </span>
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% endif %}
+
+        {% endfor %}
+    </div>
+</div>

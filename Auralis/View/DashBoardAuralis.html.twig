@@ -1,0 +1,1118 @@
+{% extends "Master/MenuTemplate.html.twig" %}
+{% import 'Macro/Utils.html.twig' as Utils %}
+
+{% block body %}
+    {{ parent() }}
+
+    <div class="auralis-dashboard">
+        <!-- Cabecera -->
+        <div class="auralis-dashboard-head">
+            <div>
+                <h1 class="auralis-dashboard-title d-flex align-items-center gap-2 flex-wrap">
+                    {% if fsc.getPageData().name == fsc.user.homepage %}
+                        <a class="btn btn-sm btn-secondary active" href="{{ fsc.url() }}?defaultPage=FALSE"
+                           title="{{ trans('marked-as-homepage') }}">
+                            <i class="fa-solid fa-bookmark" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <a class="btn btn-sm btn-secondary" href="{{ fsc.url() }}?defaultPage=TRUE"
+                           title="{{ trans('mark-as-homepage') }}">
+                            <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+                    <span>{{ trans('hello')|default('¡Hola') }}, {{ fsc.user.nick }}!</span>
+                </h1>
+                <div class="auralis-dashboard-subtitle d-flex align-items-center flex-wrap gap-2">
+                    <span>{{ trans('dashboard-subtitle')|default('Aquí tienes un resumen de la salud financiera de tu negocio.') }}</span>
+                </div>
+            </div>
+            <div class="auralis-quick-actions">
+                <a href="EditFacturaCliente" class="btn-auralis-action btn-auralis-action-primary">
+                    <i class="fa-solid fa-plus"></i> {{ trans('new-sale')|default('Nueva Venta') }}
+                </a>
+                <a href="EditFacturaProveedor" class="btn-auralis-action btn-auralis-action-secondary">
+                    <i class="fa-solid fa-plus"></i> {{ trans('new-expense')|default('Nuevo Gasto') }}
+                </a>
+                <a href="EditCliente" class="btn-auralis-action btn-auralis-action-secondary">
+                    <i class="fa-solid fa-user-plus"></i> {{ trans('new-client')|default('Nuevo Cliente') }}
+                </a>
+            </div>
+        </div>
+
+        <!-- Barra de Filtros -->
+        <div class="auralis-filters-bar">
+            <div class="auralis-filters-left">
+                <div class="d-flex gap-2 flex-wrap">
+                    <button class="auralis-filter-btn {% if fsc.rango == 'last-7-days' %}active{% endif %}" data-rango="last-7-days">7 días</button>
+                    <button class="auralis-filter-btn {% if fsc.rango == 'last-30-days' %}active{% endif %}" data-rango="last-30-days">30 días</button>
+                    <button class="auralis-filter-btn {% if fsc.rango == 'this-month' %}active{% endif %}" data-rango="this-month">
+                        {{ trans('este-mes')|default('Este Mes') }}
+                    </button>
+                    <button class="auralis-filter-btn {% if fsc.rango == 'this-quarter' %}active{% endif %}" data-rango="this-quarter">
+                        {{ trans('este-trimestre')|default('Este Trimestre') }}
+                    </button>
+                    <button class="auralis-filter-btn {% if fsc.rango == 'this-year' %}active{% endif %}" data-rango="this-year">
+                        {{ trans('ano-actual')|default('Año Actual') }}
+                    </button>
+                    <button class="auralis-filter-btn {% if fsc.rango == 'last-6-months' %}active{% endif %}" data-rango="last-6-months">6 meses</button>
+                    <button class="auralis-filter-btn {% if fsc.rango == 'last-12-months' %}active{% endif %}" data-rango="last-12-months">12 meses</button>
+                    <button class="auralis-filter-btn {% if fsc.rango == 'last-3-years' %}active{% endif %}" data-rango="last-3-years">3 años</button>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-muted small text-nowrap">{{ trans('from')|default('Desde') }}:</span>
+                        <input type="date" id="filterDesde" class="form-control" style="width: 10.5rem;" value="{{ fsc.desde }}">
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-muted small text-nowrap">{{ trans('hasta')|default('Hasta') }}:</span>
+                        <input type="date" id="filterHasta" class="form-control" style="width: 10.5rem;" value="{{ fsc.hasta }}">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="btnApplyCustomDates" title="{{ trans('refresh')|default('Actualizar') }}">
+                        <i class="fa-solid fa-sync"></i>
+                    </button>
+                </div>
+
+                {% if fsc.hasMultiEmpresa %}
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-building text-muted" aria-hidden="true"></i>
+                        <select id="filterEmpresa" class="form-select" style="min-width: 16rem; width: auto;"
+                                aria-label="{{ trans('company')|default('Empresa') }}">
+                            <option value="">{{ trans('todas-las-empresas')|default('Todas las empresas') }}</option>
+                            {% for emp in fsc.empresas %}
+                                <option value="{{ emp.id }}" {% if fsc.codEmpresa == emp.id %}selected{% endif %}>{{ emp.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="auralis-filters-right">
+                <label for="vsAnterior" style="cursor: pointer; margin: 0; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;">
+                    <input type="checkbox" id="vsAnterior" {% if fsc.vsAnterior %}checked{% endif %}>
+                    {{ trans('vs-anterior')|default('vs Anterior') }}
+                </label>
+                {% if fsc.vsAnterior %}
+                    <span class="badge bg-secondary text-white" style="font-size: 0.75rem;">
+                        {{ fsc.rangoAnteriorFormated }}
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Tira de KPIs Generales -->
+        <div class="auralis-kpi-row">
+            <!-- Ventas Totales -->
+            <div class="auralis-kpi-card">
+                <div class="auralis-kpi-title">
+                    {{ trans('ventas-totales')|default('Ventas Totales') }}
+                    <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('sales-net-tooltip')|default('Suma del neto de todas las facturas de clientes emitidas en el periodo. No incluye impuestos (valores netos).') }}"></i>
+                </div>
+                <div class="auralis-kpi-value">{{ fsc.ventasFormated }}</div>
+                {% if fsc.vsAnterior %}
+                    <div class="auralis-kpi-footer">
+                        <span class="{{ fsc.ventasTrendClass }}">{{ fsc.ventasTrendSign }}{{ fsc.ventasTrendPct|number_format(1) }}%</span>
+                        <span class="text-muted">{{ trans('vs-previous')|default('vs anterior') }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Compras Totales -->
+            <div class="auralis-kpi-card">
+                <div class="auralis-kpi-title">
+                    {{ trans('compras-totales')|default('Compras Totales') }}
+                    <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('purchases-net-tooltip')|default('Suma del neto de facturas de proveedores en el periodo. No incluye impuestos (valores netos). No incluye nóminas ni amortizaciones.') }}"></i>
+                </div>
+                <div class="auralis-kpi-value">{{ fsc.gastosFormated }}</div>
+                {% if fsc.vsAnterior %}
+                    <div class="auralis-kpi-footer">
+                        <span class="{{ fsc.gastosTrendClass }}">{{ fsc.gastosTrendSign }}{{ fsc.gastosTrendPct|number_format(1) }}%</span>
+                        <span class="text-muted">{{ trans('vs-previous')|default('vs anterior') }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Margen Comercial -->
+            <div class="auralis-kpi-card">
+                <div class="auralis-kpi-title">
+                    {{ trans('margen-comercial')|default('Margen Comercial') }}
+                    <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('net-margin-tooltip')|default('Diferencia entre Ventas Totales y Compras Totales (solo facturación comercial). No incluye impuestos.') }}"></i>
+                </div>
+                <div class="auralis-kpi-value {{ fsc.margen < 0 ? 'text-danger' : '' }}">{{ fsc.margenFormated }} <span class="fs-6 text-muted">({{ fsc.margenPct|number_format(1) }}%)</span></div>
+                {% if fsc.vsAnterior %}
+                    <div class="auralis-kpi-footer">
+                        <span class="{{ fsc.margenTrendClass }}">{{ fsc.margenTrendSign }}{{ fsc.margenTrendPct|number_format(1) }}%</span>
+                        <span class="text-muted">{{ trans('vs-previous')|default('vs anterior') }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Estimación de Impuestos -->
+            <div class="auralis-kpi-card">
+                <div class="auralis-kpi-title font-semibold">
+                    {{ trans('tax-estimation')|default('Estimación Impuestos') }}
+                    <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('tax-estimation-tooltip')|default('Estimación basada en (IVA Repercutido - IVA Soportado) + Retenciones IRPF del periodo. Un importe positivo (en rojo) representa una estimación a pagar, mientras que un importe negativo (en verde) indica una estimación a favor o a devolver por la administración fiscal.') }}"></i>
+                </div>
+                {% if fsc.hasPurchases %}
+                    <div class="auralis-kpi-value {{ fsc.impuestos < 0 ? 'text-success' : (fsc.impuestos > 0 ? 'text-danger' : '') }}">{{ fsc.impuestosFormated }}</div>
+                    <div class="auralis-kpi-footer">
+                        <span class="text-muted small">{{ trans('iva-irpf-estimado')|default('Estimación fiscal del periodo') }}</span>
+                    </div>
+                {% else %}
+                    <div class="auralis-kpi-value fs-6 text-muted mt-2">
+                        <i class="fa-solid fa-circle-info text-secondary me-1"></i>{{ trans('no-calculada')|default('No calculada') }}
+                    </div>
+                    <div class="auralis-kpi-footer">
+                        <span class="text-muted small">{{ trans('no-compras-impuestos-msg')|default('No se calcula al no registrar compras/gastos') }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Liquidez Real -->
+            <div class="auralis-kpi-card">
+                <div class="auralis-kpi-title d-flex align-items-center justify-content-between">
+                    <span>
+                        {{ trans('real-liquidity')|default('Liquidez Real') }}
+                        <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('liquidity-tooltip') }}"></i>
+                    </span>
+                </div>
+                {% if fsc.hasPurchases %}
+                    <div class="auralis-kpi-value {{ fsc.liquidez < 0 ? 'text-danger' : '' }}">{{ fsc.liquidezFormated }}</div>
+                    <div class="auralis-kpi-footer d-flex flex-column gap-1 pt-1 border-top mt-2">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <span class="text-muted" style="font-size: 0.75rem;">{{ trans('tesoreria-prevista')|default('Tesorería Prevista') }}</span>
+                            <strong style="font-size: 0.75rem;" class="{{ fsc.liquidezFutura >= 0 ? 'text-success' : 'text-danger' }}">{{ fsc.liquidezFuturaFormated }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <span class="text-muted" style="font-size: 0.75rem;">{{ trans('vencido-pendiente') }}</span>
+                            <strong style="font-size: 0.75rem;" class="{{ fsc.liquidezVencida >= 0 ? 'text-success' : 'text-danger' }}">{{ fsc.liquidezVencidaFormated }}</strong>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="auralis-kpi-value fs-6 text-muted mt-2">
+                        <i class="fa-solid fa-circle-info text-secondary me-1"></i>{{ trans('no-disponible')|default('No disponible') }}
+                    </div>
+                    <div class="auralis-kpi-footer">
+                        <span class="text-muted small">{{ trans('no-compras-liquidez-msg')|default('Requiere registrar compras/gastos en el sistema') }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Pestañas Móviles (Ubicadas justo después de los KPIs principales) -->
+        <div class="auralis-mobile-tabs my-3">
+            <button class="auralis-mobile-tab-btn active" data-tab="analytics">📊 {{ trans('analytics')|default('Analítica') }}</button>
+            <button class="auralis-mobile-tab-btn" data-tab="treasury">💶 {{ trans('treasury')|default('Tesorería') }}</button>
+        </div>
+
+        <!-- Pestaña 1: Analítica (Evolución de Ingresos/Gastos + Top 5 Clientes) -->
+        <div class="auralis-tab-pane auralis-pane-analytics">
+            <div class="auralis-analytics-row">
+                <!-- Gráfico de Evolución -->
+                <div class="auralis-chart-card">
+                    <div class="auralis-card-header auralis-evolution-header">
+                        <div class="auralis-evolution-summary">
+                            <div class="auralis-evolution-heading">
+                                <span class="auralis-evolution-kicker">EVOLUCIÓN</span>
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <h3 class="auralis-card-title mb-0">
+                                        {{ fsc.evolutionDocument == 'albaranes' ? 'Albaranes' : 'Facturas' }}
+                                        <span class="auralis-evolution-title-separator" aria-hidden="true">·</span>
+                                        {{ fsc.evolutionMetric == 'total' ? 'Total con impuestos' : 'Importe neto' }}
+                                    </h3>
+                                    <span class="auralis-evolution-info" title="Elige el tipo de documento, el nivel de detalle y el formato del gráfico. La comparación usa el periodo inmediatamente anterior." aria-label="Información sobre el gráfico">
+                                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="auralis-evolution-period" aria-label="Periodo representado">
+                                <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                                <time datetime="{{ fsc.desde }}">{{ fsc.desde|date('d/m/Y') }}</time>
+                                <i class="fa-solid fa-arrow-right-long auralis-evolution-period-arrow" aria-hidden="true"></i>
+                                <time datetime="{{ fsc.hasta }}">{{ fsc.hasta|date('d/m/Y') }}</time>
+                            </div>
+                        </div>
+                        <div class="auralis-evolution-controls" aria-label="Opciones del gráfico de evolución">
+                            <label><span>Documentos</span><select id="evolutionDocument" class="form-select form-select-sm">
+                                <option value="facturas" {% if fsc.evolutionDocument == 'facturas' %}selected{% endif %}>Facturas</option>
+                                <option value="albaranes" {% if fsc.evolutionDocument == 'albaranes' %}selected{% endif %}>Albaranes</option>
+                            </select></label>
+                            <label><span>Agrupar</span><select id="evolutionGranularity" class="form-select form-select-sm">
+                                <option value="auto" {% if fsc.evolutionGranularity == 'auto' %}selected{% endif %}>Automático</option>
+                                <option value="day" {% if fsc.evolutionGranularity == 'day' %}selected{% endif %}>Días</option>
+                                <option value="week" {% if fsc.evolutionGranularity == 'week' %}selected{% endif %}>Semanas</option>
+                                <option value="month" {% if fsc.evolutionGranularity == 'month' %}selected{% endif %}>Meses</option>
+                                <option value="year" {% if fsc.evolutionGranularity == 'year' %}selected{% endif %}>Años</option>
+                            </select></label>
+                            <label><span>Importe</span><select id="evolutionMetric" class="form-select form-select-sm">
+                                <option value="neto" {% if fsc.evolutionMetric == 'neto' %}selected{% endif %}>Neto</option>
+                                <option value="total" {% if fsc.evolutionMetric == 'total' %}selected{% endif %}>Total</option>
+                            </select></label>
+                            <label><span>Vista</span><select id="evolutionChart" class="form-select form-select-sm">
+                                <option value="line" {% if fsc.evolutionChart == 'line' %}selected{% endif %}>Líneas</option>
+                                <option value="bar" {% if fsc.evolutionChart == 'bar' %}selected{% endif %}>Barras</option>
+                            </select></label>
+                        </div>
+                    </div>
+                    <div class="auralis-evolution-chart">
+                        <canvas id="zChartEvolution"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top 5 Clientes -->
+                <div class="auralis-top-card">
+                    <div class="auralis-card-header">
+                        <h3 class="auralis-card-title">{{ trans('top-clients-title')|default('Top 5 Clientes') }}</h3>
+                    </div>
+                    <div class="auralis-bar-list">
+                        {% for client in fsc.topClients %}
+                            <div class="auralis-bar-item">
+                                <div class="auralis-bar-labels">
+                                    <span class="auralis-client-name">
+                                        <a href="EditCliente?code={{ client.codcliente }}">{{ client.nombrecliente }}</a>
+                                    </span>
+                                    <span class="auralis-client-amount">
+                                        {{ client.total_neto_formatted }}
+                                        <span class="auralis-client-pct">({{ client.percentage|number_format(1) }}%)</span>
+                                    </span>
+                                </div>
+                                <div class="auralis-bar-outer">
+                                    <div class="auralis-bar-inner {% if client.percentage > 35 %}bg-warning{% endif %}" style="width: {{ client.percentage }}%;"></div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="text-center text-muted py-5">
+                                {{ trans('no-sales-period')|default('No hay facturación registrada en este periodo.') }}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if fsc.hasClientRiskAlert %}
+                        <div class="auralis-alert-concentration">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span><strong>{{ trans('concentration-alert-title')|default('Alerta de Concentración:') }}</strong> {{ trans('concentration-alert-desc')|default('Un cliente supera el 35% de la facturación total.') }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Pestaña 2: Tesorería (Resumen KPI de Recibos + Calendario) -->
+        <div class="auralis-tab-pane auralis-pane-treasury">
+            <!-- Bloque Resumen de Recibos (4 Tarjetas KPI) -->
+            <div class="auralis-receipts-summary-section my-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h4 class="fw-bold fs-6 text-dark mb-0">
+                        <i class="fa-solid fa-receipt me-2 text-primary"></i>{{ trans('resumen-tesoreria-recibos') }}
+                    </h4>
+                </div>
+
+                <div class="row g-3">
+                    <!-- Tarjeta 1: Recibos Ventas Vencidos -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card shadow-sm border-0 h-100 border-start border-4 border-danger">
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.75rem;">{{ trans('cobros-vencidos') }}</span>
+                                    <span class="badge bg-danger-subtle text-danger rounded-pill">{{ fsc.recibosVentasVencidosCount }}</span>
+                                </div>
+                                <h3 class="fw-bold text-danger mb-1 fs-5">{{ fsc.recibosVentasVencidosTotalFormatted }}</h3>
+                                <p class="text-muted small mb-3">{{ fsc.recibosVentasVencidosCount }} {{ trans('recibos-venta-pendientes-cobro') }}</p>
+                                <button type="button" class="btn btn-sm btn-outline-danger w-100 fw-semibold" onclick="openReceiptsModal('ventas-vencidos')">
+                                    <i class="fa-solid fa-eye me-1"></i>{{ trans('ver-detalle') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 2: Recibos Ventas Por Vencer -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card shadow-sm border-0 h-100 border-start border-4 border-success">
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.75rem;">{{ trans('cobros-por-vencer') }}</span>
+                                    <span class="badge bg-success-subtle text-success rounded-pill">{{ fsc.recibosVentasProximosCount }}</span>
+                                </div>
+                                <h3 class="fw-bold text-success mb-1 fs-5">{{ fsc.recibosVentasProximosTotalFormatted }}</h3>
+                                <p class="text-muted small mb-3">{{ fsc.recibosVentasProximosCount }} {{ trans('recibos-venta-previstos-periodo') }}</p>
+                                <button type="button" class="btn btn-sm btn-outline-success w-100 fw-semibold" onclick="openReceiptsModal('ventas-proximos')">
+                                    <i class="fa-solid fa-eye me-1"></i>{{ trans('ver-detalle') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 3: Recibos Compras Vencidos -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card shadow-sm border-0 h-100 border-start border-4 border-warning">
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.75rem;">{{ trans('pagos-vencidos') }}</span>
+                                    <span class="badge bg-warning-subtle text-dark rounded-pill">{{ fsc.recibosComprasVencidosCount }}</span>
+                                </div>
+                                <h3 class="fw-bold text-dark mb-1 fs-5">{{ fsc.recibosComprasVencidosTotalFormatted }}</h3>
+                                <p class="text-muted small mb-3">{{ fsc.recibosComprasVencidosCount }} {{ trans('recibos-compra-pendientes-pago') }}</p>
+                                <button type="button" class="btn btn-sm btn-outline-danger w-100 fw-semibold" onclick="openReceiptsModal('compras-vencidos')">
+                                    <i class="fa-solid fa-eye me-1"></i>{{ trans('ver-detalle') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 4: Recibos Compras Por Vencer -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card shadow-sm border-0 h-100 border-start border-4 border-info">
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.75rem;">{{ trans('pagos-por-vencer') }}</span>
+                                    <span class="badge bg-info-subtle text-dark rounded-pill">{{ fsc.recibosComprasProximosCount }}</span>
+                                </div>
+                                <h3 class="fw-bold text-primary mb-1 fs-5">{{ fsc.recibosComprasProximosTotalFormatted }}</h3>
+                                <p class="text-muted small mb-3">{{ fsc.recibosComprasProximosCount }} {{ trans('recibos-compra-previstos-periodo') }}</p>
+                                <button type="button" class="btn btn-sm btn-outline-success w-100 fw-semibold" onclick="openReceiptsModal('compras-proximos')">
+                                    <i class="fa-solid fa-eye me-1"></i>{{ trans('ver-detalle') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# KPIs ciclo cobro/pago (sin subtítulo; debajo de las 4 cajas) #}
+                {% if fsc.kpiCicloRangoAmpliado %}
+                    <p class="small text-muted mb-2 mt-3">
+                        <i class="fa-solid fa-circle-info me-1"></i>
+                        {{ trans('kpi-ciclo-rango-ampliado') }}
+                        ({{ fsc.kpiCicloDesde|date('d/m/Y') }} – {{ fsc.kpiCicloHasta|date('d/m/Y') }}).
+                    </p>
+                {% endif %}
+                <div class="row g-3 {% if not fsc.kpiCicloRangoAmpliado %}mt-1{% endif %}">
+                    <div class="col-sm-6 col-lg-2">
+                        <div class="card shadow-sm border-0 h-100 border-start border-4 border-success">
+                            <div class="card-body p-3 d-flex flex-column">
+                                <div class="mb-2">
+                                    <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.7rem;">
+                                        {{ trans('kpi-ciclo-cobro-ventas') }}
+                                        <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('kpi-ciclo-cobro-tooltip') }}"></i>
+                                    </span>
+                                </div>
+                                <h3 class="fw-bold text-success mb-1 fs-5">{{ fsc.kpiCicloCobroVentasFormatted }}</h3>
+                                {% if fsc.kpiCicloCobroVentasCmpFormatted %}
+                                    <p class="small text-muted mb-2 mb-auto">{{ fsc.kpiCicloCobroVentasCmpFormatted }}</p>
+                                {% else %}
+                                    <div class="mb-auto"></div>
+                                {% endif %}
+                                <button type="button" class="btn btn-sm btn-outline-success w-100 fw-semibold mt-2" onclick="openPayerRankingModal('clientes')">
+                                    <i class="fa-solid fa-eye me-1"></i>{{ trans('ver-detalle') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-2">
+                        <div class="card shadow-sm border-0 h-100 border-start border-4 border-success">
+                            <div class="card-body p-3 d-flex flex-column">
+                                <div class="mb-2">
+                                    <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.7rem;">
+                                        {{ trans('kpi-retraso-cobro-ventas') }}
+                                        <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('kpi-retraso-cobro-tooltip') }}"></i>
+                                    </span>
+                                </div>
+                                <h3 class="fw-bold text-success mb-1 fs-5">{{ fsc.kpiRetrasoCobroVentasFormatted }}</h3>
+                                {% if fsc.kpiRetrasoCobroVentasCmpFormatted %}
+                                    <p class="small text-muted mb-1">{{ fsc.kpiRetrasoCobroVentasCmpFormatted }}</p>
+                                {% endif %}
+                                {% if fsc.kpiRetrasoCobroVentasPctAtrasoFormatted %}
+                                    <p class="small text-muted mb-2 mb-auto">{{ fsc.kpiRetrasoCobroVentasPctAtrasoFormatted }}</p>
+                                {% else %}
+                                    <div class="mb-auto"></div>
+                                {% endif %}
+                                <button type="button" class="btn btn-sm btn-outline-success w-100 fw-semibold mt-2" onclick="openPayerRankingModal('clientes')">
+                                    <i class="fa-solid fa-eye me-1"></i>{{ trans('ver-detalle') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-2">
+                        <div class="card shadow-sm border-0 h-100 border-start border-4 border-success">
+                            <div class="card-body p-3 d-flex flex-column">
+                                <div class="mb-2">
+                                    <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.7rem;">
+                                        {{ trans('kpi-ratio-cobrado-facturado') }}
+                                        <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('kpi-ratio-cobrado-tooltip') }}"></i>
+                                    </span>
+                                </div>
+                                <h3 class="fw-bold text-success mb-1 fs-5">{{ fsc.kpiRatioCobradoVentasFormatted }}</h3>
+                                {% if fsc.kpiRatioCobradoVentasCmpFormatted %}
+                                    <p class="small text-muted mb-1">{{ fsc.kpiRatioCobradoVentasCmpFormatted }}</p>
+                                {% endif %}
+                                {% if fsc.kpiRatioCobradoVentasImportesFormatted %}
+                                    <p class="small text-muted mb-0">{{ fsc.kpiRatioCobradoVentasImportesFormatted }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-2">
+                        <div class="card shadow-sm border-0 h-100 border-start border-4 border-danger">
+                            <div class="card-body p-3 d-flex flex-column">
+                                <div class="mb-2">
+                                    <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.7rem;">
+                                        {{ trans('kpi-ciclo-pago-compras') }}
+                                        <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('kpi-ciclo-pago-tooltip') }}"></i>
+                                    </span>
+                                </div>
+                                <h3 class="fw-bold text-danger mb-1 fs-5">{{ fsc.kpiCicloPagoComprasFormatted }}</h3>
+                                {% if fsc.kpiCicloPagoComprasCmpFormatted %}
+                                    <p class="small text-muted mb-2 mb-auto">{{ fsc.kpiCicloPagoComprasCmpFormatted }}</p>
+                                {% else %}
+                                    <div class="mb-auto"></div>
+                                {% endif %}
+                                <button type="button" class="btn btn-sm btn-outline-danger w-100 fw-semibold mt-2" onclick="openPayerRankingModal('proveedores')">
+                                    <i class="fa-solid fa-eye me-1"></i>{{ trans('ver-detalle') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-2">
+                        <div class="card shadow-sm border-0 h-100 border-start border-4 border-danger">
+                            <div class="card-body p-3 d-flex flex-column">
+                                <div class="mb-2">
+                                    <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.7rem;">
+                                        {{ trans('kpi-retraso-pago-compras') }}
+                                        <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('kpi-retraso-pago-tooltip') }}"></i>
+                                    </span>
+                                </div>
+                                <h3 class="fw-bold text-danger mb-1 fs-5">{{ fsc.kpiRetrasoPagoComprasFormatted }}</h3>
+                                {% if fsc.kpiRetrasoPagoComprasCmpFormatted %}
+                                    <p class="small text-muted mb-1">{{ fsc.kpiRetrasoPagoComprasCmpFormatted }}</p>
+                                {% endif %}
+                                {% if fsc.kpiRetrasoPagoComprasPctAtrasoFormatted %}
+                                    <p class="small text-muted mb-2 mb-auto">{{ fsc.kpiRetrasoPagoComprasPctAtrasoFormatted }}</p>
+                                {% else %}
+                                    <div class="mb-auto"></div>
+                                {% endif %}
+                                <button type="button" class="btn btn-sm btn-outline-danger w-100 fw-semibold mt-2" onclick="openPayerRankingModal('proveedores')">
+                                    <i class="fa-solid fa-eye me-1"></i>{{ trans('ver-detalle') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-2">
+                        <div class="card shadow-sm border-0 h-100 border-start border-4 border-danger">
+                            <div class="card-body p-3 d-flex flex-column">
+                                <div class="mb-2">
+                                    <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.7rem;">
+                                        {{ trans('kpi-ratio-pagado-facturado') }}
+                                        <i class="fa-solid fa-circle-info ms-1 text-muted" title="{{ trans('kpi-ratio-pagado-tooltip') }}"></i>
+                                    </span>
+                                </div>
+                                <h3 class="fw-bold text-danger mb-1 fs-5">{{ fsc.kpiRatioPagadoComprasFormatted }}</h3>
+                                {% if fsc.kpiRatioPagadoComprasCmpFormatted %}
+                                    <p class="small text-muted mb-1">{{ fsc.kpiRatioPagadoComprasCmpFormatted }}</p>
+                                {% endif %}
+                                {% if fsc.kpiRatioPagadoComprasImportesFormatted %}
+                                    <p class="small text-muted mb-0">{{ fsc.kpiRatioPagadoComprasImportesFormatted }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner Alerta descuadre recibos vs total factura (antes del widget anticipos) -->
+            {% if fsc.hasReceiptsDiffAlert %}
+                <div class="auralis-alert-receipts-diff mb-4">
+                    <div class="auralis-alert-text">
+                        <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
+                        <span>
+                            <strong>{{ trans('receipts-diff-alert-title') }}</strong>
+                            {{ trans('receipts-diff-alert-desc')|replace({'%count%': fsc.facturasDescuadreCount}) }}
+                            {{ trans('receipts-diff-alert-subtext') }}
+                        </span>
+                    </div>
+                    <div class="auralis-alert-actions">
+                        <button type="button" class="btn auralis-alert-link" data-bs-toggle="modal" data-bs-target="#auralisReceiptsDiffModal">
+                            <i class="fa-solid fa-file-invoice-dollar"></i> {{ trans('receipts-diff-ver-facturas') }}
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% for includeView in getIncludeViews('DashBoardAuralis', 'AfterReceiptsSummary') %}
+                {% include includeView['path'] ignore missing %}
+            {% endfor %}
+
+            <!-- Banner Alerta de Cashflow -->
+            {% if fsc.runway30 < 0 %}
+                <div class="auralis-alert-cashflow mb-4">
+                    <div class="auralis-alert-text">
+                        <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
+                        <span><strong>{{ trans('cashflow-alert-title')|default('Alerta de Cashflow:') }}</strong> {{ trans('cashflow-alert-desc')|default('La previsión a 30 días es negativa') }} ({{ fsc.runway30Formated }}). {{ trans('cashflow-alert-subtext') }}</span>
+                    </div>
+                    <div class="auralis-alert-actions">
+                        <button type="button" class="btn auralis-alert-link" onclick="openReceiptsModal('compras-proximos')">
+                            <i class="fa-solid fa-receipt"></i> {{ trans('ver-vencimientos')|default('Ver vencimientos') }}
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Bloque de Tesorería (Calendario en modo lista) -->
+            <div class="auralis-section-treasury">
+                <div class="auralis-calendar-section">
+                    <div class="auralis-calendar-header">
+                        <div class="auralis-calendar-nav">
+                            <button class="btn btn-sm btn-auralis-action-secondary" id="btnCalPrev">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <span class="auralis-calendar-title" id="calTitleRange" style="cursor: pointer;" title="{{ trans('jump-to-date')|default('Haga clic para saltar a una fecha específica') }}">{{ trans('loading')|default('Cargando...') }}</span>
+                            <input type="date" id="calJumpDate" style="position: absolute; width: 0; height: 0; opacity: 0; padding: 0; border: none; overflow: hidden; pointer-events: none;">
+                            <button class="btn btn-sm btn-auralis-action-secondary" id="btnCalNext">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                            <button class="btn btn-sm btn-auralis-action-secondary" id="btnCalToday">
+                                {{ trans('today')|default('Hoy') }}
+                            </button>
+                        </div>
+
+                        <div class="auralis-calendar-filters">
+                            <!-- Selector de Vista -->
+                            <div class="d-flex gap-1" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-cal-view="1day">1 {{ trans('day')|default('Día') }}</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-cal-view="3days">3 {{ trans('days')|default('Días') }}</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary active" data-cal-view="week">{{ trans('week')|default('Semana') }}</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-cal-view="month">{{ trans('month')|default('Mes') }}</button>
+                            </div>
+
+                            <!-- Filtros de cobros/pagos -->
+                            <label class="auralis-calendar-checkbox">
+                                <input type="checkbox" id="calCobros" checked>
+                                {{ trans('sales-receipts')|default('Cobros') }}<span class="text-indicator-green" id="calTotalCobros"></span>
+                            </label>
+                            <label class="auralis-calendar-checkbox">
+                                <input type="checkbox" id="calPagos" checked>
+                                {{ trans('purchases-receipts')|default('Pagos') }}<span class="text-indicator-red" id="calTotalPagos"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                        <!-- Contenedor del calendario AJAX -->
+                        <div class="z-calendar-container">
+                            <!-- Cargando _calendar_base.html.twig dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Solo modal de listado del día: el dashboard es receipts, NO calendario interactivo de eventos #}
+    {% include 'Master/_calendar_event_modal.html.twig' with {
+        day_modal_title: trans('recibos'),
+        include_event_form: false
+    } %}
+
+    <!-- Modal Detalle de Recibos -->
+    <div class="modal fade" id="auralisReceiptsDetailModal" tabindex="-1" aria-labelledby="auralisReceiptsDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow" style="border-radius: 12px;">
+                <div class="modal-header py-3 bg-light border-bottom d-flex align-items-center justify-content-between">
+                    <h5 class="modal-title fw-bold fs-6 mb-0" id="auralisReceiptsDetailModalLabel">
+                        <i class="fa-solid fa-receipt me-2 text-primary"></i>{{ trans('detalle-recibos') }}
+                    </h5>
+                    <div class="d-flex align-items-center gap-2 me-2">
+                        <label class="form-label small text-muted mb-0 d-none d-sm-inline">{{ trans('ordenar-por') }}</label>
+                        <select class="form-select form-select-sm z-sort-receipts-select" style="width: auto; font-size: 0.8rem;">
+                            <option value="dias-desc" {{ fsc.sortRecibos == 'dias-desc' ? 'selected' : '' }}>{{ trans('dias-vencidos-antiguedad') }}</option>
+                            <option value="dias-asc" {{ fsc.sortRecibos == 'dias-asc' ? 'selected' : '' }}>{{ trans('proximos-vencer') }}</option>
+                            <option value="importe-desc" {{ fsc.sortRecibos == 'importe-desc' ? 'selected' : '' }}>{{ trans('importe-mayor-menor') }}</option>
+                            <option value="importe-asc" {{ fsc.sortRecibos == 'importe-asc' ? 'selected' : '' }}>{{ trans('importe-menor-mayor') }}</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="{{ trans('cerrar') }}"></button>
+                </div>
+                <div class="modal-body p-3 bg-light">
+                    <!-- Navegación por pestañas -->
+                    <ul class="nav nav-pills row g-2 mb-3 auralis-receipts-tabs" id="receiptsTab" role="tablist">
+                        <li class="nav-item col-6 col-md-3 m-0" role="presentation">
+                            <button class="nav-link w-100 fw-semibold text-center d-flex align-items-center justify-content-center gap-1" id="tab-ventas-vencidos" data-bs-toggle="pill" data-bs-target="#pane-ventas-vencidos" type="button" role="tab">
+                                <span>{{ trans('cobros-vencidos') }}</span>
+                                <span class="badge bg-secondary rounded-pill ms-1 z-tab-count">{{ fsc.recibosVentasVencidosCount }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item col-6 col-md-3 m-0" role="presentation">
+                            <button class="nav-link w-100 fw-semibold text-center d-flex align-items-center justify-content-center gap-1" id="tab-ventas-proximos" data-bs-toggle="pill" data-bs-target="#pane-ventas-proximos" type="button" role="tab">
+                                <span>{{ trans('cobros-por-vencer') }}</span>
+                                <span class="badge bg-secondary rounded-pill ms-1 z-tab-count">{{ fsc.recibosVentasProximosCount }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item col-6 col-md-3 m-0" role="presentation">
+                            <button class="nav-link w-100 fw-semibold text-center d-flex align-items-center justify-content-center gap-1" id="tab-compras-vencidos" data-bs-toggle="pill" data-bs-target="#pane-compras-vencidos" type="button" role="tab">
+                                <span>{{ trans('pagos-vencidos') }}</span>
+                                <span class="badge bg-secondary rounded-pill ms-1 z-tab-count">{{ fsc.recibosComprasVencidosCount }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item col-6 col-md-3 m-0" role="presentation">
+                            <button class="nav-link w-100 fw-semibold text-center d-flex align-items-center justify-content-center gap-1" id="tab-compras-proximos" data-bs-toggle="pill" data-bs-target="#pane-compras-proximos" type="button" role="tab">
+                                <span>{{ trans('pagos-por-vencer') }}</span>
+                                <span class="badge bg-secondary rounded-pill ms-1 z-tab-count">{{ fsc.recibosComprasProximosCount }}</span>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="receiptsTabContent">
+                        <!-- Pane Cobros Vencidos -->
+                        <div class="tab-pane fade" id="pane-ventas-vencidos" role="tabpanel">
+                            {% if fsc.recibosVencidosVentas is not empty %}
+                                <div class="list-group z-receipts-list-group bg-transparent border-0" data-receipts-page-size="5">
+                                    {% for r in fsc.recibosVencidosVentas %}
+                                        <a href="{{ r.url }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border rounded bg-white shadow-sm z-receipt-item{% if loop.index > 5 %} d-none{% endif %}"
+                                           data-importe="{{ r.importe }}" data-dias="{{ r.dias_diff }}" data-vencimiento="{{ r.vencimiento }}">
+                                            <div class="text-truncate me-2" style="max-width: 65%;">
+                                                <div class="fw-bold text-dark text-truncate small">
+                                                    <i class="fa-solid fa-arrow-down text-success me-1"></i> {{ r.nombre }}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    {% if r.codigofactura %}
+                                                        <span class="badge bg-light text-dark border me-1">{{ r.codigofactura }}</span>
+                                                    {% endif %}
+                                                    {{ trans('vencio-el') }} {{ r.vencimiento_formatted }}
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0">
+                                                <div class="fw-bold text-danger fs-6">{{ r.importe_formatted }}</div>
+                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ trans('vencido-hace') }} {{ r.dias }}d</span>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between z-receipts-pager" data-receipts-target="pane-ventas-vencidos">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-prev" disabled>
+                                        <i class="fa-solid fa-chevron-left"></i> {{ trans('ranking-pagina-anterior') }}
+                                    </button>
+                                    <span class="small text-muted z-receipts-page-label">{{ trans('ranking-pagina-de') }}</span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-next">
+                                        {{ trans('ranking-pagina-siguiente') }} <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                {% if fsc.recibosVentasVencidosCount > fsc.recibosVencidosVentas|length %}
+                                    <div class="small text-muted text-center mt-2">{{ trans('auralis-recibos-mostrando-de', {'%shown%': fsc.recibosVencidosVentas|length, '%total%': fsc.recibosVentasVencidosCount}) }}</div>
+                                {% endif %}
+                            {% else %}
+                                <div class="text-center text-muted py-4 small">{{ trans('no-cobros-vencidos-pendientes') }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Pane Cobros Por Vencer -->
+                        <div class="tab-pane fade" id="pane-ventas-proximos" role="tabpanel">
+                            {% if fsc.recibosProximosVentas is not empty %}
+                                <div class="list-group z-receipts-list-group bg-transparent border-0" data-receipts-page-size="5">
+                                    {% for r in fsc.recibosProximosVentas %}
+                                        <a href="{{ r.url }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border rounded bg-white shadow-sm z-receipt-item{% if loop.index > 5 %} d-none{% endif %}"
+                                           data-importe="{{ r.importe }}" data-dias="{{ r.dias_diff }}" data-vencimiento="{{ r.vencimiento }}">
+                                            <div class="text-truncate me-2" style="max-width: 65%;">
+                                                <div class="fw-bold text-dark text-truncate small">
+                                                    <i class="fa-solid fa-arrow-down text-success me-1"></i> {{ r.nombre }}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    {% if r.codigofactura %}
+                                                        <span class="badge bg-light text-dark border me-1">{{ r.codigofactura }}</span>
+                                                    {% endif %}
+                                                    {{ trans('vence-el') }} {{ r.vencimiento_formatted }}
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0">
+                                                <div class="fw-bold text-success fs-6">{{ r.importe_formatted }}</div>
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle">{{ trans('en-dias') }} {{ r.dias }}d</span>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between z-receipts-pager" data-receipts-target="pane-ventas-proximos">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-prev" disabled>
+                                        <i class="fa-solid fa-chevron-left"></i> {{ trans('ranking-pagina-anterior') }}
+                                    </button>
+                                    <span class="small text-muted z-receipts-page-label">{{ trans('ranking-pagina-de') }}</span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-next">
+                                        {{ trans('ranking-pagina-siguiente') }} <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                {% if fsc.recibosVentasProximosCount > fsc.recibosProximosVentas|length %}
+                                    <div class="small text-muted text-center mt-2">{{ trans('auralis-recibos-mostrando-de', {'%shown%': fsc.recibosProximosVentas|length, '%total%': fsc.recibosVentasProximosCount}) }}</div>
+                                {% endif %}
+                            {% else %}
+                                <div class="text-center text-muted py-4 small">{{ trans('no-cobros-proximos-pendientes') }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Pane Pagos Vencidos -->
+                        <div class="tab-pane fade" id="pane-compras-vencidos" role="tabpanel">
+                            {% if fsc.recibosVencidosCompras is not empty %}
+                                <div class="list-group z-receipts-list-group bg-transparent border-0" data-receipts-page-size="5">
+                                    {% for r in fsc.recibosVencidosCompras %}
+                                        <a href="{{ r.url }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border rounded bg-white shadow-sm z-receipt-item{% if loop.index > 5 %} d-none{% endif %}"
+                                           data-importe="{{ r.importe }}" data-dias="{{ r.dias_diff }}" data-vencimiento="{{ r.vencimiento }}">
+                                            <div class="text-truncate me-2" style="max-width: 65%;">
+                                                <div class="fw-bold text-dark text-truncate small">
+                                                    <i class="fa-solid fa-arrow-up text-danger me-1"></i> {{ r.nombre }}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    {% if r.codigofactura %}
+                                                        <span class="badge bg-light text-dark border me-1">{{ r.codigofactura }}</span>
+                                                    {% endif %}
+                                                    {{ trans('vencio-el') }} {{ r.vencimiento_formatted }}
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0">
+                                                <div class="fw-bold text-danger fs-6">{{ r.importe_formatted }}</div>
+                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ trans('vencido-hace') }} {{ r.dias }}d</span>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between z-receipts-pager" data-receipts-target="pane-compras-vencidos">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-prev" disabled>
+                                        <i class="fa-solid fa-chevron-left"></i> {{ trans('ranking-pagina-anterior') }}
+                                    </button>
+                                    <span class="small text-muted z-receipts-page-label">{{ trans('ranking-pagina-de') }}</span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-next">
+                                        {{ trans('ranking-pagina-siguiente') }} <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                {% if fsc.recibosComprasVencidosCount > fsc.recibosVencidosCompras|length %}
+                                    <div class="small text-muted text-center mt-2">{{ trans('auralis-recibos-mostrando-de', {'%shown%': fsc.recibosVencidosCompras|length, '%total%': fsc.recibosComprasVencidosCount}) }}</div>
+                                {% endif %}
+                            {% else %}
+                                <div class="text-center text-muted py-4 small">{{ trans('no-pagos-vencidos-pendientes') }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Pane Pagos Por Vencer -->
+                        <div class="tab-pane fade" id="pane-compras-proximos" role="tabpanel">
+                            {% if fsc.recibosProximosCompras is not empty %}
+                                <div class="list-group z-receipts-list-group bg-transparent border-0" data-receipts-page-size="5">
+                                    {% for r in fsc.recibosProximosCompras %}
+                                        <a href="{{ r.url }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border rounded bg-white shadow-sm z-receipt-item{% if loop.index > 5 %} d-none{% endif %}"
+                                           data-importe="{{ r.importe }}" data-dias="{{ r.dias_diff }}" data-vencimiento="{{ r.vencimiento }}">
+                                            <div class="text-truncate me-2" style="max-width: 65%;">
+                                                <div class="fw-bold text-dark text-truncate small">
+                                                    <i class="fa-solid fa-arrow-up text-danger me-1"></i> {{ r.nombre }}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    {% if r.codigofactura %}
+                                                        <span class="badge bg-light text-dark border me-1">{{ r.codigofactura }}</span>
+                                                    {% endif %}
+                                                    {{ trans('vence-el') }} {{ r.vencimiento_formatted }}
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0">
+                                                <div class="fw-bold text-primary fs-6">{{ r.importe_formatted }}</div>
+                                                <span class="badge bg-info-subtle text-dark border border-info-subtle">{{ trans('en-dias') }} {{ r.dias }}d</span>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between z-receipts-pager" data-receipts-target="pane-compras-proximos">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-prev" disabled>
+                                        <i class="fa-solid fa-chevron-left"></i> {{ trans('ranking-pagina-anterior') }}
+                                    </button>
+                                    <span class="small text-muted z-receipts-page-label">{{ trans('ranking-pagina-de') }}</span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-next">
+                                        {{ trans('ranking-pagina-siguiente') }} <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                {% if fsc.recibosComprasProximosCount > fsc.recibosProximosCompras|length %}
+                                    <div class="small text-muted text-center mt-2">{{ trans('auralis-recibos-mostrando-de', {'%shown%': fsc.recibosProximosCompras|length, '%total%': fsc.recibosComprasProximosCount}) }}</div>
+                                {% endif %}
+                            {% else %}
+                                <div class="text-center text-muted py-4 small">{{ trans('no-pagos-proximos-pendientes') }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer py-2">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">{{ trans('cerrar') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ranking de pagadores (clientes / proveedores) -->
+    <div class="modal fade" id="auralisPayerRankingModal" tabindex="-1" aria-labelledby="auralisPayerRankingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow" style="border-radius: 12px;">
+                <div class="modal-header py-3 bg-light border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <h5 class="modal-title fw-bold fs-6 mb-0" id="auralisPayerRankingModalLabel">
+                        <i class="fa-solid fa-ranking-star me-2 text-primary"></i>{{ trans('ranking-pagadores') }}
+                    </h5>
+                    <div class="d-flex align-items-center gap-2 me-2">
+                        <label class="form-label small text-muted mb-0 d-none d-sm-inline">{{ trans('ordenar-por') }}</label>
+                        <select class="form-select form-select-sm z-sort-ranking-select" style="width: auto; font-size: 0.8rem;">
+                            <option value="ciclo-desc" selected>{{ trans('ranking-ciclo-mayor') }}</option>
+                            <option value="ciclo-asc">{{ trans('ranking-ciclo-menor') }}</option>
+                            <option value="retraso-desc">{{ trans('ranking-retraso-mayor') }}</option>
+                            <option value="retraso-asc">{{ trans('ranking-retraso-menor') }}</option>
+                            <option value="importe-desc">{{ trans('ranking-importe-mayor') }}</option>
+                            <option value="importe-asc">{{ trans('ranking-importe-menor') }}</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="{{ trans('cerrar') }}"></button>
+                </div>
+                <div class="modal-body p-3 bg-light">
+                    <ul class="nav nav-pills row g-2 mb-3 auralis-receipts-tabs" id="payerRankingTab" role="tablist">
+                        <li class="nav-item col-6 m-0" role="presentation">
+                            <button class="nav-link w-100 fw-semibold text-center active" id="tab-ranking-clientes" data-bs-toggle="pill" data-bs-target="#pane-ranking-clientes" type="button" role="tab">
+                                {{ trans('ranking-pagadores-clientes') }}
+                                <span class="badge bg-secondary rounded-pill ms-1 z-tab-count">{{ fsc.rankingPagadoresClientes|length }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item col-6 m-0" role="presentation">
+                            <button class="nav-link w-100 fw-semibold text-center" id="tab-ranking-proveedores" data-bs-toggle="pill" data-bs-target="#pane-ranking-proveedores" type="button" role="tab">
+                                {{ trans('ranking-pagadores-proveedores') }}
+                                <span class="badge bg-secondary rounded-pill ms-1 z-tab-count">{{ fsc.rankingPagadoresProveedores|length }}</span>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="payerRankingTabContent">
+                        <div class="tab-pane fade show active" id="pane-ranking-clientes" role="tabpanel">
+                            {% if fsc.rankingPagadoresClientes is not empty %}
+                                <div class="list-group z-ranking-list-group bg-transparent border-0" data-ranking-page-size="5">
+                                    {% for r in fsc.rankingPagadoresClientes %}
+                                        <a href="{{ r.url }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border rounded bg-white shadow-sm z-ranking-item{% if loop.index > 5 %} d-none{% endif %}"
+                                           data-importe="{{ r.importe }}" data-ciclo="{{ r.ciclo is not null ? r.ciclo : '' }}" data-retraso="{{ r.retraso is not null ? r.retraso : '' }}">
+                                            <div class="text-truncate me-2" style="max-width: 55%;">
+                                                <div class="fw-bold text-dark text-truncate small">
+                                                    <i class="fa-solid fa-user me-1 text-success"></i>{{ r.nombre }}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    <span class="badge bg-light text-dark border me-1">{{ r.codigo }}</span>
+                                                    {{ r.num_recibos }} {{ trans('recibos') }}
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0 small">
+                                                <div class="fw-bold text-dark">{{ r.importe_formatted }}</div>
+                                                <div class="text-muted">{{ trans('ranking-col-ciclo') }}: <strong>{{ r.ciclo_formatted }}</strong></div>
+                                                <div class="text-muted">{{ trans('ranking-col-retraso') }}: <strong>{{ r.retraso_formatted }}</strong></div>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between z-ranking-pager" data-ranking-target="pane-ranking-clientes">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-ranking-prev" disabled>
+                                        <i class="fa-solid fa-chevron-left"></i> {{ trans('ranking-pagina-anterior') }}
+                                    </button>
+                                    <span class="small text-muted z-ranking-page-label">{{ trans('ranking-pagina-de') }}</span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-ranking-next">
+                                        {{ trans('ranking-pagina-siguiente') }} <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            {% else %}
+                                <div class="text-center text-muted py-4 small">{{ trans('ranking-no-clientes') }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane fade" id="pane-ranking-proveedores" role="tabpanel">
+                            {% if fsc.rankingPagadoresProveedores is not empty %}
+                                <div class="list-group z-ranking-list-group bg-transparent border-0" data-ranking-page-size="5">
+                                    {% for r in fsc.rankingPagadoresProveedores %}
+                                        <a href="{{ r.url }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border rounded bg-white shadow-sm z-ranking-item{% if loop.index > 5 %} d-none{% endif %}"
+                                           data-importe="{{ r.importe }}" data-ciclo="{{ r.ciclo is not null ? r.ciclo : '' }}" data-retraso="{{ r.retraso is not null ? r.retraso : '' }}">
+                                            <div class="text-truncate me-2" style="max-width: 55%;">
+                                                <div class="fw-bold text-dark text-truncate small">
+                                                    <i class="fa-solid fa-truck me-1 text-danger"></i>{{ r.nombre }}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    <span class="badge bg-light text-dark border me-1">{{ r.codigo }}</span>
+                                                    {{ r.num_recibos }} {{ trans('recibos') }}
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0 small">
+                                                <div class="fw-bold text-dark">{{ r.importe_formatted }}</div>
+                                                <div class="text-muted">{{ trans('ranking-col-ciclo') }}: <strong>{{ r.ciclo_formatted }}</strong></div>
+                                                <div class="text-muted">{{ trans('ranking-col-retraso') }}: <strong>{{ r.retraso_formatted }}</strong></div>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between z-ranking-pager" data-ranking-target="pane-ranking-proveedores">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-ranking-prev" disabled>
+                                        <i class="fa-solid fa-chevron-left"></i> {{ trans('ranking-pagina-anterior') }}
+                                    </button>
+                                    <span class="small text-muted z-ranking-page-label">{{ trans('ranking-pagina-de') }}</span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-ranking-next">
+                                        {{ trans('ranking-pagina-siguiente') }} <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            {% else %}
+                                <div class="text-center text-muted py-4 small">{{ trans('ranking-no-proveedores') }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer py-2">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">{{ trans('cerrar') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Descuadre recibos vs factura -->
+    <div class="modal fade" id="auralisReceiptsDiffModal" tabindex="-1" aria-labelledby="auralisReceiptsDiffModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow" style="border-radius: 12px;">
+                <div class="modal-header py-3 bg-light border-bottom d-flex align-items-center justify-content-between">
+                    <h5 class="modal-title fw-bold fs-6 mb-0" id="auralisReceiptsDiffModalLabel">
+                        <i class="fa-solid fa-scale-unbalanced me-2 text-warning"></i>{{ trans('receipts-diff-modal-title') }}
+                    </h5>
+                    <div class="d-flex align-items-center gap-2 me-2">
+                        <label class="form-label small text-muted mb-0 d-none d-sm-inline">{{ trans('ordenar-por') }}</label>
+                        <select class="form-select form-select-sm z-sort-diff-select" style="width: auto; font-size: 0.8rem;">
+                            <option value="importe-desc" selected>{{ trans('importe-mayor-menor') }}</option>
+                            <option value="importe-asc">{{ trans('importe-menor-mayor') }}</option>
+                            <option value="fecha-desc">{{ trans('receipts-diff-fecha-antiguas') }}</option>
+                            <option value="fecha-asc">{{ trans('receipts-diff-fecha-cercanas') }}</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="{{ trans('cerrar') }}"></button>
+                </div>
+                <div class="modal-body p-3 bg-light">
+                    <ul class="nav nav-pills row g-2 mb-3 auralis-receipts-tabs" id="receiptsDiffTab" role="tablist">
+                        <li class="nav-item col-6 m-0" role="presentation">
+                            <button class="nav-link w-100 fw-semibold text-center active d-flex align-items-center justify-content-center gap-1" id="tab-diff-ventas" data-bs-toggle="pill" data-bs-target="#pane-diff-ventas" type="button" role="tab" aria-selected="true">
+                                <span>{{ trans('receipts-diff-ventas') }}</span>
+                                <span class="badge bg-secondary rounded-pill ms-1 z-tab-count">{{ fsc.facturasDescuadreVentas|length }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item col-6 m-0" role="presentation">
+                            <button class="nav-link w-100 fw-semibold text-center d-flex align-items-center justify-content-center gap-1" id="tab-diff-compras" data-bs-toggle="pill" data-bs-target="#pane-diff-compras" type="button" role="tab" aria-selected="false">
+                                <span>{{ trans('receipts-diff-compras') }}</span>
+                                <span class="badge bg-secondary rounded-pill ms-1 z-tab-count">{{ fsc.facturasDescuadreCompras|length }}</span>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="receiptsDiffTabContent">
+                        <div class="tab-pane fade show active" id="pane-diff-ventas" role="tabpanel">
+                            {% if fsc.facturasDescuadreVentas is not empty %}
+                                <div class="list-group z-receipts-list-group bg-transparent border-0" data-receipts-page-size="5">
+                                    {% for f in fsc.facturasDescuadreVentas %}
+                                        <a href="{{ f.url }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border rounded bg-white shadow-sm z-receipt-item{% if loop.index > 5 %} d-none{% endif %}"
+                                           data-importe="{{ f.diff_abs }}" data-dias="{{ f.dias_diff }}" data-fecha="{{ f.fecha }}">
+                                            <div class="text-truncate me-2" style="max-width: 65%;">
+                                                <div class="fw-bold text-dark text-truncate small">
+                                                    <i class="fa-solid fa-arrow-down text-success me-1"></i> {{ f.tercero }}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    {% if f.codigo %}
+                                                        <span class="badge bg-light text-dark border me-1">{{ f.codigo }}</span>
+                                                    {% endif %}
+                                                    {{ trans('receipts-diff-total-factura') }}: {{ f.total_formatted }}
+                                                    · {{ trans('receipts-diff-suma-recibos') }}: {{ f.suma_recibos_formatted }}
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0">
+                                                <div class="fw-bold fs-6{% if f.diff > 0 %} auralis-diff-amount-positive{% elseif f.diff < 0 %} auralis-diff-amount-negative{% else %} auralis-diff-amount-zero{% endif %}">{{ f.diff_formatted }}</div>
+                                                {% if f.dias_diff < 0 %}
+                                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ trans('receipts-diff-hace') }} {{ f.dias }}d</span>
+                                                {% elseif f.dias_diff > 0 %}
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle">{{ trans('en-dias') }} {{ f.dias }}d</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary-subtle text-dark border border-secondary-subtle">{{ trans('receipts-diff-hoy') }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between z-receipts-pager" data-receipts-target="pane-diff-ventas">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-prev" disabled>
+                                        <i class="fa-solid fa-chevron-left"></i> {{ trans('ranking-pagina-anterior') }}
+                                    </button>
+                                    <span class="small text-muted z-receipts-page-label">{{ trans('ranking-pagina-de') }}</span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-next">
+                                        {{ trans('ranking-pagina-siguiente') }} <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            {% else %}
+                                <div class="text-center text-muted py-4 small">{{ trans('receipts-diff-empty') }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="tab-pane fade" id="pane-diff-compras" role="tabpanel">
+                            {% if fsc.facturasDescuadreCompras is not empty %}
+                                <div class="list-group z-receipts-list-group bg-transparent border-0" data-receipts-page-size="5">
+                                    {% for f in fsc.facturasDescuadreCompras %}
+                                        <a href="{{ f.url }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border rounded bg-white shadow-sm z-receipt-item{% if loop.index > 5 %} d-none{% endif %}"
+                                           data-importe="{{ f.diff_abs }}" data-dias="{{ f.dias_diff }}" data-fecha="{{ f.fecha }}">
+                                            <div class="text-truncate me-2" style="max-width: 65%;">
+                                                <div class="fw-bold text-dark text-truncate small">
+                                                    <i class="fa-solid fa-arrow-up text-danger me-1"></i> {{ f.tercero }}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    {% if f.codigo %}
+                                                        <span class="badge bg-light text-dark border me-1">{{ f.codigo }}</span>
+                                                    {% endif %}
+                                                    {{ trans('receipts-diff-total-factura') }}: {{ f.total_formatted }}
+                                                    · {{ trans('receipts-diff-suma-recibos') }}: {{ f.suma_recibos_formatted }}
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0">
+                                                <div class="fw-bold fs-6{% if f.diff > 0 %} auralis-diff-amount-positive{% elseif f.diff < 0 %} auralis-diff-amount-negative{% else %} auralis-diff-amount-zero{% endif %}">{{ f.diff_formatted }}</div>
+                                                {% if f.dias_diff < 0 %}
+                                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ trans('receipts-diff-hace') }} {{ f.dias }}d</span>
+                                                {% elseif f.dias_diff > 0 %}
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle">{{ trans('en-dias') }} {{ f.dias }}d</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary-subtle text-dark border border-secondary-subtle">{{ trans('receipts-diff-hoy') }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between z-receipts-pager" data-receipts-target="pane-diff-compras">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-prev" disabled>
+                                        <i class="fa-solid fa-chevron-left"></i> {{ trans('ranking-pagina-anterior') }}
+                                    </button>
+                                    <span class="small text-muted z-receipts-page-label">{{ trans('ranking-pagina-de') }}</span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary z-receipts-next">
+                                        {{ trans('ranking-pagina-siguiente') }} <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            {% else %}
+                                <div class="text-center text-muted py-4 small">{{ trans('receipts-diff-empty') }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer py-2">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">{{ trans('cerrar') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if settings('auralis_calendario', 'mostrar_en_dashboard_auralis', '0') == '1' %}
+        {% include '@PluginAuralisAgenda/Block/DashboardCalendarWidget.html.twig' ignore missing %}
+    {% endif %}
+
+    <footer class="text-center text-muted small py-4 mt-3">
+        {{ auralisFooterHtml(settings('auralis', 'login_footer_text', '© {year} Diseñado por MansiHost.com')) }}
+    </footer>
+
+    <!-- Datos embebidos para JS -->
+    <script type="application/json" id="auralis-dash-data">
+        {# Seguro: fsc.dashDataJson viene escapado en PHP con JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT #}
+        {{ fsc.dashDataJson|raw }}
+    </script>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-dashboard.css') }}?v=1.50.1-bust">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'Master/_auralis_i18n_script.html.twig' %}
+    <!-- Chart.js servido localmente desde Assets/JS/ (sin CDN externo) -->
+    <script src="{{ asset('Dinamic/Assets/JS/chart.umd.min.js') }}?v=4.6.1"></script>
+    <script src="{{ asset('Dinamic/Assets/JS/auralis-calendar-modal.js') }}?v=1.50.1-bust"></script>
+    <!-- Load custom Dashboard JS -->
+    <script src="{{ asset('Dinamic/Assets/JS/auralis-dashboard.js') }}?v=1.50.1-bust"></script>
+{% endblock %}

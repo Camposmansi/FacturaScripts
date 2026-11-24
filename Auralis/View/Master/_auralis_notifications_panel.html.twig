@@ -1,0 +1,127 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Panel único de la campana Auralis (Actividad + Novedades + Offcanvas histórico).
+ #}
+{% set auralisNotifCount = auralisUnreadNotifications() %}
+{% set auralisHasUnreadNews = auralisHasUnreadNews() %}
+{% set auralisNotifEnabled = true %}
+{% set auralisCanCalendar = false %}
+{% set auralisShowActivity = false %}
+{% if auralisNotifEnabled and fsc.user %}
+{# Sin dropdown-menu: Core fuerza position:absolute !important y el panel "desaparece" al scroll #}
+<div id="auralis-notif-shared-panel" class="auralis-notif-panel shadow" hidden
+     data-auralis-can-calendar="{{ auralisCanCalendar ? '1' : '0' }}">
+    <div class="auralis-notif-header">
+        <strong>{{ trans('auralis-inapp-notifications') }}</strong>
+        <button type="button" class="btn btn-sm btn-link p-0{% if not auralisShowActivity or auralisNotifCount <= 0 %} d-none{% endif %}"
+                data-auralis-notif-mark-all{% if not auralisShowActivity or auralisNotifCount <= 0 %} hidden{% endif %}>
+            {{ trans('auralis-inapp-mark-all-read') }}
+        </button>
+    </div>
+    <ul class="nav nav-tabs nav-fill" role="tablist">
+        <li class="nav-item{% if not auralisShowActivity %} d-none{% endif %}" role="presentation">
+            <button class="nav-link {{ auralisShowActivity ? 'active' : '' }}" id="auralis-notif-tab-act"
+                    data-bs-toggle="tab" data-bs-target="#auralis-notif-pane-act"
+                    type="button" role="tab">
+                {{ trans('auralis-inapp-tab-activity') }}
+                <span class="badge text-bg-secondary ms-1" data-auralis-notif-badge>{{ auralisNotifCount }}</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{ auralisShowActivity ? '' : 'active' }}" id="auralis-notif-tab-news"
+                    data-bs-toggle="tab" data-bs-target="#auralis-notif-pane-news"
+                    type="button" role="tab"
+                    data-auralis-notif-news-tab>
+                {{ trans('auralis-inapp-tab-changelog') }}
+                <span class="auralis-notif-news-dot {{ auralisHasUnreadNews ? '' : 'is-empty' }}" data-auralis-notif-news-dot
+                      {% if not auralisHasUnreadNews %}hidden{% endif %}
+                      title="{{ trans('auralis-inapp-news-unread') }}"></span>
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content auralis-notif-tab-content">
+        <div class="tab-pane fade {{ auralisShowActivity ? 'show active' : 'd-none' }} auralis-notif-pane" id="auralis-notif-pane-act" role="tabpanel">
+            <div id="auralis-notif-activity-list" class="auralis-notif-scroll">
+                <div class="auralis-notif-empty">{{ trans('auralis-inapp-loading') }}</div>
+            </div>
+        </div>
+        <div class="tab-pane fade {{ auralisShowActivity ? '' : 'show active' }} auralis-notif-pane" id="auralis-notif-pane-news" role="tabpanel">
+            <div id="auralis-notif-changelog-list" class="auralis-notif-scroll">
+                <div class="auralis-notif-empty">{{ trans('auralis-inapp-loading') }}</div>
+            </div>
+        </div>
+    </div>
+    {# Footer fijo común: enlace «Ver todas» solo en Novedades + crédito Auralis siempre #}
+    <div class="auralis-notif-footer">
+        <div class="auralis-notif-footer-news {{ auralisShowActivity ? 'd-none' : '' }}" data-auralis-footer-news>
+            <a href="#" id="zBtnVerTodoChangelog" class="btn btn-sm btn-link w-100 text-center py-0">
+                {{ trans('auralis-inapp-view-all-news') }}
+            </a>
+        </div>
+        {% include 'Master/_auralis_creditos.html.twig' with { variant: 'micro' } %}
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end auralis-notif-news-offcanvas" tabindex="-1" id="auralis-notif-news-offcanvas"
+     aria-labelledby="auralis-notif-news-offcanvas-label">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="auralis-notif-news-offcanvas-label">
+            {{ trans('auralis-inapp-all-news-title') }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-3">
+        <div id="auralis-notif-changelog-all" class="d-flex flex-column gap-3">
+            <div class="auralis-notif-empty">{{ trans('auralis-inapp-loading') }}</div>
+        </div>
+    </div>
+    <div class="auralis-notif-offcanvas-footer border-top px-3 py-3 bg-body-tertiary d-flex align-items-center justify-content-between gap-2 flex-nowrap">
+        <span class="auralis-notif-offcanvas-version text-muted font-monospace">
+            Auralis v{{ auralisPluginVersion() }}
+        </span>
+        {% include 'Master/_auralis_creditos.html.twig' with { variant: 'cta' } %}
+    </div>
+</div>
+<input type="hidden" data-auralis-notif-token value="{{ formToken(false) }}"/>
+<script>
+window.AURALIS_NOTIF = {
+    enabled: true,
+    canCalendar: {{ auralisCanCalendar ? 'true' : 'false' }},
+    endpoint: {{ 'AuralisNotificationsAjax'|json_encode|raw }},
+    token: {{ formToken(false)|json_encode|raw }},
+    pollSeconds: 90,
+    initialCount: {{ auralisNotifCount }},
+    initialHasUnreadNews: {{ auralisHasUnreadNews ? 'true' : 'false' }},
+    push: {
+        enabled: false,
+        https: {{ (app.request.server.get('HTTPS') == 'on' or app.request.server.get('HTTPS') == '1') ? 'true' : 'false' }},
+        vapidPublic: '',
+        manifestUrl: '',
+        swUrl: '',
+        scope: './'
+    },
+    i18n: {
+        emptyActivity: {{ trans('auralis-inapp-empty-activity')|json_encode|raw }},
+        emptyChangelog: {{ trans('auralis-inapp-empty-changelog')|json_encode|raw }},
+        markRead: {{ trans('auralis-inapp-mark-read')|json_encode|raw }},
+        read: {{ trans('auralis-inapp-read')|json_encode|raw }},
+        missed: {{ trans('auralis-inapp-missed')|json_encode|raw }},
+        newsUnread: {{ trans('auralis-inapp-news-unread')|json_encode|raw }},
+        open: {{ trans('auralis-inapp-open')|json_encode|raw }},
+        whatsNew: {{ trans('auralis-inapp-whats-new')|json_encode|raw }},
+        snooze: {{ trans('auralis-inapp-snooze')|json_encode|raw }},
+        insistenteTab: {{ trans('auralis-inapp-insistente-tab')|json_encode|raw }},
+        dismiss: {{ trans('auralis-inapp-dismiss')|json_encode|raw }},
+        minutes: {{ trans('auralis-inapp-minutes-short')|json_encode|raw }},
+        hour: {{ trans('auralis-inapp-hour-short')|json_encode|raw }},
+        viewAllNews: {{ trans('auralis-inapp-view-all-news')|json_encode|raw }},
+        relativeToday: {{ trans('auralis-inapp-relative-today')|json_encode|raw }},
+        relativeYesterday: {{ trans('auralis-inapp-relative-yesterday')|json_encode|raw }},
+        relativeMinutes: {{ trans('auralis-inapp-relative-minutes')|json_encode|raw }}
+    }
+};
+</script>
+<link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-notifications.css') }}?v=1.44-bell-dot"/>
+<script src="{{ asset('Dinamic/Assets/JS/auralis-notifications.js') }}?v=1.62-insistente" defer></script>
+{% endif %}

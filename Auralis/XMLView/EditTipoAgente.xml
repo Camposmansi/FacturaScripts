@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Vista de edición de un tipo de agente Auralis (alias EditTipoAgente).
+ */
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="idtipo" readonly="dinamic"/>
+            </column>
+            <column name="code-custom" title="identifier" numcolumns="5" order="110">
+                <widget type="text" fieldname="codigo" maxlength="50" icon="fa-solid fa-barcode"/>
+            </column>
+            <column name="name" numcolumns="5" order="120">
+                <widget type="text" fieldname="nombre" required="true" maxlength="100" icon="fa-solid fa-font"/>
+            </column>
+            <column name="active" numcolumns="2" order="140">
+                <widget type="checkbox" fieldname="activo"/>
+            </column>
+        </group>
+    </columns>
+</view>

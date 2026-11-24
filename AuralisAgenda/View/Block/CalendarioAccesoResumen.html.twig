@@ -1,0 +1,43 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Pie de la pestaña «Calendarios» de la ficha de usuario: con quién comparte sus calendarios personales y qué le llega por grupo o empresa. Solo lectura; los datos los prepara CalendarioAccesoFicha::resumenUsuario().
+ #}
+{% set resumen = fsc.tab('EditAuralisCalendarioAccesoUsuario').settings.auralis_resumen ?? {} %}
+{% set secciones = [
+    {titulo: 'auralis-calendarios-compartidos', ayuda: 'auralis-calendario-compartidos-ayuda', filas: resumen.compartidos ?? [], columna: 'con', etiqueta: 'auralis-calendario-compartido-con'},
+    {titulo: 'auralis-calendarios-por-rol', ayuda: 'auralis-calendario-heredados-ayuda', filas: resumen.heredados ?? [], columna: 'via', etiqueta: 'auralis-calendario-llega-por'}
+] %}
+<p class="small text-body-secondary mb-3"><i class="fa-solid fa-circle-info me-1" aria-hidden="true"></i>{{ trans('auralis-calendario-compartir-sin-avisos') | e }}</p>
+<div class="row g-3">
+    {% for seccion in secciones %}
+        <div class="col-12 col-lg-6">
+            <h6 class="mb-1">{{ trans(seccion.titulo) | e }}</h6>
+            <p class="small text-body-secondary mb-2">{{ trans(seccion.ayuda) | e }}</p>
+            {% if seccion.filas is empty %}
+                <p class="text-body-secondary mb-0">-</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                        <tr>
+                            <th>{{ trans('auralis-calendario') | e }}</th>
+                            <th>{{ trans(seccion.etiqueta) | e }}</th>
+                            <th>{{ trans('auralis-calendario-permiso') | e }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for fila in seccion.filas %}
+                            <tr>
+                                <td>{{ fila.calendario | e }}</td>
+                                <td>{{ attribute(fila, seccion.columna) | e }}</td>
+                                <td>{{ fila.permiso | e }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>

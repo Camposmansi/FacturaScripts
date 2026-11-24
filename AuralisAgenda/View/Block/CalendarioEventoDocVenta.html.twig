@@ -1,0 +1,183 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Pie del modal (centro): crear o ver documento de venta vinculado al evento.
+ #}
+{% if settings('auralis_calendario', 'calendar_event_doc_show', '1') == '1' %}
+{% set docEdit = fsc.eventDocEditController|default('EditPresupuestoCliente') %}
+{% set docLabelKey = fsc.eventDocLabelKey|default('estimation') %}
+{# Permisos del rol en la página destino: sin acceso no hay botón; solo ver = solo «ver» (no crear). #}
+{% set docPermisos = agendaPermisosPagina(docEdit) %}
+{% set docTitleNew = trans('new') ~ ' ' ~ trans(docLabelKey) %}
+{% set docTitleView = trans('open') ~ ' ' ~ trans(docLabelKey) %}
+{# d-none por defecto (como #btnDeleteAuralisEvent): solo visible al editar un evento ya guardado. #}
+<button type="button" class="btn btn-outline-primary d-none" id="auralisEventDocVenta"
+        data-edit-url="{{ docEdit|e('html_attr') }}"
+        data-label-key="{{ docLabelKey|e('html_attr') }}"
+        data-title-new="{{ docTitleNew|e('html_attr') }}"
+        data-title-view="{{ docTitleView|e('html_attr') }}"
+        data-can-view="{{ docPermisos.ver ? '1' : '0' }}"
+        data-can-edit="{{ docPermisos.editar ? '1' : '0' }}"
+        data-msg-save-first="{{ trans('calendar-event-doc-save-first')|e('html_attr') }}"
+        data-mode="create"
+        title="{{ docTitleNew|e('html_attr') }}"
+        aria-label="{{ docTitleNew|e('html_attr') }}">
+    <i class="fa-solid fa-file-invoice" aria-hidden="true"></i>
+</button>
+<style>
+    #auralisEventDocVenta[data-z-bloqueado] { display: none !important; }
+</style>
+<script>
+    (function () {
+        var btn = document.getElementById('auralisEventDocVenta');
+        if (!btn || btn.dataset.bound === '1') {
+            return;
+        }
+        btn.dataset.bound = '1';
+
+        /** Hidden cabecera o primer asistente tipo cliente del Tom Select. */
+        function resolveCodcliente() {
+            var hidden = document.getElementById('zEvCodcliente');
+            var fromHidden = hidden ? String(hidden.value || '').trim() : '';
+            if (fromHidden !== '') {
+                return fromHidden;
+            }
+            if (window.AuralisCalendarParticipants
+                && typeof window.AuralisCalendarParticipants.firstClienteCodigo === 'function') {
+                return String(window.AuralisCalendarParticipants.firstClienteCodigo() || '').trim();
+            }
+            var jsonEl = document.getElementById('zEvParticipantsJson');
+            if (!jsonEl) {
+                return '';
+            }
+            try {
+                var list = JSON.parse(jsonEl.value || '[]');
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i] && list[i].tipo === 'cliente' && list[i].codigo) {
+                        return String(list[i].codigo).trim();
+                    }
+                }
+            } catch (e) { /* ignore */ }
+            return '';
+        }
+
+        function setDocButtonIcon(linked) {
+            var icon = btn.querySelector('i');
+            if (!icon) {
+                return;
+            }
+            icon.className = linked
+                ? 'fa-solid fa-file-circle-check'
+                : 'fa-solid fa-file-invoice';
+            icon.setAttribute('aria-hidden', 'true');
+        }
+
+        /**
+         * Sincroniza el botón crear/ver según vínculo del evento (cardData o campos data-*).
+         * Vinculado: btn-success sólido + icono check. Sin vínculo: outline + factura.
+         * @param {object|null} cardData
+         */
+        function syncDocButton(cardData) {
+            var docId = 0;
+            var docEdit = btn.getAttribute('data-edit-url') || 'EditPresupuestoCliente';
+            if (cardData && cardData.doc_id) {
+                docId = parseInt(String(cardData.doc_id), 10) || 0;
+                if (cardData.doc_edit) {
+                    docEdit = String(cardData.doc_edit);
+                }
+            }
+            // Permisos de la página destino: crear exige editar; ver el vinculado exige poder abrirla.
+            var puedeVer = btn.getAttribute('data-can-view') === '1';
+            var puedeEditar = btn.getAttribute('data-can-edit') === '1';
+            var bloquear = docId > 0 ? !puedeVer : !puedeEditar;
+            if (bloquear) {
+                btn.setAttribute('data-z-bloqueado', '1');
+            } else {
+                btn.removeAttribute('data-z-bloqueado');
+            }
+            if (docId > 0) {
+                btn.dataset.mode = 'view';
+                btn.dataset.docId = String(docId);
+                btn.dataset.docEdit = docEdit;
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-success');
+                setDocButtonIcon(true);
+                var titleView = btn.getAttribute('data-title-view') || '';
+                btn.setAttribute('title', titleView);
+                btn.setAttribute('aria-label', titleView);
+                return;
+            }
+            btn.dataset.mode = 'create';
+            delete btn.dataset.docId;
+            delete btn.dataset.docEdit;
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-outline-primary');
+            setDocButtonIcon(false);
+            var titleNew = btn.getAttribute('data-title-new') || '';
+            btn.setAttribute('title', titleNew);
+            btn.setAttribute('aria-label', titleNew);
+        }
+
+        window.AuralisCalendarEventDoc = window.AuralisCalendarEventDoc || {};
+        window.AuralisCalendarEventDoc.syncButton = syncDocButton;
+
+        btn.addEventListener('click', function () {
+            var idEl = document.getElementById('zEvId');
+            var id = idEl ? String(idEl.value || '').trim() : '';
+            if (!id) {
+                window.alert(btn.getAttribute('data-msg-save-first') || '');
+                return;
+            }
+
+            if (btn.dataset.mode === 'view' && btn.dataset.docId) {
+                var editView = btn.dataset.docEdit || btn.getAttribute('data-edit-url') || 'EditPresupuestoCliente';
+                window.location.href = editView + '?code=' + encodeURIComponent(btn.dataset.docId);
+                return;
+            }
+
+            if (window.AuralisCalendarParticipants
+                && typeof window.AuralisCalendarParticipants.syncHiddenJson === 'function') {
+                window.AuralisCalendarParticipants.syncHiddenJson();
+            }
+
+            var edit = btn.getAttribute('data-edit-url') || 'EditPresupuestoCliente';
+            var params = new URLSearchParams();
+            params.set('action', 'from-calendar');
+            params.set('idevent', id);
+
+            var codcliente = resolveCodcliente();
+            if (codcliente !== '') {
+                params.set('codcliente', codcliente);
+            }
+
+            var codagente = document.getElementById('zEvCodagente');
+            if (codagente && String(codagente.value || '').trim() !== '') {
+                params.set('codagente', String(codagente.value).trim());
+            }
+
+            var titulo = document.getElementById('zEvTitulo');
+            var descripcion = document.getElementById('zEvDescripcion');
+            var obsParts = [];
+            if (titulo && String(titulo.value || '').trim() !== '') {
+                obsParts.push(String(titulo.value).trim());
+            }
+            if (descripcion && String(descripcion.value || '').trim() !== '') {
+                obsParts.push(String(descripcion.value).trim());
+            }
+            if (obsParts.length > 0) {
+                params.set('observaciones', obsParts.join('\n'));
+            }
+
+            var fecha = document.getElementById('zEvFecha');
+            if (fecha && String(fecha.value || '').trim() !== '') {
+                params.set('fecha', String(fecha.value).trim());
+            }
+
+            window.location.href = edit + '?' + params.toString();
+        });
+
+        // Alta libre: modo crear
+        syncDocButton(null);
+    })();
+</script>
+{% endif %}

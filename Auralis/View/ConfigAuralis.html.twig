@@ -1,0 +1,932 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Plantilla de la interfaz de configuración del tema Auralis
+ #}
+
+<link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-admin.css') }}?v=1.7-check"/>
+
+<div class="auralis-admin-container mt-3">
+    <div class="row">
+        <!-- Panel de Configuración -->
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="card-title mb-0 text-primary">
+                        <i class="fa-solid fa-sliders me-2"></i>{{ trans('configuracion-auralis') }}
+                    </h5>
+                    <button type="submit" form="auralisConfigForm" class="btn btn-primary btn-sm px-3">
+                        <i class="fa-solid fa-floppy-disk me-1"></i>{{ trans('guardar') }}
+                    </button>
+                </div>
+                <div class="card-body py-4">
+                    <form method="post" action="{{ fsc.url() }}" id="auralisConfigForm" enctype="multipart/form-data">
+                        {{ formToken() }}
+                        <input type="hidden" name="action" value="save"/>
+                        <input type="hidden" name="activetab" value="Auralis"/>
+                        <script>(function(){var i=document.querySelector('#auralisConfigForm input[name="multireqtoken"]');if(i&&i.value){window.AURALIS_LIBRARY_CSRF=i.value;}})();</script>
+
+                        <!-- Sección 1: Modo de Menú -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary mb-3">
+                                <i class="fa-solid fa-bars-staggered me-2 text-primary"></i>{{ trans('modo-menu') }}
+                            </label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="menu-mode-card {{ settings('auralis', 'modo_menu', 'horizontal') == 'horizontal' ? 'active' : '' }}">
+                                        <input class="form-check-input d-none" type="radio" name="modo_menu" id="menu_horizontal" value="horizontal" {{ settings('auralis', 'modo_menu', 'horizontal') == 'horizontal' ? 'checked' : '' }}>
+                                        <label class="form-check-label w-100 p-3 cursor-pointer" for="menu_horizontal">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper me-3">
+                                                    <i class="fa-solid fa-window-maximize fa-2x"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">{{ trans('horizontal') }}</div>
+                                                    <small class="text-muted">{{ trans('barra-superior-defecto') }}</small>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="menu-mode-card {{ settings('auralis', 'modo_menu', 'horizontal') == 'vertical' ? 'active' : '' }}">
+                                        <input class="form-check-input d-none" type="radio" name="modo_menu" id="menu_vertical" value="vertical" {{ settings('auralis', 'modo_menu', 'horizontal') == 'vertical' ? 'checked' : '' }}>
+                                        <label class="form-check-label w-100 p-3 cursor-pointer" for="menu_vertical">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper me-3">
+                                                    <i class="fa-solid fa-columns fa-2x"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">{{ trans('vertical') }}</div>
+                                                    <small class="text-muted">{{ trans('menu-lateral-ocultable') }}</small>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-check mt-3">
+                                <input class="form-check-input" type="checkbox" name="menu_horizontal_hide_empresa" id="menu_horizontal_hide_empresa" value="1" {{ settings('auralis', 'menu_horizontal_hide_empresa', '0') == '1' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="menu_horizontal_hide_empresa">
+                                    {{ trans('menu-horizontal-hide-empresa') }}
+                                    <small class="d-block text-muted">{{ trans('menu-horizontal-hide-empresa-help') }}</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25"/>
+
+                        <!-- Sección 2: Selector de Color -->
+                        <div class="mb-4">
+                            {% set currentTheme = settings('auralis', 'tema_color', 'default') %}
+                            {% set isSecondaryThemeActive = currentTheme in ['kinetic', 'nord', 'zafiro', 'pergamino', 'zen', 'prestige', 'nexus', 'cyber', 'crimson', 'blaze', 'serenity', 'terra'] %}
+                            <label class="form-label fw-bold text-secondary mb-3">
+                                <i class="fa-solid fa-palette me-2 text-primary"></i>{{ trans('tema-color') }}
+                            </label>
+
+                            <!-- Cuadrícula de los 4 temas principales -->
+                            <div class="row g-3">
+                                <!-- Tema 1: Predeterminado -->
+                                <div class="col-12 col-sm-6">
+                                    <div class="theme-color-card h-100 {{ currentTheme == 'default' ? 'active' : '' }}">
+                                        <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_default" value="default" {{ currentTheme == 'default' ? 'checked' : '' }}>
+                                        <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_default">
+                                            <div class="d-flex align-items-center me-2 min-w-0">
+                                                <div class="color-preview-dots me-3">
+                                                    <span class="dot" style="background-color: #0d6efd;"></span>
+                                                    <span class="dot" style="background-color: #212529;"></span>
+                                                </div>
+                                                <div class="text-truncate">
+                                                    <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('predeterminado') }}</div>
+                                                    <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('estilo-fs-nativo') }}</small>
+                                                </div>
+                                            </div>
+                                            <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Tema 2: Auralis Claro -->
+                                <div class="col-12 col-sm-6">
+                                    <div class="theme-color-card h-100 {{ currentTheme == 'auralis' ? 'active' : '' }}">
+                                        <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_auralis" value="auralis" {{ currentTheme == 'auralis' ? 'checked' : '' }}>
+                                        <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_auralis">
+                                            <div class="d-flex align-items-center me-2 min-w-0">
+                                                <div class="color-preview-dots me-3">
+                                                    <span class="dot" style="background-color: #10b981;"></span>
+                                                    <span class="dot" style="background-color: #ffffff; border: 1px solid #cbd5e1;"></span>
+                                                </div>
+                                                <div class="text-truncate">
+                                                    <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-claro') }}</div>
+                                                    <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('interfaz-lateral-claro') }}</small>
+                                                </div>
+                                            </div>
+                                            <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Tema 3: Auralis Oscuro -->
+                                <div class="col-12 col-sm-6">
+                                    <div class="theme-color-card h-100 {{ currentTheme == 'auralis_dark' ? 'active' : '' }}">
+                                        <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_auralis_dark" value="auralis_dark" {{ currentTheme == 'auralis_dark' ? 'checked' : '' }}>
+                                        <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_auralis_dark">
+                                            <div class="d-flex align-items-center me-2 min-w-0">
+                                                <div class="color-preview-dots me-3">
+                                                    <span class="dot" style="background-color: #10b981;"></span>
+                                                    <span class="dot" style="background-color: #0f172a;"></span>
+                                                </div>
+                                                <div class="text-truncate">
+                                                    <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-oscuro') }}</div>
+                                                    <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-azul-marino') }}</small>
+                                                </div>
+                                            </div>
+                                            <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Tema 4: Personalizado -->
+                                <div class="col-12 col-sm-6">
+                                    <div class="theme-color-card h-100 {{ currentTheme == 'custom' ? 'active' : '' }}" id="card_custom_theme">
+                                        <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_custom" value="custom" {{ currentTheme == 'custom' ? 'checked' : '' }}>
+                                        <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_custom">
+                                            <div class="d-flex align-items-center me-2 min-w-0">
+                                                <div class="color-preview-dots me-3" id="custom_preview_dots">
+                                                    <span class="dot" id="dot_primary" style="background-color: {{ settings('auralis', 'custom_primary', '#10b981') }};"></span>
+                                                    <span class="dot" id="dot_sidebar" style="background-color: {{ settings('auralis', 'custom_sidebar', '#0f172a') }};"></span>
+                                                </div>
+                                                <div class="text-truncate">
+                                                    <div class="fw-bold text-dark auralis-admin-theme-title">
+                                                        <i class="fa-solid fa-wand-magic-sparkles text-primary me-1"></i>{{ trans('personalizado') }}
+                                                    </div>
+                                                    <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('crea-tu-propio-tema') }}</small>
+                                                </div>
+                                            </div>
+                                            <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botón colapsable para explorar más paletas -->
+                            <div class="mt-3 text-center">
+                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 d-inline-flex align-items-center gap-2 theme-collapse-btn {{ isSecondaryThemeActive ? '' : 'collapsed' }}"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapseMoreThemes"
+                                        aria-expanded="{{ isSecondaryThemeActive ? 'true' : 'false' }}"
+                                        aria-controls="collapseMoreThemes">
+                                    <i class="fa-solid fa-palette text-primary"></i>
+                                    <span class="theme-collapse-text-more">{{ trans('mas-paletas-color') }}</span>
+                                    <span class="theme-collapse-text-less d-none">{{ trans('menos-paletas-color') }}</span>
+                                    <span class="badge bg-primary text-white rounded-pill ms-1 auralis-admin-badge-sm">+12</span>
+                                    <i class="fa-solid fa-chevron-down theme-chevron ms-1"></i>
+                                </button>
+                            </div>
+
+                            <!-- Bloque colapsable con temas secundarios -->
+                            <div class="collapse {{ isSecondaryThemeActive ? 'show' : '' }} mt-3" id="collapseMoreThemes">
+                                <div class="p-3 bg-light rounded-3 border theme-secondary-container">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="small fw-semibold text-secondary text-uppercase auralis-admin-section-label">
+                                            <i class="fa-solid fa-wand-magic-sparkles me-1 text-primary"></i>{{ trans('paletas-adicionales') }}
+                                        </span>
+                                    </div>
+                                    <div class="row g-3">
+                                        <!-- Tema: Auralis Kinetic -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'kinetic' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_kinetic" value="kinetic" {{ currentTheme == 'kinetic' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_kinetic">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #F97316;"></span>
+                                                            <span class="dot" style="background-color: #FFFFFF; border: 1px solid #CBD5E1;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-kinetic') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-kinetic') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Nord (Acero Nórdico) -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'nord' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_nord" value="nord" {{ currentTheme == 'nord' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_nord">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #475569;"></span>
+                                                            <span class="dot" style="background-color: #FFFFFF; border: 1px solid #CBD5E1;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-nord') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-nord') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Zafiro -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'zafiro' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_zafiro" value="zafiro" {{ currentTheme == 'zafiro' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_zafiro">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #1E3A8A;"></span>
+                                                            <span class="dot" style="background-color: #FFFFFF; border: 1px solid #CBD5E1;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-zafiro') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-zafiro') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Legacy -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'pergamino' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_pergamino" value="pergamino" {{ currentTheme == 'pergamino' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_pergamino">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #2C3E50;"></span>
+                                                            <span class="dot" style="background-color: #FDFBF7; border: 1px solid #CBD5E1;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-pergamino') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-pergamino') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Zen -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'zen' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_zen" value="zen" {{ currentTheme == 'zen' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_zen">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #52796F;"></span>
+                                                            <span class="dot" style="background-color: #FFFFFF; border: 1px solid #CBD5E1;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-zen') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-zen') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Prestige -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'prestige' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_prestige" value="prestige" {{ currentTheme == 'prestige' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_prestige">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #B08D57;"></span>
+                                                            <span class="dot" style="background-color: #12100B;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-prestige') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-negro-obsidiana') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Nexus -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'nexus' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_nexus" value="nexus" {{ currentTheme == 'nexus' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_nexus">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #4F46E5;"></span>
+                                                            <span class="dot" style="background-color: #06B6D4;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-nexus') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-nexus') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Cyber -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'cyber' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_cyber" value="cyber" {{ currentTheme == 'cyber' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_cyber">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #8B5CF6;"></span>
+                                                            <span class="dot" style="background-color: #0F0C1B;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-cyber') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-purpura-neon') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Crimson -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'crimson' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_crimson" value="crimson" {{ currentTheme == 'crimson' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_crimson">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #E11D48;"></span>
+                                                            <span class="dot" style="background-color: #334155;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-crimson') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-pizarra-carmin') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Blaze -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'blaze' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_blaze" value="blaze" {{ currentTheme == 'blaze' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_blaze">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #FF5F1F;"></span>
+                                                            <span class="dot" style="background-color: #000000;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-blaze') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-negro-puro') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Serenity -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'serenity' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_serenity" value="serenity" {{ currentTheme == 'serenity' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_serenity">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #2DD4BF;"></span>
+                                                            <span class="dot" style="background-color: #134E4A;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-serenity') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-verde-petroleo') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tema: Auralis Terra -->
+                                        <div class="col-12 col-sm-6">
+                                            <div class="theme-color-card h-100 {{ currentTheme == 'terra' ? 'active' : '' }}">
+                                                <input class="form-check-input d-none" type="radio" name="tema_color" id="theme_terra" value="terra" {{ currentTheme == 'terra' ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100 p-3 cursor-pointer d-flex align-items-center justify-content-between mb-0" for="theme_terra">
+                                                    <div class="d-flex align-items-center me-2 min-w-0">
+                                                        <div class="color-preview-dots me-3">
+                                                            <span class="dot" style="background-color: #B45309;"></span>
+                                                            <span class="dot" style="background-color: #431407;"></span>
+                                                        </div>
+                                                        <div class="text-truncate">
+                                                            <div class="fw-bold text-dark auralis-admin-theme-title">{{ trans('auralis-terra') }}</div>
+                                                            <small class="text-muted text-truncate d-block auralis-admin-theme-desc">{{ trans('lateral-terra') }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="theme-check-icon flex-shrink-0 ms-2">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Panel de personalización de colores -->
+                            <div id="custom_theme_panel" class="mt-3 border rounded-3 p-3 bg-light {{ settings('auralis', 'tema_color', 'auralis') != 'custom' ? 'd-none' : '' }}">
+                                <p class="fw-semibold text-secondary mb-3">
+                                    <i class="fa-solid fa-paintbrush me-2 text-primary"></i>{{ trans('colores-personalizados') }}
+                                </p>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label mb-1" for="custom_primary">
+                                            🎨 {{ trans('color-primario') }}
+                                            <small class="text-muted d-block">{{ trans('botones-links-accent') }}</small>
+                                        </label>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="color" class="form-control form-control-color cursor-pointer" name="custom_primary" id="custom_primary" value="{{ settings('auralis', 'custom_primary', '#10b981') }}">
+                                            <code class="text-muted" id="custom_primary_hex">{{ settings('auralis', 'custom_primary', '#10b981') }}</code>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label mb-1" for="custom_sidebar">
+                                            🖼️ {{ trans('fondo-sidebar') }}
+                                            <small class="text-muted d-block">{{ trans('menu-lateral-navbar') }}</small>
+                                        </label>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="color" class="form-control form-control-color cursor-pointer" name="custom_sidebar" id="custom_sidebar" value="{{ settings('auralis', 'custom_sidebar', '#0f172a') }}">
+                                            <code class="text-muted" id="custom_sidebar_hex">{{ settings('auralis', 'custom_sidebar', '#0f172a') }}</code>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label mb-1" for="custom_accent">
+                                            ✨ {{ trans('color-acento') }}
+                                            <small class="text-muted d-block">{{ trans('badges-highlights') }}</small>
+                                        </label>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="color" class="form-control form-control-color cursor-pointer" name="custom_accent" id="custom_accent" value="{{ settings('auralis', 'custom_accent', '#6366f1') }}">
+                                            <code class="text-muted" id="custom_accent_hex">{{ settings('auralis', 'custom_accent', '#6366f1') }}</code>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-muted mt-2 mb-0 auralis-admin-help">
+                                    <i class="fa-solid fa-circle-info me-1"></i>
+                                    {{ trans('contraste-calculado-automaticamente') }}
+                                </p>
+                            </div>
+
+                            <!-- Colores semánticos Bootstrap: colapsable (cerrado por defecto), independiente del tema -->
+                            <div class="mt-3">
+                                <button class="btn btn-link btn-sm p-0 text-decoration-none text-primary"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapseBsSemanticColors"
+                                        aria-expanded="false"
+                                        aria-controls="collapseBsSemanticColors">
+                                    <i class="fa-solid fa-palette me-1"></i>{{ trans('colores-bootstrap-semanticos') }}
+                                    <i class="fa-solid fa-chevron-down ms-1 small" aria-hidden="true"></i>
+                                </button>
+                                <div class="collapse" id="collapseBsSemanticColors">
+                                    <div id="bootstrap_semantic_colors_panel" class="mt-2 border rounded-3 p-3 bg-light">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" id="btn_reset_bs_semantic_colors">
+                                                <i class="fa-solid fa-rotate-left me-1"></i>{{ trans('restablecer-defaults-bootstrap') }}
+                                            </button>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-md-3 col-sm-6">
+                                                <label class="form-label mb-1" for="custom_success">{{ trans('color-exito') }}</label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" class="form-control form-control-color cursor-pointer" name="custom_success" id="custom_success" value="{{ settings('auralis', 'custom_success', '#198754') }}">
+                                                    <code class="text-muted" id="custom_success_hex">{{ settings('auralis', 'custom_success', '#198754') }}</code>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6">
+                                                <label class="form-label mb-1" for="custom_danger">{{ trans('color-peligro') }}</label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" class="form-control form-control-color cursor-pointer" name="custom_danger" id="custom_danger" value="{{ settings('auralis', 'custom_danger', '#dc3545') }}">
+                                                    <code class="text-muted" id="custom_danger_hex">{{ settings('auralis', 'custom_danger', '#dc3545') }}</code>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6">
+                                                <label class="form-label mb-1" for="custom_warning">{{ trans('color-advertencia') }}</label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" class="form-control form-control-color cursor-pointer" name="custom_warning" id="custom_warning" value="{{ settings('auralis', 'custom_warning', '#ffc107') }}">
+                                                    <code class="text-muted" id="custom_warning_hex">{{ settings('auralis', 'custom_warning', '#ffc107') }}</code>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6">
+                                                <label class="form-label mb-1" for="custom_info">{{ trans('color-info') }}</label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" class="form-control form-control-color cursor-pointer" name="custom_info" id="custom_info" value="{{ settings('auralis', 'custom_info', '#0dcaf0') }}">
+                                                    <code class="text-muted" id="custom_info_hex">{{ settings('auralis', 'custom_info', '#0dcaf0') }}</code>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6">
+                                                <label class="form-label mb-1" for="custom_light">{{ trans('color-luz') }}</label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" class="form-control form-control-color cursor-pointer" name="custom_light" id="custom_light" value="{{ settings('auralis', 'custom_light', '#f8f9fa') }}">
+                                                    <code class="text-muted" id="custom_light_hex">{{ settings('auralis', 'custom_light', '#f8f9fa') }}</code>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-6">
+                                                <label class="form-label mb-1" for="custom_dark">{{ trans('color-oscuridad') }}</label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input type="color" class="form-control form-control-color cursor-pointer" name="custom_dark" id="custom_dark" value="{{ settings('auralis', 'custom_dark', '#212529') }}">
+                                                    <code class="text-muted" id="custom_dark_hex">{{ settings('auralis', 'custom_dark', '#212529') }}</code>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="text-muted mt-2 mb-0 auralis-admin-help">
+                                            <i class="fa-solid fa-circle-info me-1"></i>
+                                            {{ trans('colores-bootstrap-semanticos-help') }}
+                                            {{ trans('color-luz-afecta-bg-light') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25"/>
+
+                        <!-- Sección 3: Tipografía -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary mb-2" for="tipografia">
+                                <i class="fa-solid fa-font me-2 text-primary"></i>{{ trans('tipografia') }}
+                            </label>
+                            {% set tipografiaActual = settings('auralis', 'tipografia', 'plus_jakarta_sans') %}
+                            {% set tipografiasLocales = ['inter', 'lato', 'merriweather', 'montserrat', 'nunito', 'open_sans', 'outfit', 'plus_jakarta_sans', 'poppins', 'roboto', 'sistema'] %}
+                            {% set tipografiaSelect = tipografiaActual in tipografiasLocales ? tipografiaActual : 'sistema' %}
+                            <select class="form-select form-select-lg select2 cursor-pointer" name="tipografia" id="tipografia">
+                                <option value="inter" style="font-family: 'Inter', sans-serif;" {{ tipografiaSelect == 'inter' ? 'selected' : '' }}>Inter</option>
+                                <option value="lato" style="font-family: 'Lato', sans-serif;" {{ tipografiaSelect == 'lato' ? 'selected' : '' }}>Lato</option>
+                                <option value="merriweather" style="font-family: 'Merriweather', serif;" {{ tipografiaSelect == 'merriweather' ? 'selected' : '' }}>Merriweather</option>
+                                <option value="montserrat" style="font-family: 'Montserrat', sans-serif;" {{ tipografiaSelect == 'montserrat' ? 'selected' : '' }}>Montserrat</option>
+                                <option value="nunito" style="font-family: 'Nunito', sans-serif;" {{ tipografiaSelect == 'nunito' ? 'selected' : '' }}>Nunito</option>
+                                <option value="open_sans" style="font-family: 'Open Sans', sans-serif;" {{ tipografiaSelect == 'open_sans' ? 'selected' : '' }}>Open Sans</option>
+                                <option value="outfit" style="font-family: 'Outfit', sans-serif;" {{ tipografiaSelect == 'outfit' ? 'selected' : '' }}>Outfit</option>
+                                <option value="plus_jakarta_sans" style="font-family: 'Plus Jakarta Sans', sans-serif;" {{ tipografiaSelect == 'plus_jakarta_sans' ? 'selected' : '' }}>Plus Jakarta Sans</option>
+                                <option value="poppins" style="font-family: 'Poppins', sans-serif;" {{ tipografiaSelect == 'poppins' ? 'selected' : '' }}>Poppins</option>
+                                <option value="roboto" style="font-family: 'Roboto', sans-serif;" {{ tipografiaSelect == 'roboto' ? 'selected' : '' }}>Roboto</option>
+                                <option value="sistema" style="font-family: sans-serif;" {{ tipografiaSelect == 'sistema' ? 'selected' : '' }}>{{ trans('sistema') }}</option>
+                            </select>
+                        </div>
+
+                        <!-- Sección 4: Tamaños de Tipografía -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary mb-3">
+                                <i class="fa-solid fa-text-height me-2 text-primary"></i>{{ trans('tamano-letra-fuente') }}
+                            </label>
+
+                            <!-- Sliders -->
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <label class="form-label mb-0" for="font_size_base">{{ trans('tamano-texto-base') }}</label>
+                                    <span class="badge bg-light text-dark border" id="font_size_base_val">{{ settings('auralis', 'font_size_base', '16') }}px</span>
+                                </div>
+                                <input type="range" class="form-range" name="font_size_base" id="font_size_base" min="10" max="24" value="{{ settings('auralis', 'font_size_base', '16') }}"/>
+                            </div>
+
+                            <div class="mb-3">
+                                <button class="btn btn-link btn-sm p-0 text-decoration-none text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFuentes" aria-expanded="false" aria-controls="collapseFuentes">
+                                    <i class="fa-solid fa-cog me-1"></i>{{ trans('ajustes-avanzados-fuentes') }}
+                                </button>
+                            </div>
+
+                            <div class="collapse" id="collapseFuentes">
+                                <div class="border rounded p-3 bg-light mb-3">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <label class="form-label mb-0" for="font_size_h1">{{ trans('tamano-titulo-principal-h1') }}</label>
+                                            <span class="badge bg-light text-dark border" id="font_size_h1_val">{{ settings('auralis', 'font_size_h1', '28') }}px</span>
+                                        </div>
+                                        <input type="range" class="form-range" name="font_size_h1" id="font_size_h1" min="18" max="48" value="{{ settings('auralis', 'font_size_h1', '28') }}"/>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <label class="form-label mb-0" for="font_size_h2">{{ trans('tamano-subtitulo-h2') }}</label>
+                                            <span class="badge bg-light text-dark border" id="font_size_h2_val">{{ settings('auralis', 'font_size_h2', '24') }}px</span>
+                                        </div>
+                                        <input type="range" class="form-range" name="font_size_h2" id="font_size_h2" min="16" max="40" value="{{ settings('auralis', 'font_size_h2', '24') }}"/>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <label class="form-label mb-0" for="font_size_h3">{{ trans('tamano-cabecera-seccion-h3') }}</label>
+                                            <span class="badge bg-light text-dark border" id="font_size_h3_val">{{ settings('auralis', 'font_size_h3', '20') }}px</span>
+                                        </div>
+                                        <input type="range" class="form-range" name="font_size_h3" id="font_size_h3" min="14" max="32" value="{{ settings('auralis', 'font_size_h3', '20') }}"/>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <label class="form-label mb-0" for="font_size_h4">{{ trans('tamano-cabecera-bloque-h4') }}</label>
+                                            <span class="badge bg-light text-dark border" id="font_size_h4_val">{{ settings('auralis', 'font_size_h4', '18') }}px</span>
+                                        </div>
+                                        <input type="range" class="form-range" name="font_size_h4" id="font_size_h4" min="12" max="28" value="{{ settings('auralis', 'font_size_h4', '18') }}"/>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <label class="form-label mb-0" for="font_size_h5">{{ trans('tamano-titulo-menor-h5') }}</label>
+                                            <span class="badge bg-light text-dark border" id="font_size_h5_val">{{ settings('auralis', 'font_size_h5', '16') }}px</span>
+                                        </div>
+                                        <input type="range" class="form-range" name="font_size_h5" id="font_size_h5" min="10" max="24" value="{{ settings('auralis', 'font_size_h5', '16') }}"/>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <label class="form-label mb-0" for="font_size_h6">{{ trans('tamano-titulo-minimo-h6') }}</label>
+                                            <span class="badge bg-light text-dark border" id="font_size_h6_val">{{ settings('auralis', 'font_size_h6', '14') }}px</span>
+                                        </div>
+                                        <input type="range" class="form-range" name="font_size_h6" id="font_size_h6" min="8" max="20" value="{{ settings('auralis', 'font_size_h6', '14') }}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25"/>
+
+                        <!-- Sección 5: Sliders Border Radius -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary mb-3">
+                                <i class="fa-solid fa-circle-nodes me-2 text-primary"></i>{{ trans('border-radius') }}
+                            </label>
+
+                            <!-- Sliders -->
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <label class="form-label mb-0" for="border_radius_global">{{ trans('radio-bordes-global') }}</label>
+                                    <span class="badge bg-light text-dark border" id="radius_global_val">{{ settings('auralis', 'border_radius_cards', '12') }}px</span>
+                                </div>
+                                <input type="range" class="form-range" id="border_radius_global" min="0" max="24" value="{{ settings('auralis', 'border_radius_cards', '12') }}"/>
+                            </div>
+
+                            <div class="mb-3">
+                                <button class="btn btn-link btn-sm p-0 text-decoration-none text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBordes" aria-expanded="false" aria-controls="collapseBordes">
+                                    <i class="fa-solid fa-cog me-1"></i>{{ trans('ajustes-avanzados-bordes') }}
+                                </button>
+                            </div>
+
+                            <div class="collapse" id="collapseBordes">
+                                <div class="border rounded p-3 bg-light mb-3">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <label class="form-label mb-0" for="border_radius_cards">{{ trans('border-radius-cards') }}</label>
+                                            <span class="badge bg-light text-dark border" id="radius_cards_val">{{ settings('auralis', 'border_radius_cards', '8') }}px</span>
+                                        </div>
+                                        <input type="range" class="form-range" name="border_radius_cards" id="border_radius_cards" min="0" max="24" value="{{ settings('auralis', 'border_radius_cards', '8') }}"/>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <label class="form-label mb-0" for="border_radius_botones">{{ trans('border-radius-botones') }}</label>
+                                            <span class="badge bg-light text-dark border" id="radius_botones_val">{{ settings('auralis', 'border_radius_botones', '8') }}px</span>
+                                        </div>
+                                        <input type="range" class="form-range" name="border_radius_botones" id="border_radius_botones" min="0" max="24" value="{{ settings('auralis', 'border_radius_botones', '8') }}"/>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <label class="form-label mb-0" for="border_radius_inputs">{{ trans('border-radius-inputs') }}</label>
+                                            <span class="badge bg-light text-dark border" id="radius_inputs_val">{{ settings('auralis', 'border_radius_inputs', '8') }}px</span>
+                                        </div>
+                                        <input type="range" class="form-range" name="border_radius_inputs" id="border_radius_inputs" min="0" max="24" value="{{ settings('auralis', 'border_radius_inputs', '8') }}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25"/>
+
+                        <!-- Sección 6: Logotipo / Favicon Personalizado -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary mb-3">
+                                <i class="fa-solid fa-image me-2 text-primary"></i>{{ trans('logotipo-favicon-personalizado') }}
+                            </label>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">{{ trans('seleccionar-subir-imagen') }}</label>
+                                {{ fsc.getLogoLibraryWidget('custom_logo_id', settings('auralis', 'custom_logo_id'))|raw }}
+                                <div class="form-text mt-1">{{ trans('custom-logo-help') }}</div>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <label class="form-label mb-0" for="logo_height_sidebar">{{ trans('alto-menu-lateral') }} <small class="text-muted">(Modo móvil y vertical)</small></label>
+                                        <span class="badge bg-light text-dark border" id="logo_height_sidebar_val">{{ settings('auralis', 'logo_height_sidebar', '90') }}px</span>
+                                    </div>
+                                    <input type="range" class="form-range" name="logo_height_sidebar" id="logo_height_sidebar" min="20" max="150" value="{{ settings('auralis', 'logo_height_sidebar', '90') }}"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <label class="form-label mb-0" for="logo_height_navbar">{{ trans('alto-barra-superior') }} <small class="text-muted">(Modo horizontal PC)</small></label>
+                                        <span class="badge bg-light text-dark border" id="logo_height_navbar_val">{{ settings('auralis', 'logo_height_navbar', '40') }}px</span>
+                                    </div>
+                                    <input type="range" class="form-range" name="logo_height_navbar" id="logo_height_navbar" min="15" max="80" value="{{ settings('auralis', 'logo_height_navbar', '40') }}"/>
+                                </div>
+                            </div>
+                            {% set customLogo = settings('auralis', 'custom_logo') %}
+                            {% if customLogo %}
+                                <div class="d-flex align-items-center bg-light p-3 rounded border">
+                                    <div class="me-3 p-2 bg-white rounded border">
+                                        <img src="{{ asset(customLogo) }}" height="40" alt="{{ trans('logo-actual') }}"/>
+                                    </div>
+                                    <div>
+                                        <div class="small text-muted mb-2">{{ trans('logotipo-activo-actual') }}</div>
+                                        <button type="submit" name="delete_logo" value="1" class="btn btn-sm btn-outline-danger">
+                                            <i class="fa-solid fa-trash me-1"></i>{{ trans('eliminar-logotipo') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25"/>
+
+                        <!-- Sección 7: Comportamiento Responsive -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary mb-3">
+                                <i class="fa-solid fa-mobile-screen-button me-2 text-primary"></i>{{ trans('comportamiento-responsive') }}
+                            </label>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <label class="form-label mb-0" for="mobile_breakpoint">{{ trans('mobile-breakpoint') }}</label>
+                                    <span class="badge bg-light text-dark border" id="mobile_breakpoint_val">{{ settings('auralis', 'mobile_breakpoint', '990') }}px</span>
+                                </div>
+                                <input type="range" class="form-range" name="mobile_breakpoint" id="mobile_breakpoint" min="480" max="1200" step="10" value="{{ settings('auralis', 'mobile_breakpoint', '990') }}"/>
+                                <div class="form-text">{{ trans('mobile-breakpoint-help') }}</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-2">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="fa-solid fa-save me-2"></i>{{ trans('guardar') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna de Previsualización en Vivo -->
+        <div class="col-lg-5 mb-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 20px; z-index: 10;">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="card-title mb-0 text-secondary">
+                        <i class="fa-solid fa-eye me-2 text-primary"></i>{{ trans('previsualizacion-en-vivo') }}
+                    </h5>
+                </div>
+                <div class="card-body d-flex flex-column align-items-center py-4 bg-light">
+                    <!-- Esquemas de maquetas de menú en la previsualización -->
+                    <div class="mb-4 w-100 bg-white p-3 border rounded shadow-sm">
+                        <div class="d-flex align-items-center mb-2 justify-content-between">
+                            <label class="form-label small fw-bold text-muted mb-0">
+                                <i class="fa-solid fa-layer-group me-1 text-primary"></i>{{ trans('esquema-layout-menu') }}
+                            </label>
+                            <div class="btn-group btn-group-sm" role="group" id="preview_device_selector">
+                                <button type="button" class="btn btn-outline-primary active" id="btn_preview_pc">
+                                    <i class="fa-solid fa-desktop me-1"></i>{{ trans('pc') }}
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" id="btn_preview_mobile">
+                                    <i class="fa-solid fa-mobile-screen me-1"></i>{{ trans('movil') }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="border rounded p-2 bg-light position-relative" style="height: 140px; overflow: hidden;" id="menu_layout_preview_box">
+                            <!-- Maqueta Horizontal -->
+                            <div id="layout_preview_horizontal" class="layout-preview-demo h-100 w-100 flex-column" style="display: {{ settings('auralis', 'modo_menu', 'horizontal') == 'horizontal' ? 'flex' : 'none' }};">
+                                <div class="layout-horizontal-header bg-primary text-white px-2 py-1 small d-flex align-items-center rounded-top" style="height: 30px; font-size: 10px;">
+                                    <i class="fa-solid fa-bars me-2"></i><strong>Empresa S.L.</strong>
+                                    <span class="ms-auto" style="font-size: 8px;">Inicio | Admin | Almacén</span>
+                                </div>
+                                <div class="bg-white p-2 flex-grow-1 border-start border-end border-bottom rounded-bottom d-flex align-items-center justify-content-center">
+                                    <span class="text-muted" style="font-size: 10px;">{{ trans('menu-horizontal-ancho') }}</span>
+                                </div>
+                            </div>
+                            <!-- Maqueta Vertical -->
+                            <div id="layout_preview_vertical" class="layout-preview-demo h-100 w-100 flex-row" style="display: {{ settings('auralis', 'modo_menu', 'horizontal') == 'vertical' ? 'flex' : 'none' }}; border-radius: 4px;">
+                                <div class="layout-vertical-sidebar bg-white border-end p-2 d-flex flex-column rounded-start" style="width: 80px; font-size: 8px; border-color: #dee2e6 !important;">
+                                    <div class="layout-vertical-brand fw-bold border-bottom pb-1 mb-1 text-primary text-truncate">Empresa S.L.</div>
+                                    <span class="text-truncate text-muted mb-1"><i class="fa-solid fa-folder me-1"></i>Admin</span>
+                                    <span class="text-truncate text-muted"><i class="fa-solid fa-folder me-1"></i>Almacén</span>
+                                </div>
+                                <div class="flex-grow-1 d-flex flex-column">
+                                    <div class="layout-vertical-header bg-white border-bottom px-2 py-1 small d-flex align-items-center" style="height: 30px; border-color: #dee2e6 !important;">
+                                        <i class="layout-vertical-header-icon fa-solid fa-bars text-dark me-2" style="font-size: 9px;"></i>
+                                        <span class="ms-auto text-muted" style="font-size: 8px;"><i class="fa-solid fa-search"></i> <i class="fa-solid fa-user"></i></span>
+                                    </div>
+                                    <div class="bg-light p-2 flex-grow-1 d-flex align-items-center justify-content-center">
+                                        <span class="text-muted" style="font-size: 9px; line-height: 1.1; text-align: center;">{{ trans('menu-vertical-desplazado') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Maqueta Móvil (Universal) -->
+                            <div id="layout_preview_mobile" class="layout-preview-demo h-100 w-100 flex-column" style="display: none; border-radius: 4px; max-width: 250px; margin: 0 auto; border: 1px solid #dee2e6;">
+                                <div class="layout-mobile-header bg-white border-bottom px-2 py-1 small d-flex align-items-center" style="height: 30px; border-color: #dee2e6 !important;">
+                                    <i class="layout-mobile-toggler fa-solid fa-bars text-primary me-2" style="font-size: 11px;"></i>
+                                    <span class="layout-mobile-brand fw-bold text-dark" style="font-size: 10px;">Empresa S.L.</span>
+                                    <span class="ms-auto text-muted" style="font-size: 8px;"><i class="fa-solid fa-user"></i></span>
+                                </div>
+                                <div class="flex-grow-1 d-flex position-relative">
+                                    <!-- Menú lateral flotante sobrepuesto -->
+                                    <div class="layout-mobile-sidebar bg-white border-end p-2 d-flex flex-column position-absolute h-100" style="width: 75px; font-size: 7px; border-color: #dee2e6 !important; left: 0; top: 0; z-index: 5; box-shadow: 2px 0 5px rgba(0,0,0,0.08);">
+                                        <span class="layout-mobile-overlay-title text-truncate text-primary mb-1 fw-bold border-bottom pb-1"><i class="fa-solid fa-folder-open me-1"></i>Menu</span>
+                                        <span class="text-truncate text-muted mb-1">Admin</span>
+                                        <span class="text-truncate text-muted">Almacén</span>
+                                    </div>
+                                    <div class="bg-light p-2 flex-grow-1 d-flex align-items-center justify-content-center" style="padding-left: 80px !important;">
+                                        <span class="text-muted" style="font-size: 8px; text-align: center;">{{ trans('vista-movil-overlay') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta de vista previa reactiva -->
+                    <div class="preview-card p-4 bg-white w-100 border shadow-sm mb-4" id="live_preview_card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="preview-avatar rounded bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
+                                <i class="fa-solid fa-user fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold preview-text" id="preview_title">Empresa S.L.</h6>
+                                <small class="text-muted preview-text">{{ trans('muestra-componentes-erp') }}</small>
+                            </div>
+                        </div>
+
+                        <p class="preview-text text-secondary small mb-3">
+                            {{ trans('preview-card-desc') }}
+                        </p>
+
+                        <!-- Input simulado -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted preview-text">{{ trans('campo-texto-muestra') }}</label>
+                            <input type="text" class="form-control" id="live_preview_input" placeholder="{{ trans('escribe-algo') }}" value="{{ trans('datos-prueba') }}"/>
+                        </div>
+
+                        <!-- Botón simulado -->
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="button" class="btn btn-secondary btn-sm px-3" id="live_preview_btn_sec">{{ trans('cancelar') }}</button>
+                            <button type="button" class="btn btn-primary btn-sm px-3" id="live_preview_btn_pri">{{ trans('aceptar') }}</button>
+                        </div>
+                    </div>
+
+                    <!-- Leyenda del tema -->
+                    <div class="w-100 bg-white p-3 border rounded">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge bg-primary me-2">&nbsp;</span>
+                            <span class="small fw-bold">{{ trans('color-primario') }}</span>
+                            <span class="ms-auto text-muted small" id="lbl_primary_color">#10B981</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-secondary me-2">&nbsp;</span>
+                            <span class="small fw-bold">{{ trans('color-secundario') }}</span>
+                            <span class="ms-auto text-muted small" id="lbl_secondary_color">#475569</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('Dinamic/Assets/JS/auralis-admin.js') }}?v=1.3-bs-semantic"></script>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Accesos compartidos a un calendario Auralis: usuario, rol o toda la empresa (ambos vacíos) con permiso ocupado, ver o editar.
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>idcalendario</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>codrole</name>
+        <type>character varying(20)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>permiso</name>
+        <type>character varying(10)</type>
+        <default>'ver'</default>
+    </column>
+    <constraint>
+        <name>auralis_calendario_accesos_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_cal_accesos_calendario</name>
+        <type>FOREIGN KEY (idcalendario) REFERENCES auralis_calendarios (idcalendario) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_cal_accesos_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_cal_accesos_roles</name>
+        <type>FOREIGN KEY (codrole) REFERENCES roles (codrole) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <index>
+        <name>auralis_cal_accesos_idcalendario_idx</name>
+        <columns>idcalendario</columns>
+    </index>
+    <index>
+        <name>auralis_cal_accesos_nick_idx</name>
+        <columns>nick</columns>
+    </index>
+    <index>
+        <name>auralis_cal_accesos_codrole_idx</name>
+        <columns>codrole</columns>
+    </index>
+</table>

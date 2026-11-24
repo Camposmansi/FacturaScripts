@@ -1,0 +1,732 @@
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @copyright 2026 MansiHost.com. Todos los derechos reservados.
+ * @license Licencia privada Auralis. Ver LICENSE.txt
+ * Uso sujeto a los términos de LICENSE.txt.
+ * @description Estilos del tablero Kanban: superficies planas, escala de 8 px, colores derivados del tema, color de estado en el punto y el borde superior de la columna, columnas vacías plegadas y estados de arrastre.
+ */
+
+.auralis-kanban {
+    /* columna derivada del tema (en claro se oscurece, en oscuro se aclara): sin mezclar con #000 */
+    --zk-gris-columna: color-mix(in srgb, var(--v-bg-light, #f4f5f7) 95%, var(--bs-body-color, #212529));
+    --zk-primario: var(--v-primary, #0d6efd);
+    --zk-borde-color: var(--bs-border-color, #dee2e6);
+    --zk-borde: 1px solid var(--zk-borde-color);
+    /* color del estado de cada columna (lo fija el JS); por defecto, el corporativo */
+    --zk-color-estado: var(--v-primary, #0d6efd);
+    --zk-tarjeta-bg: var(--bs-body-bg, #fff);
+    /* texto secundario: casi el color del cuerpo (--v-text-muted no llegaba a 4,5:1 sobre la columna) */
+    --zk-texto-suave: color-mix(in srgb, var(--bs-body-color, #212529) 88%, var(--bs-body-bg, #fff));
+    /* variante oscura del color corporativo para indicadores (foco, destino, pestaña activa) */
+    --zk-acento: color-mix(in srgb, var(--v-primary, #0d6efd) 65%, #000);
+    background: var(--v-bg-light, #f4f5f7);
+    /* texto del contenido, no el del body (los temas oscuros lo aclaran para el menú lateral) */
+    color: var(--bs-body-color, #212529);
+    padding: 16px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.auralis-kanban [hidden] {
+    display: none !important;
+}
+
+.auralis-kanban .zk-pestanas {
+    display: none;
+}
+
+/* ------------------------------------------------------------ tablero y columnas */
+
+.auralis-kanban .zk-tablero {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.auralis-kanban .zk-columna {
+    flex: 0 0 280px;
+    width: 280px;
+    max-height: calc(100vh - 240px);
+    min-height: 160px;
+    overflow-y: auto;
+    /* la columna es el contenedor de las @container de la cabecera (etiquetas de bloqueo con texto o solo candado) */
+    container: zk-columna / inline-size;
+    padding: 0 16px 16px;
+    background: var(--zk-gris-columna);
+    border: var(--zk-borde);
+    border-top: 3px solid var(--zk-color-estado);
+    border-radius: var(--auralis-radius-md, 8px);
+}
+
+.auralis-kanban .zk-cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 16px 0 8px;
+    background: var(--zk-gris-columna);
+}
+
+.auralis-kanban .zk-cabecera-fila {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.auralis-kanban .zk-punto {
+    flex: 0 0 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--zk-color-estado);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--zk-color-estado) 60%, var(--bs-body-color, #212529));
+}
+
+/* El nombre manda: ocupa todo el ancho libre de su fila y se parte en hasta 2 líneas (el texto completo sigue en el DOM y en title). */
+.auralis-kanban .zk-nombre {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.auralis-kanban .zk-contador {
+    flex: 0 0 auto;
+    color: var(--zk-texto-suave);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Etiquetas de bloqueo de la columna («Bloqueado», «Se genera desde la ficha»): línea propia bajo la fila
+ * principal, alineada con el nombre (punto 8 px + hueco 8 px). Sin fondo ni color propio: texto suave y candado.
+ */
+.auralis-kanban .zk-etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-top: 4px;
+    padding-left: 16px;
+}
+
+.auralis-kanban .zk-suma {
+    margin-top: 4px;
+    padding-left: 16px;
+    color: var(--zk-texto-suave);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.auralis-kanban .zk-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 80px;
+    border: 1px dashed transparent;
+    border-radius: var(--auralis-radius-md, 8px);
+}
+
+.auralis-kanban .zk-lista-vacia {
+    align-items: center;
+    justify-content: center;
+    border-color: color-mix(in srgb, var(--zk-texto-suave), transparent 50%);
+}
+
+.auralis-kanban .zk-lista-vacia::before {
+    content: attr(data-vacio);
+    font-size: 12px;
+    color: var(--zk-texto-suave);
+}
+
+.auralis-kanban .zk-lista-vacia:has(.zk-tarjeta)::before {
+    content: none;
+}
+
+.auralis-kanban .zk-mas {
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* ------------------------------------------------------------ tarjeta */
+
+.auralis-kanban .zk-tarjeta {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px;
+    background: var(--zk-tarjeta-bg);
+    border: var(--zk-borde);
+    border-radius: var(--auralis-radius-sm, 6px);
+    cursor: pointer;
+    font-variant-numeric: tabular-nums;
+}
+
+.auralis-kanban .zk-tarjeta:not(.zk-bloqueada) {
+    cursor: grab;
+}
+
+.auralis-kanban .zk-tarjeta:hover {
+    border-color: color-mix(in srgb, var(--zk-primario), transparent 50%);
+}
+
+.auralis-kanban .zk-fila-codigo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 24px;
+    font-size: 12px;
+}
+
+.auralis-kanban .zk-espacio {
+    flex: 1 1 auto;
+}
+
+.auralis-kanban .zk-codigo {
+    color: var(--zk-texto-suave);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+}
+
+.auralis-kanban a.zk-codigo:hover {
+    text-decoration: underline;
+}
+
+.auralis-kanban .zk-bloqueo {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--zk-texto-suave);
+}
+
+/* etiqueta de la cabecera (columna bloqueada o que se genera desde la ficha); el contenedor es .zk-etiquetas */
+.auralis-kanban .zk-bloqueo-columna {
+    flex: 0 1 auto;
+    min-width: 0;
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+/*
+ * Columna estrecha: contenido de menos de 224 px (columna de unos 258 px o menos; la de por defecto mide 280 px
+ * y muestra el texto). Las etiquetas quedan en solo candado: el texto sigue en el DOM como visually-hidden y
+ * en el title, así no gastan ancho ni altura.
+ */
+@container zk-columna (max-width: 223.98px) {
+    .auralis-kanban .zk-etiquetas {
+        flex-wrap: nowrap;
+    }
+
+    .auralis-kanban .zk-bloqueo-columna {
+        font-size: 14px;
+    }
+
+    .auralis-kanban .zk-bloqueo-columna .zk-bloqueo-texto {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+}
+
+.auralis-kanban .zk-columna-bloqueada .zk-tarjeta .zk-bloqueo {
+    display: none;
+}
+
+.auralis-kanban .zk-columna-bloqueada .zk-tarjeta,
+.auralis-kanban .zk-columna-bloqueada .zk-tarjeta:not(.zk-bloqueada) {
+    cursor: not-allowed;
+}
+
+.auralis-kanban .zk-spinner {
+    width: 12px;
+    height: 12px;
+    border-width: 2px;
+    color: var(--zk-acento);
+}
+
+.auralis-kanban .zk-titulo {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.auralis-kanban .zk-subtitulo {
+    font-size: 12px;
+    color: var(--zk-texto-suave);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.auralis-kanban .zk-clave {
+    text-align: right;
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.auralis-kanban .zk-pie {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--zk-texto-suave);
+}
+
+.auralis-kanban .zk-fecha {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: auto;
+}
+
+.auralis-kanban .zk-vencida {
+    color: var(--bs-danger-text-emphasis, #b02a37);
+    font-weight: 600;
+}
+
+/* texto ámbar legible (no --bs-warning): siempre acompañado de icono y texto */
+.auralis-kanban .zk-vence-pronto {
+    color: var(--bs-warning-text-emphasis, #664d03);
+    font-weight: 600;
+}
+
+.auralis-kanban .zk-etiqueta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* «+N»: más etiquetas de las que caben; la lista completa va en el tooltip */
+.auralis-kanban .zk-etiqueta-mas {
+    font-variant-numeric: tabular-nums;
+    cursor: default;
+}
+
+/* dato del criterio de orden de otro plugin (solo mientras se ordena por él) */
+.auralis-kanban .zk-dato-orden {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+}
+
+.auralis-kanban .zk-punto-etiqueta {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--zk-texto-suave);
+    box-shadow: 0 0 0 1px var(--zk-texto-suave);
+}
+
+.auralis-kanban .zk-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: var(--zk-borde);
+    flex: 0 0 24px;
+    border-radius: 50%;
+    background: var(--zk-gris-columna);
+    color: var(--bs-body-color, #212529);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* En curso: borde discontinuo en el color de acento (más el spinner), sin bajar el contraste del texto. */
+.auralis-kanban .zk-tarjeta.zk-pendiente {
+    border-style: dashed;
+    border-color: var(--zk-acento);
+}
+
+/* menú «⋯» visible al pasar el ratón o al recibir el foco */
+.auralis-kanban .zk-menu-btn {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0 8px;
+    color: var(--zk-texto-suave);
+    opacity: 0;
+}
+
+.auralis-kanban .zk-tarjeta:hover .zk-menu-btn,
+.auralis-kanban .zk-tarjeta:focus-within .zk-menu-btn,
+.auralis-kanban .zk-menu-btn[aria-expanded="true"] {
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .auralis-kanban .zk-menu-btn {
+        opacity: 1;
+    }
+}
+
+.auralis-kanban .zk-bloqueada .zk-menu-btn {
+    opacity: .5;
+}
+
+/* ------------------------------------------------------------ foco */
+
+.auralis-kanban .zk-nombre:focus-visible,
+.auralis-kanban .zk-plegada-btn:focus-visible,
+.auralis-kanban .zk-plegar-btn:focus-visible,
+.auralis-kanban .zk-tarjeta:focus-visible,
+.auralis-kanban .zk-pestana:focus-visible,
+.auralis-kanban .zk-menu-btn:focus-visible,
+.auralis-kanban .zk-mas:focus-visible {
+    outline: 2px solid var(--zk-acento);
+    outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------ arrastre */
+
+.auralis-kanban .zk-fantasma {
+    opacity: 1;
+    background: transparent;
+    border: 1px dashed var(--zk-acento);
+}
+
+.auralis-kanban .zk-fantasma > * {
+    visibility: hidden;
+}
+
+.auralis-kanban .zk-elegida,
+.auralis-kanban .zk-arrastrada,
+.auralis-kanban .zk-levantada {
+    box-shadow: var(--bs-box-shadow-sm, 0 .125rem .25rem rgba(0, 0, 0, .075));
+    cursor: grabbing;
+}
+
+.auralis-kanban .zk-levantada {
+    outline: 2px solid var(--zk-acento);
+    outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+    .auralis-kanban .zk-arrastrada {
+        transform: scale(1.02);
+    }
+}
+
+.auralis-kanban .zk-destino-valido {
+    border-color: transparent;
+}
+
+.auralis-kanban .zk-destino-valido.zk-lista {
+    border-color: var(--zk-acento);
+}
+
+.auralis-kanban .zk-destino-sobre.zk-lista,
+.auralis-kanban .zk-destino-sobre.zk-pestana,
+.auralis-kanban .zk-columna.zk-destino-sobre {
+    background: var(--v-bg-light, #f4f5f7);
+    border: 1px dashed var(--zk-acento);
+}
+
+.auralis-kanban .zk-lista.zk-destino-no,
+.auralis-kanban .zk-pestana.zk-destino-no {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.auralis-kanban:has(.zk-tablero.zk-arrastrando) .zk-pestana > * {
+    pointer-events: none;
+}
+
+/* ------------------------------------------------------------ estados */
+
+.auralis-kanban .zk-estado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 32px 16px;
+    color: var(--zk-texto-suave);
+    text-align: center;
+}
+
+.auralis-kanban .zk-estado-texto {
+    margin: 0;
+}
+
+.auralis-kanban .zk-squeleto .zk-columna {
+    overflow: hidden;
+    border-top-color: var(--zk-borde-color);
+}
+
+.auralis-kanban .zk-sq-cabecera,
+.auralis-kanban .zk-sq-tarjeta {
+    border-radius: var(--auralis-radius-sm, 6px);
+    background: color-mix(in srgb, var(--zk-gris-columna) 92%, var(--bs-body-color, #212529));
+    animation: zk-pulso 1.4s ease-in-out infinite;
+}
+
+.auralis-kanban .zk-sq-cabecera {
+    height: 24px;
+    margin: 16px 0 8px;
+}
+
+.auralis-kanban .zk-sq-tarjeta {
+    height: 96px;
+    margin-bottom: 8px;
+}
+
+@keyframes zk-pulso {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+}
+
+/* ------------------------------------------------------------ tablet */
+
+@media (min-width: 576px) and (max-width: 991.98px) {
+    .auralis-kanban .zk-columna {
+        flex-basis: 280px;
+    }
+}
+
+/* ------------------------------------------------------------ columnas vacías plegadas (escritorio y tablet) */
+
+.auralis-kanban .zk-plegada-btn {
+    display: none;
+}
+
+/* «Plegar» en la cabecera de una columna vacía abierta */
+.auralis-kanban .zk-plegar-btn {
+    min-width: 32px;
+    min-height: 32px;
+    margin-left: auto;
+    padding: 0 8px;
+    color: var(--zk-texto-suave);
+}
+
+.auralis-kanban .zk-plegar-btn:hover {
+    color: var(--bs-body-color, #212529);
+}
+
+@media (max-width: 575.98px) {
+    .auralis-kanban .zk-plegar-btn {
+        display: none;
+    }
+}
+
+@media (min-width: 576px) {
+    .auralis-kanban .zk-columna.zk-columna-plegada {
+        flex: 0 0 48px;
+        width: 48px;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .auralis-kanban .zk-columna-plegada > .zk-cabecera,
+    .auralis-kanban .zk-columna-plegada > .zk-lista,
+    .auralis-kanban .zk-columna-plegada > .zk-mas {
+        display: none;
+    }
+
+    .auralis-kanban .zk-columna-plegada > .zk-plegada-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 160px;
+        padding: 16px 0;
+        border: 0;
+        background: transparent;
+        color: var(--bs-body-color, #212529);
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .auralis-kanban .zk-plegada-nombre {
+        max-height: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+    }
+
+    .auralis-kanban .zk-plegada-contador,
+    .auralis-kanban .zk-plegada-bloqueo {
+        color: var(--zk-texto-suave);
+        font-weight: 400;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+/* ------------------------------------------------------------ móvil: una columna con pestañas */
+
+@media (max-width: 575.98px) {
+    .auralis-kanban {
+        padding: 8px;
+    }
+
+    .auralis-kanban .zk-pestanas {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        background: var(--v-bg-light, #f4f5f7);
+    }
+
+    .auralis-kanban .zk-pestana {
+        display: inline-flex;
+        align-items: center;
+        flex: 0 0 auto;
+        gap: 8px;
+        min-height: 44px;
+        padding: 0 16px;
+        border: var(--zk-borde);
+        border-radius: var(--auralis-radius-md, 8px);
+        background: var(--zk-tarjeta-bg);
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .auralis-kanban .zk-pestana-activa {
+        border-color: var(--zk-acento);
+        box-shadow: inset 0 -2px 0 var(--zk-acento);
+    }
+
+    .auralis-kanban .zk-pestana-contador {
+        color: var(--zk-texto-suave);
+        font-weight: 400;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Con pestañas el bloqueo se indica con un candado en la pestaña (texto en title y para lectores), sin segunda línea en la cabecera. */
+    .auralis-kanban .zk-etiquetas {
+        display: none;
+    }
+
+    .auralis-kanban .zk-pestana-bloqueo {
+        color: var(--zk-texto-suave);
+        font-size: 12px;
+        font-weight: 400;
+    }
+
+    .auralis-kanban .zk-tablero {
+        display: block;
+        overflow-x: hidden;
+        touch-action: pan-y;
+    }
+
+    .auralis-kanban .zk-columna {
+        display: none;
+        width: 100%;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .auralis-kanban .zk-columna.zk-columna-activa {
+        display: block;
+    }
+
+    .auralis-kanban .zk-cabecera {
+        position: static;
+    }
+
+    .auralis-kanban .zk-menu-btn,
+    .auralis-kanban .zk-mas {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .auralis-kanban .zk-menu-btn {
+        opacity: 1;
+    }
+}
+
+/* El modal y los toasts viven fuera de la raíz: hoja inferior en móvil. */
+@media (max-width: 575.98px) {
+    .auralis-kanban-modal .modal-dialog {
+        align-items: flex-end;
+        margin: 0 auto;
+        min-height: 100%;
+    }
+
+    .auralis-kanban-modal .btn {
+        min-height: 44px;
+    }
+}
+
+/* ------------------------------------------------------------ modal de detalle (fuera de .auralis-kanban) */
+
+.auralis-kanban-modal-detalle .modal-header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.auralis-kanban-modal-detalle .zk-detalle-titulos {
+    flex: 1 1 12rem;
+    min-width: 0;
+}
+
+.auralis-kanban-modal-detalle .modal-title {
+    overflow-wrap: anywhere;
+}
+
+.auralis-kanban-modal-detalle .zk-detalle-subtitulo {
+    margin-top: 4px;
+    color: color-mix(in srgb, var(--bs-body-color) 88%, var(--bs-body-bg));
+}
+
+.auralis-kanban-modal-detalle .zk-detalle-extra {
+    margin-top: 24px;
+}
+
+/* ------------------------------------------------------------ «Ordenar por» (barra de filtros, fuera de .auralis-kanban) */
+
+/* controles Core a tamaño normal; el botón de invertir, cuadrado y con área táctil de 44 px */
+.auralis-kanban-orden .zk-orden-dir {
+    min-width: 44px;
+}
+
+@media (max-width: 575.98px) {
+    .auralis-kanban-orden .form-select,
+    .auralis-kanban-orden .zk-orden-dir {
+        min-height: 44px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .auralis-kanban *,
+    .auralis-kanban *::before,
+    .auralis-kanban *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}

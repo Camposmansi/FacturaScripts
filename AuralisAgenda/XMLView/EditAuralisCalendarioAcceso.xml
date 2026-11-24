@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Accesos de un calendario común: usuario o rol (ambos vacíos = toda la empresa) y permiso ocupado, ver o editar.
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="id" display="none" order="90">
+                <widget type="text" fieldname="id" readonly="true"/>
+            </column>
+            <column name="calendar" display="none" order="95">
+                <widget type="text" fieldname="idcalendario" readonly="true"/>
+            </column>
+            <column name="user" numcolumns="4" order="100" description="auralis-calendario-acceso-help">
+                <widget type="select" fieldname="nick" onclick="EditUser">
+                    <values source="users" fieldcode="nick" fieldtitle="nick"/>
+                </widget>
+            </column>
+            <column name="role" numcolumns="4" order="110">
+                <widget type="select" fieldname="codrole" onclick="EditRole">
+                    <values source="roles" fieldcode="codrole" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="auralis-calendario-permiso" numcolumns="4" order="120">
+                <widget type="select" fieldname="permiso" translate="true" required="true">
+                    <values title="auralis-calendario-permiso-ocupado">ocupado</values>
+                    <values title="auralis-calendario-permiso-ver">ver</values>
+                    <values title="auralis-calendario-permiso-editar">editar</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

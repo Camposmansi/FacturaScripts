@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Entregas por destinatario de recordatorios de calendario (idempotencia Cron).
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>idnotif</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>canal</name>
+        <type>character varying(20)</type>
+        <default>'email'</default>
+    </column>
+    <column>
+        <name>tipo</name>
+        <type>character varying(20)</type>
+    </column>
+    <column>
+        <name>codigo</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>email</name>
+        <type>character varying(150)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>sent</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>sent_at</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <constraint>
+        <name>auralis_cal_event_notif_deliv_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_cal_notif_deliv_notif</name>
+        <type>FOREIGN KEY (idnotif) REFERENCES auralis_calendar_event_notifications (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>uniq_auralis_cal_notif_deliv</name>
+        <type>UNIQUE (idnotif, canal, tipo, codigo)</type>
+    </constraint>
+    <index>
+        <name>auralis_cal_notif_deliv_idnotif_idx</name>
+        <columns>idnotif</columns>
+    </index>
+</table>

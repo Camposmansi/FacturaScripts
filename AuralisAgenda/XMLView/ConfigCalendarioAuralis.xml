@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Configuración del calendario timegrid 24h, avisos in-app/push e icono PWA.
+-->
+<view>
+    <columns>
+        <group name="name" numcolumns="12" display="none">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+        </group>
+        <group name="calendario-timegrid" title="auralis-config-calendario" icon="fa-solid fa-calendar-day" numcolumns="12">
+            <column name="mostrar_en_dashboard_auralis" title="agenda-mostrar-dashboard-auralis" description="agenda-mostrar-dashboard-auralis-help" order="90" numcolumns="12">
+                <widget type="checkbox" fieldname="mostrar_en_dashboard_auralis"/>
+            </column>
+            <column name="calendar_hora_inicio" title="calendar-hora-inicio-laboral" description="calendar-hora-inicio-help" order="100" numcolumns="4">
+                <widget type="number" fieldname="calendar_hora_inicio" min="0" max="23" step="1" required="true"/>
+            </column>
+            <column name="calendar_hora_fin" title="calendar-hora-fin" description="calendar-hora-fin-help" order="105" numcolumns="4">
+                <widget type="number" fieldname="calendar_hora_fin" min="1" max="24" step="1"/>
+            </column>
+            <column name="calendar_duracion_default" title="calendar-duracion-default" description="calendar-duracion-default-help" order="110" numcolumns="4">
+                <widget type="number" fieldname="calendar_duracion_default" min="5" max="480" step="5" required="true" icon="fa-solid fa-hourglass-half"/>
+            </column>
+        </group>
+        <group name="calendario-mi-mostrar" numcolumns="12">
+            <column name="calendar_mi_show_event_types" title="calendar-mi-show-event-types" description="calendar-mi-show-event-types-help" order="120" numcolumns="4">
+                <widget type="checkbox" fieldname="calendar_mi_show_event_types"/>
+            </column>
+            <column name="calendar_mi_show_event_status" title="calendar-mi-show-event-status" description="calendar-mi-show-event-status-help" order="130" numcolumns="4">
+                <widget type="checkbox" fieldname="calendar_mi_show_event_status"/>
+            </column>
+            <column name="calendar_mi_show_rooms" title="calendar-mi-show-rooms" description="calendar-mi-show-rooms-help" order="140" numcolumns="4">
+                <widget type="checkbox" fieldname="calendar_mi_show_rooms"/>
+            </column>
+        </group>
+        <group name="calendario-event-doc" numcolumns="12">
+            <column name="calendar_event_doc_show" title="calendar-event-doc-show" description="calendar-event-doc-show-help" order="150" numcolumns="4">
+                <widget type="checkbox" fieldname="calendar_event_doc_show"/>
+            </column>
+            <column name="calendar_event_doc_tipo" title="calendar-event-doc-tipo" description="calendar-event-doc-tipo-help" order="160" numcolumns="4">
+                <widget type="select" fieldname="calendar_event_doc_tipo" translate="true" required="true" icon="fa-solid fa-file-invoice">
+                    <values title="estimation">PresupuestoCliente</values>
+                    <values title="order">PedidoCliente</values>
+                    <values title="delivery-note">AlbaranCliente</values>
+                    <values title="invoice">FacturaCliente</values>
+                </widget>
+            </column>
+        </group>
+        <group name="calendario-calendarios" title="auralis-calendarios" icon="fa-solid fa-calendar-week" numcolumns="12">
+            <column name="comunes_gestionan" title="auralis-calendario-comunes-gestionan" description="auralis-calendario-comunes-gestionan-help" order="100" numcolumns="4">
+                <widget type="select" fieldname="comunes_gestionan" translate="true" required="true" icon="fa-solid fa-user-shield">
+                    <values title="auralis-calendario-gestionan-admin">admin</values>
+                    <values title="auralis-calendario-gestionan-roles">roles</values>
+                </widget>
+            </column>
+            <column name="comunes_roles_gestores" title="auralis-calendario-comunes-roles" description="auralis-calendario-comunes-roles-help" order="110" numcolumns="4">
+                <widget type="select" fieldname="comunes_roles_gestores" multiple="true"/>
+            </column>
+            <column name="calendario_defecto" title="auralis-calendario-defecto" description="auralis-calendario-defecto-help" order="120" numcolumns="4">
+                <widget type="select" fieldname="calendario_defecto" required="true" icon="fa-solid fa-calendar-check"/>
+            </column>
+            <column name="permitir_compartir" title="auralis-calendario-permitir-compartir" description="auralis-calendario-permitir-compartir-help" order="130" numcolumns="4">
+                <widget type="checkbox" fieldname="permitir_compartir"/>
+            </column>
+            <column name="permitir_calendarios_extra" title="auralis-calendario-permitir-extra" description="auralis-calendario-permitir-extra-help" order="140" numcolumns="4">
+                <widget type="checkbox" fieldname="permitir_calendarios_extra"/>
+            </column>
+            <column name="calendarios_ayuda" order="150" numcolumns="4">
+                <widget type="info" icon="fa-solid fa-circle-info" text="auralis-calendarios-ajustes-ayuda"/>
+            </column>
+        </group>
+        <group name="calendario-notificaciones-defaults" title="calendar-notif-defaults-title" icon="fa-solid fa-bell" numcolumns="12">
+            <column name="calendar_default_notif_offset" title="calendar-default-notif-offset" description="calendar-default-notif-offset-help" order="100" numcolumns="3">
+                <widget type="number" fieldname="calendar_default_notif_offset" min="0" max="999" step="1" icon="fa-solid fa-hashtag"/>
+            </column>
+            <column name="calendar_default_notif_unit" title="calendar-default-notif-unit" description="calendar-default-notif-unit-help" order="110" numcolumns="3">
+                <widget type="select" fieldname="calendar_default_notif_unit" translate="true" icon="fa-solid fa-clock">
+                    <values title="calendar-notif-minutes">minutes</values>
+                    <values title="calendar-notif-hours">hours</values>
+                    <values title="calendar-notif-days">days</values>
+                    <values title="calendar-notif-weeks">weeks</values>
+                </widget>
+            </column>
+            <column name="calendar_inapp_notifications" title="auralis-inapp-enabled" description="auralis-inapp-enabled-help" order="120" numcolumns="3">
+                <widget type="checkbox" fieldname="calendar_inapp_notifications"/>
+            </column>
+            <column name="calendar_inapp_poll_seconds" title="auralis-inapp-poll-seconds" description="auralis-inapp-poll-seconds-help" order="130" numcolumns="3">
+                <widget type="number" fieldname="calendar_inapp_poll_seconds" min="60" max="90" step="5" icon="fa-solid fa-stopwatch"/>
+            </column>
+        </group>
+        <group name="calendario-push-pwa" id="grupo-calendario-push-pwa" title="auralis-push-title" description="auralis-push-browser-service-notice" icon="fa-solid fa-mobile-screen" numcolumns="12">
+            <column name="calendar_push_notifications" title="auralis-push-enabled" description="auralis-push-enabled-help" order="100" numcolumns="4">
+                <widget type="checkbox" fieldname="calendar_push_notifications"/>
+            </column>
+            <column name="calendar_push_skip_if_online_seconds" title="auralis-push-skip-online" description="auralis-push-skip-online-help" order="110" numcolumns="4">
+                <widget type="number" fieldname="calendar_push_skip_if_online_seconds" min="60" max="900" step="30" icon="fa-solid fa-user-clock"/>
+            </column>
+            <column name="calendar_push_batch_limit" title="auralis-push-batch-limit" description="auralis-push-batch-limit-help" order="120" numcolumns="4">
+                <widget type="number" fieldname="calendar_push_batch_limit" min="1" max="200" step="1" icon="fa-solid fa-layer-group"/>
+            </column>
+            <column name="calendar_push_max_retry_hours" title="auralis-push-max-retry-hours" description="auralis-push-max-retry-hours-help" order="125" numcolumns="4">
+                <widget type="number" fieldname="calendar_push_max_retry_hours" min="1" max="168" step="1" icon="fa-solid fa-clock-rotate-left"/>
+            </column>
+            <column name="calendar_push_max_subs_per_user" title="auralis-push-max-subs" description="auralis-push-max-subs-help" order="130" numcolumns="4">
+                <widget type="number" fieldname="calendar_push_max_subs_per_user" min="1" max="20" step="1"/>
+            </column>
+            <column name="calendar_push_generate_vapid" title="auralis-push-generate-vapid" description="auralis-push-generate-vapid-help" order="140" numcolumns="4">
+                <widget type="checkbox" fieldname="calendar_push_generate_vapid"/>
+            </column>
+            <column name="calendar_push_vapid_public" title="auralis-push-vapid-public" order="150" numcolumns="12">
+                <widget type="text" fieldname="calendar_push_vapid_public" readonly="true"/>
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="footer">
+            {# PWA se reubica por JS dentro del form principal (antes de Guardar) #}
+            <group name="help-pwa-icon" id="footer-calendar-pwa-icon" class="w-100" html="Block/CalendarPwaIcon.html.twig"/>
+            {# El botón de prueba se reubica por JS al final del grupo push; sin JS queda aquí #}
+            <group name="push-test" id="footer-calendar-push-test" class="w-100" html="Block/CalendarPushTest.html.twig"/>
+            <group name="help" id="footer-calendar-help" class="w-100" html="Block/CalendarHelpAccordion.html.twig"/>
+        </row>
+    </rows>
+</view>

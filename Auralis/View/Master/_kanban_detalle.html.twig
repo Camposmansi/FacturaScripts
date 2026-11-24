@@ -1,0 +1,76 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Carcasa del detalle Kanban (cuerpo del modal, lo pinta el servidor): campos declarados por el proveedor
+ #              y, debajo, su plantilla propia. Variables: detalle (salida de KanbanDetalle::normalizar()), puedeEditar (bool).
+ #              Sin <script>: el JS del consumidor llega por detalleAssets() y los eventos del tablero.
+ #}
+{% set kanbanPuedeEditar = puedeEditar|default(false) %}
+<form data-kanban-detalle-form novalidate>
+    <div class="row g-3">
+        {% for campo in detalle.campos %}
+            {% set activo = kanbanPuedeEditar and campo.editable %}
+            {% set idCampo = 'zk-det-' ~ campo.nombre %}
+            {% set idError = idCampo ~ '-error' %}
+            {% set requerido = activo and campo.requerido %}
+            <div class="col-12 col-md-{{ campo.ancho }}">
+                {% if campo.tipo == 'casilla' %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1"
+                               name="{{ campo.nombre }}" id="{{ idCampo }}" aria-describedby="{{ idError }}"
+                               {% if campo.valor %}checked{% endif %}
+                               {% if requerido %}required aria-required="true"{% endif %}
+                               {% if not activo %}disabled{% endif %}>
+                        <label class="form-check-label" for="{{ idCampo }}">{{ campo.etiqueta }}</label>
+                        <div class="invalid-feedback" id="{{ idError }}" data-error-for="{{ campo.nombre }}"></div>
+                    </div>
+                {% elseif campo.tipo == 'solo-lectura' %}
+                    <div class="form-label mb-1" id="{{ idCampo }}-etiqueta">{{ campo.etiqueta }}</div>
+                    <div class="form-control-plaintext" id="{{ idCampo }}" aria-labelledby="{{ idCampo }}-etiqueta">
+                        {%- if campo.valor is same as('') -%}
+                            <span class="text-body-secondary" aria-hidden="true">—</span>
+                        {%- else -%}
+                            {{ campo.valor }}
+                        {%- endif -%}
+                    </div>
+                {% else %}
+                    <label class="form-label" for="{{ idCampo }}">
+                        {{- campo.etiqueta -}}
+                        {%- if requerido %} <span class="text-danger" aria-hidden="true">*</span>{% endif -%}
+                    </label>
+                    {% if campo.tipo == 'textarea' %}
+                        <textarea class="form-control" rows="4" maxlength="{{ campo.maxlength }}"
+                                  name="{{ campo.nombre }}" id="{{ idCampo }}" aria-describedby="{{ idError }}"
+                                  {% if requerido %}required aria-required="true"{% endif %}
+                                  {% if not activo %}readonly{% endif %}>{{ campo.valor }}</textarea>
+                    {% elseif campo.tipo == 'select' %}
+                        <select class="form-select" name="{{ campo.nombre }}" id="{{ idCampo }}" aria-describedby="{{ idError }}"
+                                {% if requerido %}required aria-required="true"{% endif %}
+                                {% if not activo %}disabled{% endif %}>
+                            {% if not campo.requerido %}
+                                <option value=""{% if campo.valor is same as('') %} selected{% endif %}>—</option>
+                            {% endif %}
+                            {% for clave, texto in campo.opciones %}
+                                <option value="{{ clave }}"{% if (clave ~ '') is same as(campo.valor) %} selected{% endif %}>{{ texto }}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        {% set tipoInput = campo.tipo == 'numero' ? 'number' : (campo.tipo == 'fecha' ? 'date' : 'text') %}
+                        <input class="form-control" type="{{ tipoInput }}"
+                               name="{{ campo.nombre }}" id="{{ idCampo }}" aria-describedby="{{ idError }}"
+                               value="{{ campo.valor }}"
+                               {% if tipoInput == 'text' %}maxlength="{{ campo.maxlength }}"{% elseif tipoInput == 'number' %}step="any"{% endif %}
+                               {% if requerido %}required aria-required="true"{% endif %}
+                               {% if not activo %}readonly{% endif %}>
+                    {% endif %}
+                    <div class="invalid-feedback" id="{{ idError }}" data-error-for="{{ campo.nombre }}"></div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    {% if detalle.plantilla %}
+        <div class="zk-detalle-extra mt-3">
+            {% include detalle.plantilla with {detalle: detalle.datos, puedeEditar: kanbanPuedeEditar} only %}
+        </div>
+    {% endif %}
+</form>

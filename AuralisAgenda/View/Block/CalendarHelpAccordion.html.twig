@@ -1,0 +1,199 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Guías colapsables: email + onboarding visual Web Push (stepper Bootstrap + FA).
+ #}
+<div class="col-12 px-0 pb-0 mt-2 auralis-calendar-config-block">
+    <div class="accordion accordion-flush border rounded-3 overflow-hidden shadow-sm" id="accordionGuiasAgenda">
+        <div class="accordion-item border-0 border-bottom">
+            <h2 class="accordion-header" id="headingGuiaEmail">
+                <button class="accordion-button collapsed py-2 px-3 auralis-calendar-config-accordion-btn"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#guiaEmailAgenda"
+                        aria-expanded="false"
+                        aria-controls="guiaEmailAgenda">
+                    <i class="fa-solid fa-envelope me-2" aria-hidden="true"></i>
+                    {{ trans('calendar-notif-config-email-reminder') }}
+                </button>
+            </h2>
+            <div id="guiaEmailAgenda" class="accordion-collapse collapse"
+                 aria-labelledby="headingGuiaEmail" data-bs-parent="#accordionGuiasAgenda">
+                <div class="accordion-body py-2 px-3 auralis-calendar-config-help text-muted bg-white">
+                    <ol class="ps-3 mb-2">
+                        <li class="mb-1">{{ trans('calendar-notif-config-email-step-1') }}</li>
+                        <li class="mb-1">{{ trans('calendar-notif-config-email-step-2') }}</li>
+                        <li>{{ trans('calendar-notif-config-email-step-3') }}</li>
+                    </ol>
+                    <a href="ConfigEmail" class="btn btn-sm btn-outline-primary mb-0">
+                        <i class="fa-solid fa-gear me-1" aria-hidden="true"></i>{{ trans('calendar-notif-config-email-link') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item border-0">
+            <h2 class="accordion-header" id="headingGuiaPush">
+                <button class="accordion-button collapsed py-2 px-3 auralis-calendar-config-accordion-btn"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#guiaPushAgenda"
+                        aria-expanded="false"
+                        aria-controls="guiaPushAgenda">
+                    <i class="fa-solid fa-mobile-screen me-2" aria-hidden="true"></i>
+                    {{ trans('auralis-push-howto-title') }}
+                </button>
+            </h2>
+            <div id="guiaPushAgenda" class="accordion-collapse collapse"
+                 aria-labelledby="headingGuiaPush" data-bs-parent="#accordionGuiasAgenda">
+                <div class="accordion-body p-3 bg-white auralis-push-onboarding">
+
+                    {# Admin: chips / timeline compacto #}
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                            <span class="badge text-bg-secondary rounded-pill">{{ trans('auralis-push-step-admin-badge') }}</span>
+                            <span class="fw-semibold auralis-calendar-config-title mb-0">
+                                {{ trans('auralis-push-step-admin-title') }}
+                            </span>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-12 col-md-4">
+                                <div class="border rounded p-2 bg-light h-100">
+                                    <div class="fw-semibold text-primary auralis-calendar-config-title">
+                                        <i class="fa-solid fa-1 me-1" aria-hidden="true"></i>{{ trans('auralis-push-step-admin-1-title') }}
+                                    </div>
+                                    <div class="auralis-calendar-config-help text-muted mt-1">{{ trans('auralis-push-step-admin-1-desc') }}</div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="border rounded p-2 bg-light h-100">
+                                    <div class="fw-semibold text-primary auralis-calendar-config-title">
+                                        <i class="fa-solid fa-2 me-1" aria-hidden="true"></i>{{ trans('auralis-push-step-admin-2-title') }}
+                                    </div>
+                                    <div class="auralis-calendar-config-help text-muted mt-1">{{ trans('auralis-push-step-admin-2-desc') }}</div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="border rounded p-2 bg-light h-100">
+                                    <div class="fw-semibold text-primary auralis-calendar-config-title">
+                                        <i class="fa-solid fa-3 me-1" aria-hidden="true"></i>{{ trans('auralis-push-step-admin-3-title') }}
+                                    </div>
+                                    <div class="auralis-calendar-config-help text-muted mt-1">{{ trans('auralis-push-step-admin-3-desc') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="text-muted opacity-25 my-3">
+
+                    {# Usuarios: tarjetas Android/PC vs iPhone #}
+                    <div class="mb-2">
+                        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                            <span class="badge text-bg-primary rounded-pill">{{ trans('auralis-push-step-user-badge') }}</span>
+                            <span class="fw-bold text-uppercase text-secondary auralis-calendar-config-label mb-0">
+                                {{ trans('auralis-push-step-user-title') }}
+                            </span>
+                        </div>
+                        <p class="auralis-calendar-config-help text-muted mb-3">{{ trans('auralis-push-step-user-intro') }}</p>
+                        <p class="auralis-calendar-config-help text-muted mb-3">{{ trans('auralis-push-browser-service-notice') }}</p>
+
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <div class="card h-100 border shadow-none bg-body-tertiary">
+                                    <div class="card-header bg-transparent py-2 border-bottom fw-semibold auralis-calendar-config-label d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                                        <span>
+                                            <i class="fa-brands fa-android text-success me-1" aria-hidden="true"></i>
+                                            {{ trans('auralis-push-card-android-title') }}
+                                        </span>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle">{{ trans('auralis-push-card-android-badge') }}</span>
+                                    </div>
+                                    <div class="card-body p-3">
+                                        <div class="d-flex gap-3 mb-3">
+                                            <div class="flex-shrink-0">
+                                                <span class="auralis-push-step-icon d-inline-flex align-items-center justify-content-center bg-white border rounded-circle shadow-sm">
+                                                    <i class="fa-solid fa-bell text-warning" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <strong class="d-block auralis-calendar-config-title">{{ trans('auralis-push-card-android-1-title') }}</strong>
+                                                <span class="auralis-calendar-config-help text-muted">{{ trans('auralis-push-card-android-1-desc') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-3">
+                                            <div class="flex-shrink-0">
+                                                <span class="auralis-push-step-icon d-inline-flex align-items-center justify-content-center bg-white border rounded-circle shadow-sm">
+                                                    <i class="fa-solid fa-mobile-screen text-primary" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <strong class="d-block auralis-calendar-config-title">{{ trans('auralis-push-card-android-2-title') }}</strong>
+                                                <span class="auralis-calendar-config-help text-muted">{{ trans('auralis-push-card-android-2-desc') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="card h-100 border shadow-none bg-body-tertiary">
+                                    <div class="card-header bg-transparent py-2 border-bottom fw-semibold auralis-calendar-config-label d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                                        <span>
+                                            <i class="fa-brands fa-apple text-body me-1" aria-hidden="true"></i>
+                                            {{ trans('auralis-push-card-ios-title') }}
+                                        </span>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">{{ trans('auralis-push-card-ios-badge') }}</span>
+                                    </div>
+                                    <div class="card-body p-3">
+                                        <div class="d-flex gap-3 mb-3">
+                                            <div class="flex-shrink-0">
+                                                <span class="auralis-push-step-icon d-inline-flex align-items-center justify-content-center bg-white border rounded-circle shadow-sm">
+                                                    <i class="fa-solid fa-arrow-up-from-bracket text-primary" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <strong class="d-block auralis-calendar-config-title">{{ trans('auralis-push-card-ios-1-title') }}</strong>
+                                                <span class="auralis-calendar-config-help text-muted">{{ trans('auralis-push-card-ios-1-desc') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-3">
+                                            <div class="flex-shrink-0">
+                                                <span class="auralis-push-step-icon d-inline-flex align-items-center justify-content-center bg-white border rounded-circle shadow-sm">
+                                                    <i class="fa-solid fa-square-plus text-body" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <strong class="d-block auralis-calendar-config-title">{{ trans('auralis-push-card-ios-2-title') }}</strong>
+                                                <span class="auralis-calendar-config-help text-muted">{{ trans('auralis-push-card-ios-2-desc') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info py-2 px-3 d-flex align-items-start gap-2 mb-0 mt-3 rounded-3 auralis-calendar-config-help">
+                        <i class="fa-solid fa-circle-info flex-shrink-0 mt-1" aria-hidden="true"></i>
+                        <div>
+                            <strong>{{ trans('auralis-push-howto-note-lead') }}</strong>
+                            {{ trans('auralis-push-howto-note') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var footer = document.getElementById('footer-calendar-help');
+        if (!footer) {
+            return;
+        }
+        var form = footer.closest('form');
+        if (form) {
+            form.classList.add('w-100');
+        }
+    })();
+</script>

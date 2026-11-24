@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Configuración de avisos internos por tipo de documento Auralis.
+-->
+<view>
+    <columns>
+        <group name="name" numcolumns="12" display="none">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+        </group>
+        <group name="avisos-venta" title="auralis-avisos-venta" icon="fa-solid fa-cash-register" numcolumns="12">
+            <column name="presupuesto_cliente" title="auralis-aviso-presupuesto-cliente" order="100">
+                <widget type="checkbox" fieldname="presupuesto_cliente"/>
+            </column>
+            <column name="pedido_cliente" title="auralis-aviso-pedido-cliente" order="110">
+                <widget type="checkbox" fieldname="pedido_cliente"/>
+            </column>
+            <column name="albaran_cliente" title="auralis-aviso-albaran-cliente" order="120">
+                <widget type="checkbox" fieldname="albaran_cliente"/>
+            </column>
+            <column name="factura_cliente" title="auralis-aviso-factura-cliente" order="130">
+                <widget type="checkbox" fieldname="factura_cliente"/>
+            </column>
+        </group>
+        <group name="avisos-compra" title="auralis-avisos-compra" icon="fa-solid fa-cart-shopping" numcolumns="12">
+            <column name="presupuesto_proveedor" title="auralis-aviso-presupuesto-proveedor" order="100">
+                <widget type="checkbox" fieldname="presupuesto_proveedor"/>
+            </column>
+            <column name="pedido_proveedor" title="auralis-aviso-pedido-proveedor" order="110">
+                <widget type="checkbox" fieldname="pedido_proveedor"/>
+            </column>
+            <column name="albaran_proveedor" title="auralis-aviso-albaran-proveedor" order="120">
+                <widget type="checkbox" fieldname="albaran_proveedor"/>
+            </column>
+            <column name="factura_proveedor" title="auralis-aviso-factura-proveedor" order="130">
+                <widget type="checkbox" fieldname="factura_proveedor"/>
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="footer">
+            <group name="help" id="footer-auralis-avisos-info" class="w-100" html="Block/ConfigAuralisAvisosInfo.html.twig"/>
+        </row>
+    </rows>
+</view>

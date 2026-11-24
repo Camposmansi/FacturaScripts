@@ -1,0 +1,45 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Shell full-page de agenda timegrid (sin card). Enganche: include desde satélites.
+ #
+ # Parámetros:
+ #   page_title       (string, obligatorio) — ya traducido
+ #   page_subtitle    (string, opcional)
+ #   page_class       (string, default auralis-calendar-page)
+ #   header_actions   (HTML capturado, opcional) — botones a la derecha del título
+ #   header_filters   (HTML capturado, opcional) — selects en .auralis-calendar-filters (antes de vistas)
+ #   sidebar          (bool, opcional) — lateral de calendarios (Mi calendario). Sin él, el HTML es el de siempre.
+ #   sidebar_calendars (array, con sidebar) — respuesta de calendarios-list (calendarios, defecto, permitir_*).
+ #                     Con sidebar, header_filters va al bloque «Filtros» del lateral. Ver _calendar_page_sidebar.
+ #}
+{% set page_class = page_class|default('auralis-calendar-page') %}
+{% if sidebar is defined and sidebar %}
+{% include 'Master/_calendar_page_sidebar.html.twig' %}
+{% else %}
+<div class="{{ page_class }} container-fluid py-3">
+    <div class="auralis-calendar-page-heading d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-2 mb-3">
+        <div>
+            <h1 class="h3 mb-1">
+                <i class="fa-solid fa-calendar-days me-2 text-primary"></i>{{ page_title }}
+            </h1>
+            {% if page_subtitle is defined and page_subtitle %}
+                <p class="text-muted small mb-0 auralis-calendar-page-subtitle">{{ page_subtitle }}</p>
+            {% endif %}
+        </div>
+        {% if header_actions is defined and header_actions %}
+            <div class="d-flex gap-2 flex-wrap auralis-calendar-page-actions">
+                {{ header_actions|raw }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="auralis-calendar-page-body">
+{% include 'Master/_calendar_toolbar.html.twig' %}
+
+        <div class="z-calendar-container" style="min-height: 420px;">
+            {# Carga AJAX action=calendar-events #}
+        </div>
+    </div>
+</div>
+{% endif %}

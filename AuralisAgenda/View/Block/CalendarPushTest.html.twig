@@ -1,0 +1,20 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Botón «Enviar push de prueba» de Config agenda; se reubica al final del grupo push.
+ #}
+<div class="col-12 px-0 pb-0 mt-2 auralis-calendar-config-block">
+    <div class="auralis-push-test border rounded-3 p-3 bg-light" data-auralis-push-test
+         data-url="AuralisAgendaNotificationsAjax"
+         data-error="{{ trans('auralis-push-test-error')|e('html_attr') }}">
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <button type="button" class="btn btn-outline-primary mb-0" data-auralis-push-test-btn>
+                <i class="fa-solid fa-paper-plane me-1" aria-hidden="true"></i>{{ trans('auralis-push-test-button') }}
+            </button>
+            <span class="auralis-calendar-config-help text-muted">{{ trans('auralis-push-test-help') }}</span>
+        </div>
+        <div class="alert mt-3 mb-0 d-none" role="status" data-auralis-push-test-result></div>
+    </div>
+</div>
+
+<script src="{{ asset('Dinamic/Assets/JS/auralis-push-test.js') }}?v={{ agendaAssetVersion('Dinamic/Assets/JS/auralis-push-test.js') }}"></script>

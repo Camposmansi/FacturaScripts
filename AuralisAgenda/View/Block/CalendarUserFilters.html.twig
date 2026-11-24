@@ -1,0 +1,38 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Filtros de cabecera para Mi calendario (tipo / estado / asistente).
+ #              Tipo y estado solo si el setting está ON y hay catálogo activo.
+ #              Ancho responsive: CSS .auralis-calendar-filter-selects (sin width inline).
+ #}
+{% set showTipos = settings('auralis_calendario', 'calendar_mi_show_event_types', '0') == '1'
+    and fsc.eventTypesList|default([])|length > 0 %}
+{% set showEstados = settings('auralis_calendario', 'calendar_mi_show_event_status', '0') == '1'
+    and fsc.eventStatusesList|default([])|length > 0 %}
+{% if showTipos %}
+<select id="calFilterTipo" class="form-select auralis-cal-filter-control"
+        title="{{ trans('calendar-filter-tipo') }}" aria-label="{{ trans('calendar-filter-tipo') }}">
+    <option value="">{{ trans('calendar-filter-tipo-all') }}</option>
+    {% for t in fsc.eventTypesList|default([]) %}
+        <option value="{{ t.id }}">{{ t.nombre }}</option>
+    {% endfor %}
+</select>
+{% endif %}
+{% if showEstados %}
+<select id="calFilterEstado" class="form-select auralis-cal-filter-control"
+        title="{{ trans('calendar-filter-estado') }}" aria-label="{{ trans('calendar-filter-estado') }}">
+    <option value="">{{ trans('calendar-filter-estado-all') }}</option>
+    {% for s in fsc.eventStatusesList|default([]) %}
+        <option value="{{ s.codestado }}">{{ s.nombre }}</option>
+    {% endfor %}
+</select>
+{% endif %}
+<select id="calFilterParticipante" class="form-select auralis-cal-filter-control auralis-cal-filter-participante"
+        title="{{ trans('calendar-filter-participante') }}"
+        aria-label="{{ trans('calendar-filter-participante') }}"
+        placeholder="{{ trans('calendar-filter-participante-all') }}"
+        data-tipo-user="{{ trans('user')|e('html_attr') }}"
+        data-tipo-cliente="{{ trans('customer')|e('html_attr') }}"
+        data-tipo-contacto="{{ trans('contact')|e('html_attr') }}">
+    <option value="">{{ trans('calendar-filter-participante-all') }}</option>
+</select>

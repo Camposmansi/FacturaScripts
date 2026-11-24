@@ -1,0 +1,520 @@
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Estilos premium para el panel de configuración de Auralis en el ERP.
+ *              Tipografía anclada a ConfigAuralis (--auralis-font-size-base / h*).
+ */
+
+.auralis-admin-container {
+    width: 100%;
+    font-size: var(--auralis-font-size-base, 1rem);
+}
+
+.auralis-admin-container .card-title,
+.auralis-admin-container .form-label {
+    font-size: inherit;
+}
+
+.auralis-admin-container h5.card-title {
+    font-size: var(--auralis-font-size-h5, var(--auralis-font-size-base, 1rem)) !important;
+}
+
+/* Tipografía de tarjetas de tema / modo menú (sustituye inline rem/px) */
+.auralis-admin-theme-title {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.95) !important;
+    line-height: 1.3;
+}
+
+.auralis-admin-theme-desc {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.6875) !important; /* ~11px @ 16 */
+    line-height: 1.35;
+}
+
+.auralis-admin-section-label {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.6875) !important;
+    letter-spacing: 0.03em;
+}
+
+.auralis-admin-badge-sm {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.625) !important;
+}
+
+.auralis-admin-help {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.6875) !important;
+}
+
+.auralis-admin-container .theme-collapse-btn {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.875) !important;
+}
+
+.auralis-admin-container .form-control,
+.auralis-admin-container .form-select,
+.auralis-admin-container .btn:not(.btn-sm) {
+    font-size: var(--auralis-font-size-base, 1rem) !important;
+}
+
+.auralis-admin-container .btn-sm {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.875) !important;
+}
+
+.auralis-admin-container .form-label.fw-bold {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.9375) !important;
+}
+
+/* Checkboxes visibles: Bootstrap Core usa #0d6efd compilado; forzar primario del tema. */
+.auralis-admin-container .form-check-input {
+    accent-color: var(--v-primary, #10b981);
+    cursor: pointer;
+}
+
+.auralis-admin-container .form-check-input:checked {
+    background-color: var(--v-primary, #10b981) !important;
+    border-color: var(--v-primary, #10b981) !important;
+}
+
+.auralis-admin-container .form-check-input:focus {
+    border-color: var(--v-primary, #10b981);
+    box-shadow: 0 0 0 0.25rem rgba(var(--v-primary-rgb, 16, 185, 129), 0.25);
+}
+
+.auralis-admin-container .form-check-input:checked:focus {
+    box-shadow: 0 0 0 0.25rem rgba(var(--v-primary-rgb, 16, 185, 129), 0.25);
+}
+
+/* Tarjetas de Selección de Opciones */
+.menu-mode-card, .theme-color-card {
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #ffffff;
+    position: relative;
+}
+
+.menu-mode-card:hover, .theme-color-card:hover {
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.menu-mode-card.active, .theme-color-card.active {
+    border-color: var(--v-primary, #10b981);
+    background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.04);
+    box-shadow: 0 0 0 1px var(--v-primary, #10b981);
+}
+
+/* Fix alineación check icon: flex puro, sin position:absolute */
+.theme-color-card .form-check-label {
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+
+.theme-color-card .form-check-label > div:first-child {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.theme-color-card .theme-check-icon {
+    flex-shrink: 0;
+    min-width: 1.4rem;
+    text-align: center;
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 1.1);
+    color: #cbd5e1;
+    transition: all 0.2s ease;
+    opacity: 0.4;
+    pointer-events: none;
+    margin-left: 0.5rem;
+}
+
+.theme-color-card.active .theme-check-icon {
+    color: var(--v-primary, #10b981);
+    opacity: 1;
+}
+
+.theme-color-card .text-truncate {
+    min-width: 0;
+}
+
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Botón y contenedor para más temas de color */
+.theme-collapse-btn {
+    border-color: #cbd5e1;
+    color: #475569;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+}
+
+.theme-collapse-btn:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+    color: #0f172a;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.theme-collapse-btn .theme-chevron {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-collapse-btn[aria-expanded="true"] .theme-chevron,
+.theme-collapse-btn:not(.collapsed) .theme-chevron {
+    transform: rotate(180deg);
+}
+
+.theme-collapse-btn[aria-expanded="true"] .theme-collapse-text-more,
+.theme-collapse-btn:not(.collapsed) .theme-collapse-text-more {
+    display: none !important;
+}
+
+.theme-collapse-btn[aria-expanded="true"] .theme-collapse-text-less,
+.theme-collapse-btn:not(.collapsed) .theme-collapse-text-less {
+    display: inline !important;
+}
+
+.theme-secondary-container {
+    background-color: #f8fafc;
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 12px;
+}
+
+/* Iconos y previews dentro de las opciones */
+.icon-wrapper {
+    width: 50px;
+    height: 50px;
+    background-color: #f1f5f9;
+    color: #475569;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 1.25);
+}
+
+.menu-mode-card.active .icon-wrapper {
+    background-color: var(--v-primary, #10b981);
+    color: #ffffff;
+}
+
+.menu-mode-card .fw-bold {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.95);
+}
+
+.menu-mode-card small {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.75);
+}
+
+.color-preview-dots {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.color-preview-dots .dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0, 0, 0, 0.12);
+    display: inline-block;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Estilos de los Sliders */
+.form-range::-webkit-slider-thumb {
+    background: var(--v-primary, #10b981);
+}
+
+.form-range::-moz-range-thumb {
+    background: var(--v-primary, #10b981);
+}
+
+.form-range::-ms-thumb {
+    background: var(--v-primary, #10b981);
+}
+
+/* Previsualización en Vivo */
+.preview-card {
+    border: 1px solid #e2e8f0;
+    transition: border-radius 0.2s ease;
+    background-color: #ffffff;
+}
+
+.preview-avatar {
+    transition: background-color 0.2s ease;
+}
+
+#live_preview_btn_pri {
+    transition: border-radius 0.2s ease, background-color 0.2s ease;
+}
+
+#live_preview_btn_sec {
+    transition: border-radius 0.2s ease;
+}
+
+/* Soporte modo oscuro nativo en la administración */
+.dark-mode .menu-mode-card, .dark-mode .theme-color-card {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+.dark-mode .menu-mode-card:hover, .dark-mode .theme-color-card:hover {
+    border-color: #475569;
+}
+
+.dark-mode .menu-mode-card.active, .dark-mode .theme-color-card.active {
+    border-color: #2dd4bf;
+    background-color: rgba(45, 212, 191, 0.03);
+    box-shadow: 0 0 0 1px #2dd4bf;
+}
+
+.dark-mode .icon-wrapper {
+    background-color: #334155;
+    color: #94a3b8;
+}
+
+.dark-mode .menu-mode-card.active .icon-wrapper {
+    background-color: #2dd4bf;
+    color: #0f172a;
+}
+
+.dark-mode .card {
+    background-color: #1e293b !important;
+    color: #f1f5f9;
+}
+
+.dark-mode .card-header {
+    background-color: #1e293b !important;
+    border-bottom-color: #334155 !important;
+}
+
+.dark-mode .preview-card {
+    background-color: #0f172a !important;
+    border-color: #334155;
+}
+
+.dark-mode .theme-collapse-btn {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+.dark-mode .theme-collapse-btn:hover {
+    background-color: #334155;
+    border-color: #475569;
+    color: #ffffff;
+}
+
+.dark-mode .theme-secondary-container {
+    background-color: #0f172a;
+    border-color: #334155 !important;
+}
+
+/* Lead magnet: dolores (ConfigAuralisServicios) */
+.auralis-pain-shell {
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.04) 0%, #ffffff 42%);
+    border: 1px solid #e2e8f0;
+}
+
+.auralis-pain-badge {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.8);
+    font-weight: 600;
+    padding: 0.35rem 0.65rem;
+}
+
+.auralis-pain-hero-title {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 1.25);
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.35;
+}
+
+.auralis-pain-cta {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.95);
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+}
+
+.auralis-pain-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+.auralis-pain-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background-color: #ffffff;
+    min-height: 6.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.auralis-pain-card:hover {
+    border-color: var(--v-primary, #10b981);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.12);
+    transform: translateY(-1px);
+    color: inherit;
+}
+
+.auralis-pain-card-link {
+    flex-shrink: 0;
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.75);
+    color: #94a3b8;
+    margin-top: 0.15rem;
+    opacity: 0;
+    transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.auralis-pain-card:hover .auralis-pain-card-link {
+    opacity: 1;
+    color: var(--v-primary, #10b981);
+}
+
+.auralis-pain-card-icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 1.15);
+    line-height: 1;
+}
+
+.auralis-pain-card--warning .auralis-pain-card-icon {
+    background-color: rgba(245, 158, 11, 0.14);
+    color: #d97706;
+}
+
+.auralis-pain-card--success .auralis-pain-card-icon {
+    background-color: rgba(16, 185, 129, 0.14);
+    color: #059669;
+}
+
+.auralis-pain-card--info .auralis-pain-card-icon {
+    background-color: rgba(14, 165, 233, 0.14);
+    color: #0284c7;
+}
+
+.auralis-pain-card--primary .auralis-pain-card-icon {
+    background-color: rgba(59, 130, 246, 0.14);
+    color: #2563eb;
+}
+
+.auralis-pain-card--danger .auralis-pain-card-icon {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+}
+
+.auralis-pain-card--secondary .auralis-pain-card-icon {
+    background-color: rgba(100, 116, 139, 0.14);
+    color: #475569;
+}
+
+.auralis-pain-card-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.auralis-pain-card-title {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.95);
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.35;
+    margin-bottom: 0.35rem;
+}
+
+.auralis-pain-card-alivio {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.85);
+    color: #475569;
+    line-height: 1.45;
+}
+
+.auralis-pain-footer {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.85);
+    line-height: 1.4;
+}
+
+@media (max-width: 992px) {
+    .auralis-pain-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .auralis-pain-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .auralis-pain-card {
+        padding: 0.85rem 1rem;
+    }
+
+    .auralis-pain-card-link {
+        opacity: 0.6;
+    }
+}
+
+@media (max-width: 576px) {
+    .auralis-pain-hero {
+        margin-bottom: 1rem !important;
+    }
+
+    .auralis-pain-hero-title {
+        font-size: calc(var(--auralis-font-size-base, 1rem) * 1.15);
+    }
+
+    .auralis-pain-cta {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .auralis-pain-footer {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+.dark-mode .auralis-pain-shell {
+    background: linear-gradient(180deg, rgba(45, 212, 191, 0.06) 0%, #1e293b 45%);
+    border-color: #334155;
+}
+
+.dark-mode .auralis-pain-hero-title {
+    color: #f1f5f9;
+}
+
+.dark-mode .auralis-pain-badge {
+    background-color: rgba(45, 212, 191, 0.12);
+    color: #5eead4;
+    border-color: rgba(45, 212, 191, 0.25);
+}
+
+.dark-mode .auralis-pain-card {
+    background-color: #0f172a;
+    border-color: #334155;
+}
+
+.dark-mode .auralis-pain-card-title {
+    color: #f1f5f9;
+}
+
+.dark-mode .auralis-pain-card-alivio {
+    color: #94a3b8;
+}

@@ -1,0 +1,48 @@
+LICENCIA PRIVADA DE AURALIS
+Versión 1.1 — 23 de noviembre de 2026
+
+Copyright © 2026 MansiHost.com. Todos los derechos reservados.
+
+1. OBJETO
+Esta licencia regula el uso del plugin Auralis, incluyendo su código, diseño,
+recursos visuales, documentación integrada y personalizaciones.
+
+2. AUTORIZACIÓN DE USO
+MansiHost.com concede al cliente o titular autorizado una licencia limitada,
+no exclusiva y no transferible para instalar y utilizar Auralis en las
+instalaciones y proyectos expresamente autorizados.
+
+3. RESTRICCIONES
+Sin autorización previa y por escrito de MansiHost.com no está permitido:
+
+- vender, sublicenciar, alquilar, publicar o redistribuir Auralis;
+- entregar copias completas o parciales a terceros;
+- eliminar o falsear los avisos de titularidad de esta licencia;
+- presentar como propio código perteneciente a terceros;
+- utilizar Auralis para crear una distribución pública o un producto derivado
+  destinado a su reventa.
+
+Las copias de seguridad y las modificaciones internas necesarias para una
+instalación autorizada sí están permitidas.
+
+4. TITULARIDAD
+Las adaptaciones, identidad visual, configuración y desarrollos propios de
+Auralis pertenecen a MansiHost.com. La licencia concede derecho de uso, pero
+no transmite la propiedad intelectual.
+
+Determinadas partes proceden del plugin original Zolteka y se han adaptado con
+autorización de su autor. Esa referencia se limita a este documento de licencia.
+
+5. GARANTÍA Y RESPONSABILIDAD
+Auralis se proporciona tal como está. Salvo acuerdo escrito distinto, no se
+garantiza que esté libre de errores ni que resulte adecuado para una finalidad
+concreta. MansiHost.com no será responsable de pérdidas indirectas, pérdida de
+datos o interrupciones derivadas de un uso incorrecto o no autorizado.
+
+6. TERMINACIÓN
+El incumplimiento de esta licencia extingue automáticamente la autorización de
+uso. En ese caso deberán cesar el uso y la distribución y eliminarse las copias
+no autorizadas.
+
+7. ACEPTACIÓN
+La instalación, copia o uso de Auralis implica la aceptación de esta licencia.

@@ -1,0 +1,304 @@
+{
+  "entries": [
+    {
+      "plugin": "Core",
+      "version": "2026.72",
+      "date": "2026-10-30",
+      "title": "Distingue retenciones del mismo porcentaje y guarda el motivo al rectificar",
+      "summary": "Las retenciones con el mismo porcentaje ya no se mezclan. Guardas el motivo al rectificar y buscas productos por color o talla.",
+      "badges": [
+        { "type": "feature", "label": "Nueva Función" },
+        { "type": "legal", "label": "Legal" }
+      ],
+      "items": [
+        {
+          "label": "Retenciones por línea",
+          "text": "Si tienes dos retenciones al 19 % (por ejemplo IRPF e IRPF de alquileres), el documento, el PDF y la contabilidad las tratan por separado."
+        },
+        {
+          "label": "Motivo al rectificar",
+          "text": "Al crear una rectificativa eliges el motivo que piden Verifactu, el SII y TicketBAI. Es informativo: no cambia importes ni stock."
+        },
+        {
+          "label": "Productos por atributo",
+          "text": "En ventas y compras, «camiseta rojo» encuentra la variante roja. En ventas ves el precio con impuestos; en compras, el del proveedor, el coste y el de venta."
+        },
+        {
+          "label": "IVA dentro de la UE",
+          "text": "En operaciones intracomunitarias se aplica la excepción correcta, y el VIES acepta los NIF-IVA de Grecia."
+        },
+        {
+          "label": "Listados y buscador",
+          "text": "Al exportar a Excel, los totales van en una hoja aparte. El megabuscador también busca en la documentación de FacturaScripts."
+        }
+      ]
+    },
+    {
+      "plugin": "Core",
+      "version": "2026.7",
+      "date": "2026-10-03",
+      "title": "Pasa de una ficha a otra sin volver al listado",
+      "summary": "Flechas en la cabecera, pestañas más ordenadas y más control sobre quién cambia documentos y archivos.",
+      "badges": [
+        { "type": "feature", "label": "Nueva Función" },
+        { "type": "improvement", "label": "Productividad" }
+      ],
+      "items": [
+        {
+          "label": "Anterior y siguiente",
+          "text": "En la ficha ves flechas para abrir el registro anterior o el siguiente con los mismos filtros del listado."
+        },
+        {
+          "label": "Pestañas agrupadas",
+          "text": "En clientes y proveedores, facturas y albaranes van juntos en Ventas o Compras; en productos, el stock se agrupa en Almacén."
+        },
+        {
+          "label": "Orden de estados",
+          "text": "Puedes decidir en qué orden aparecen los estados en el botón de presupuestos, pedidos, albaranes y facturas."
+        },
+        {
+          "label": "Más seguridad",
+          "text": "Más acciones piden permiso de modificar; quien solo ve sus datos no abre fichas de otros."
+        },
+        {
+          "label": "Consejo: Tareas programadas",
+          "text": "En Admin → Tareas programadas ves cada cuánto corre cada una y puedes filtrar las que han fallado."
+        }
+      ]
+    },
+    {
+      "plugin": "Core",
+      "version": "2026.65",
+      "date": "2026-08-25",
+      "title": "Huecos de numeración y fiscalidad de Ceuta y Melilla",
+      "summary": "Reutiliza un número libre sin cambiar la fecha, y factura con IPSI cuando toca.",
+      "badges": [
+        { "type": "improvement", "label": "Mejora" },
+        { "type": "legal", "label": "Legal" }
+      ],
+      "items": [
+        {
+          "label": "Rellenar un número libre",
+          "text": "En presupuestos, pedidos y albaranes puedes mantener la fecha original al rellenar un hueco de la serie."
+        },
+        {
+          "label": "IPSI Ceuta y Melilla",
+          "text": "Nueva operación de facturación para el IPSI, lista para usar en clientes y proveedores de esas plazas."
+        },
+        {
+          "label": "Archivos y correos",
+          "text": "Menos choques de nombre al adjuntar, descargas más claras y correos ligados al aviso que los envió."
+        },
+        {
+          "label": "Plugins instalados",
+          "text": "En Más plugins se ve de un vistazo cuáles ya tienes puestos."
+        }
+      ]
+    },
+    {
+      "plugin": "Core",
+      "version": "2026.6",
+      "date": "2026-08-04",
+      "title": "Saldos claros y Excel como lo ves en pantalla",
+      "summary": "Aviso si la contabilidad aún se está recalculando, y exportaciones con las mismas columnas del listado.",
+      "badges": [
+        { "type": "improvement", "label": "Mejora" },
+        { "type": "tip", "label": "Consejo" }
+      ],
+      "items": [
+        {
+          "label": "Saldos en segundo plano",
+          "text": "Tras un cierre, ves un aviso en cuentas y subcuentas si el recálculo aún no ha terminado."
+        },
+        {
+          "label": "CSV y Excel",
+          "text": "Exportas las columnas visibles del listado, con fechas e importes listos para la hoja de cálculo."
+        },
+        {
+          "label": "Documentos más claros",
+          "text": "Mejor distinción entre impagado y vencido, y mensajes de error al guardar que se entienden."
+        },
+        {
+          "label": "Consejo: Espera al aviso",
+          "text": "Si acabas de cerrar el ejercicio, no tomes decisiones con los saldos hasta que desaparezca el aviso de recálculo."
+        }
+      ]
+    },
+    {
+      "plugin": "Core",
+      "version": "2026.5",
+      "date": "2026-07-18",
+      "title": "Alta de cliente sin salir de la factura",
+      "summary": "Creas el cliente o el proveedor en una ventana mientras haces el documento, y el panel de inicio se entiende mejor.",
+      "badges": [
+        { "type": "feature", "label": "Nueva Función" },
+        { "type": "improvement", "label": "Productividad" }
+      ],
+      "items": [
+        {
+          "label": "Nuevo cliente en el documento",
+          "text": "Desde la factura, el pedido o el presupuesto das de alta un cliente o un proveedor sin irte a otra pantalla."
+        },
+        {
+          "label": "Dashboard",
+          "text": "El panel de inicio muestra mejor lo urgente del día a día."
+        },
+        {
+          "label": "Vender sin stock",
+          "text": "Por defecto puedes vender un producto aunque no haya existencias (cámbialo si tu almacén no lo permite)."
+        },
+        {
+          "label": "Líneas de compra",
+          "text": "Reordenar líneas en compras funciona igual que en ventas."
+        }
+      ]
+    },
+    {
+      "plugin": "Core",
+      "version": "2026.4",
+      "date": "2026-07-03",
+      "title": "Plugins más claros y documentos solo tuyos",
+      "summary": "La página de plugins se entiende mejor y, si tu usuario solo ve lo suyo, esa regla se respeta al editar.",
+      "badges": [
+        { "type": "improvement", "label": "Mejora" }
+      ],
+      "items": [
+        {
+          "label": "Administrar plugins",
+          "text": "Buscas también por la descripción, y los incompatibles aparecen aparte con avisos más claros."
+        },
+        {
+          "label": "Solo mis documentos",
+          "text": "Si tu usuario tiene esa restricción, no abres ni cambias facturas o pedidos de otros."
+        },
+        {
+          "label": "Compras con dirección",
+          "text": "Los documentos de compra llevan dirección, igual que los de venta."
+        },
+        {
+          "label": "Filtros en fichas",
+          "text": "En clientes y proveedores filtras pagado o no pagado; en sus documentos, por país, provincia, ciudad y transportista."
+        }
+      ]
+    },
+    {
+      "plugin": "Core",
+      "version": "2026.3",
+      "date": "2026-05-27",
+      "title": "Cuenta más segura y datos fiscales que se rellenan solos",
+      "summary": "Doble factor más robusto, VIES que completa la ficha y recargo de equivalencia del proveedor sin pasos extra.",
+      "badges": [
+        { "type": "improvement", "label": "Mejora" },
+        { "type": "legal", "label": "Legal" }
+      ],
+      "items": [
+        {
+          "label": "Inicio de sesión",
+          "text": "La verificación en dos pasos y el cierre de sesión protegen mejor tu usuario."
+        },
+        {
+          "label": "VIES",
+          "text": "Al comprobar el IVA europeo se rellenan nombre y dirección de la empresa, también para Irlanda del Norte."
+        },
+        {
+          "label": "NIF más fiable",
+          "text": "Menos errores al introducir DNI, NIF o NIE."
+        },
+        {
+          "label": "Recargo del proveedor",
+          "text": "Si el proveedor tiene recargo de equivalencia, se aplica solo en la compra."
+        },
+        {
+          "label": "Errores de contabilidad",
+          "text": "El mensaje indica qué cliente, proveedor o impuesto está fallando."
+        }
+      ]
+    },
+    {
+      "plugin": "Core",
+      "version": "2026.2",
+      "date": "2026-05-14",
+      "title": "Avisos más claros y exportaciones más seguras",
+      "summary": "Al cambiar el estado de un documento ves qué ha pasado, y Excel ya no arrastra fórmulas peligrosas.",
+      "badges": [
+        { "type": "improvement", "label": "Mejora" }
+      ],
+      "items": [
+        {
+          "label": "Estados de documento",
+          "text": "Si falla al pasar de presupuesto a pedido o al facturar, el mensaje explica el motivo."
+        },
+        {
+          "label": "Biblioteca de archivos",
+          "text": "El selector de archivos carga un número razonable de ítems para que el formulario no se quede colgado."
+        },
+        {
+          "label": "Actualizador",
+          "text": "Ya no te propone plugins que no encajan con tu versión de FacturaScripts."
+        },
+        {
+          "label": "Excel",
+          "text": "Las celdas no se convierten en fórmulas al abrir el archivo."
+        }
+      ]
+    },
+    {
+      "plugin": "Core",
+      "version": "2026.1",
+      "date": "2026-04-28",
+      "title": "Listados más limpios y cuenta del banco en un clic",
+      "summary": "Menos botones de más cuando no hay filas, y subcuenta bancaria generada desde la ficha de la cuenta.",
+      "badges": [
+        { "type": "feature", "label": "Nueva Función" },
+        { "type": "improvement", "label": "Mejora" }
+      ],
+      "items": [
+        {
+          "label": "Listados vacíos",
+          "text": "Si no hay registros, se ocultan borrar, imprimir y abrir pestañas para no saturar."
+        },
+        {
+          "label": "Grupos de botones",
+          "text": "Las acciones de los listados se agrupan y ocupan menos barra."
+        },
+        {
+          "label": "Cuenta bancaria",
+          "text": "Desde la cuenta del banco de la empresa pulsas generar y se crea la subcuenta contable."
+        },
+        {
+          "label": "Buscador",
+          "text": "El megabuscador muestra progreso mientras recorre las pantallas."
+        }
+      ]
+    },
+    {
+      "plugin": "Core",
+      "version": "2026",
+      "date": "2026-01-15",
+      "title": "Arranque más rápido y operación fiscal en la ficha",
+      "summary": "El asistente inicial va al grano, y marcas en el cliente o proveedor cómo facturas siempre con él.",
+      "badges": [
+        { "type": "feature", "label": "Nueva Función" },
+        { "type": "legal", "label": "Legal" }
+      ],
+      "items": [
+        {
+          "label": "Primer inicio",
+          "text": "El asistente deja el negocio listo con menos pasos."
+        },
+        {
+          "label": "Operación en la ficha",
+          "text": "Indicas en el cliente o el proveedor si las facturas van siempre como intracomunitarias, importación o inversión de sujeto pasivo."
+        },
+        {
+          "label": "Al borrar una factura",
+          "text": "El albarán o pedido vuelve al estado que tenía, no al de «nuevo»."
+        },
+        {
+          "label": "Correos",
+          "text": "Puedes usar códigos cortos en las plantillas de email para rellenar datos al vuelo."
+        }
+      ]
+    }
+  ]
+}

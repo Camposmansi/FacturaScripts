@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Vista de listado de estados de eventos del calendario Auralis.
+ */
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="codestado"/>
+        </column>
+        <column name="name" order="110">
+            <widget type="text" fieldname="nombre"/>
+        </column>
+        <column name="calendar-status-order" order="120">
+            <widget type="number" fieldname="orden"/>
+        </column>
+        <column name="origen_tipo" order="140">
+            <widget type="select" fieldname="origen_tipo">
+                <values>
+                    <value code="general" title="calendar-origin-general"/>
+                </values>
+            </widget>
+        </column>
+        <column name="active" display="center" order="150">
+            <widget type="checkbox" fieldname="activo"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="danger" fieldname="activo" title="inactive">0</option>
+        </row>
+    </rows>
+</view>

@@ -1,0 +1,63 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Agenda personal timegrid del usuario (shell Auralis full-page, sin card).
+ #}
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-agenda-shell.css') }}?v={{ agendaAssetVersion('Dinamic/Assets/CSS/auralis-agenda-shell.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-calendar.css') }}?v={{ agendaAssetVersion('Dinamic/Assets/CSS/auralis-calendar.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/vendor/tom-select-agenda/tom-select.bootstrap5.min.css') }}?v=2.6.2"/>
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-calendar-sidebar.css') }}?v={{ agendaAssetVersion('Dinamic/Assets/CSS/auralis-calendar-sidebar.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    {% set header_filters %}
+        {% include 'Block/CalendarUserFilters.html.twig' %}
+    {% endset %}
+
+    {% include 'Master/_calendar_page_shell.html.twig' with {
+        page_title: trans('mi-calendario'),
+        page_subtitle: trans('mi-calendario-subtitulo'),
+        page_class: 'auralis-calendar-page auralis-user-calendar',
+        header_filters: header_filters,
+        sidebar: true,
+        sidebar_calendars: fsc.calendariosSidebar
+    } %}
+
+    {% include 'Master/_calendar_event_modal.html.twig' with {
+        origen_tipo: fsc.origenTipo,
+        day_modal_title: trans('eventos'),
+        include_event_form: true,
+        show_agents: false,
+        show_rooms: settings('auralis_calendario', 'calendar_mi_show_rooms', '0') == '1'
+            and fsc.salasList|default([])|length > 0,
+        show_warehouses: false,
+        show_assigned_user: false,
+        show_event_types: settings('auralis_calendario', 'calendar_mi_show_event_types', '0') == '1'
+            and fsc.eventTypesList|default([])|length > 0,
+        show_status: settings('auralis_calendario', 'calendar_mi_show_event_status', '0') == '1'
+            and fsc.eventStatusesList|default([])|length > 0,
+        show_participants: true,
+        show_notifications: true,
+        extra_footer_view: '@PluginAuralisAgenda/Block/CalendarioEventoDocVenta.html.twig',
+        calendars_list: fsc.calendariosSidebar
+    } %}
+
+    <script type="application/json" id="auralis-calendar-data">{{ fsc.calendarDataJson|raw }}</script>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('Dinamic/Assets/JS/vendor/tom-select-agenda/tom-select.complete.min.js') }}?v=2.6.2"></script>
+    <script src="{{ asset('Dinamic/Assets/JS/auralis-calendar-participants.js') }}?v={{ agendaAssetVersion('Dinamic/Assets/JS/auralis-calendar-participants.js') }}"></script>
+    <script src="{{ asset('Dinamic/Assets/JS/auralis-agenda-calendar-modal.js') }}?v={{ agendaAssetVersion('Dinamic/Assets/JS/auralis-agenda-calendar-modal.js') }}"></script>
+    <script src="{{ asset('Dinamic/Assets/JS/auralis-calendar-notifications.js') }}?v={{ agendaAssetVersion('Dinamic/Assets/JS/auralis-calendar-notifications.js') }}"></script>
+    <script src="{{ asset('Dinamic/Assets/JS/auralis-timegrid.js') }}?v={{ agendaAssetVersion('Dinamic/Assets/JS/auralis-timegrid.js') }}"></script>
+    <script src="{{ asset('Dinamic/Assets/JS/auralis-calendar.js') }}?v={{ agendaAssetVersion('Dinamic/Assets/JS/auralis-calendar.js') }}"></script>
+    <script src="{{ asset('Dinamic/Assets/JS/auralis-calendar-sidebar.js') }}?v={{ agendaAssetVersion('Dinamic/Assets/JS/auralis-calendar-sidebar.js') }}"></script>
+{% endblock %}

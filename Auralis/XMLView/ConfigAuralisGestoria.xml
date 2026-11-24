@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Ajustes del informe «Documentos para la gestoría»: email, máximo de documentos y tamaño máximo del ZIP por email.
+-->
+<view>
+    <columns>
+        <group name="name" numcolumns="12" display="none">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+        </group>
+        <group name="gestoria" title="auralis-gestoria-titulo" icon="fa-solid fa-file-zipper" numcolumns="12">
+            <column name="email" title="auralis-gestoria-email" numcolumns="4" order="100"
+                    description="auralis-gestoria-ajuste-email-ayuda">
+                <widget type="text" fieldname="email" maxlength="100"/>
+            </column>
+            <column name="max_documentos" title="auralis-gestoria-ajuste-max-documentos" numcolumns="4" order="110"
+                    description="auralis-gestoria-ajuste-max-documentos-ayuda">
+                <widget type="number" fieldname="max_documentos" min="1" max="5000" step="1" decimal="0" required="true"/>
+            </column>
+            <column name="max_mb" title="auralis-gestoria-ajuste-max-mb" numcolumns="4" order="120"
+                    description="auralis-gestoria-ajuste-max-mb-ayuda">
+                <widget type="number" fieldname="max_mb" min="1" max="50" step="1" decimal="0" required="true"/>
+            </column>
+            <column name="aviso_tiempo" numcolumns="12" order="130">
+                <widget type="info" alert="info" icon="fa-solid fa-stopwatch" text="auralis-gestoria-ajuste-estimacion"/>
+            </column>
+            <column name="aviso_correo" numcolumns="12" order="140">
+                <widget type="info" alert="secondary" icon="fa-solid fa-envelope" text="auralis-gestoria-ajuste-correo"/>
+            </column>
+        </group>
+    </columns>
+</view>

@@ -1,0 +1,53 @@
+{# Ayuda comercial de MansiHost.com. Solo se carga como última pestaña de Ajustes generales. #}
+{% set brandUrl = settings('zMarcaBlanca', 'brand_url', 'https://mansihost.com') %}
+{% if brandUrl is empty %}{% set brandUrl = 'https://mansihost.com' %}{% endif %}
+
+<div class="row justify-content-center mt-3 mb-4">
+    <div class="col-12 col-xl-9">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-3 p-lg-4">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary" style="width: 48px; height: 48px;">
+                        <i class="fa-solid fa-life-ring fa-lg" aria-hidden="true"></i>
+                    </span>
+                    <div>
+                        <h2 class="h4 mb-1">¿Te podemos ayudar?</h2>
+                        <p class="text-muted mb-0">Selecciona el servicio sobre el que necesitas información.</p>
+                    </div>
+                </div>
+
+                <div class="accordion" id="auralisMansiHostServices">
+                    {% set services = [
+                        {'icon': 'fa-server', 'title': 'Hosting, dominios y correo', 'description': 'Alojamiento administrado, dominios, certificados SSL, correo profesional y migraciones.', 'url': 'https://mansihost.com/hosting/'},
+                        {'icon': 'fa-laptop-code', 'title': 'Diseño web y tiendas online', 'description': 'Webs corporativas, catálogos y comercio electrónico adaptados a cada negocio.', 'url': 'https://mansihost.com/diseno-web/'},
+                        {'icon': 'fa-screwdriver-wrench', 'title': 'Mantenimiento y seguridad', 'description': 'Actualizaciones, copias de seguridad, monitorización, protección y resolución de incidencias.', 'url': 'https://mansihost.com/mantenimiento/'},
+                        {'icon': 'fa-wand-magic-sparkles', 'title': 'Personalizaciones e integraciones', 'description': 'Adaptaciones a medida, automatizaciones, importaciones e integración con servicios externos.', 'url': 'https://mansihost.com/contacto/'},
+                        {'icon': 'fa-headset', 'title': 'Soporte personalizado', 'description': 'Ayuda técnica, formación y acompañamiento para configurar y mejorar tu sistema.', 'url': 'https://mansihost.com/contacto/'}
+                    ] %}
+
+                    {% for service in services %}
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="auralisServiceHeading{{ loop.index }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#auralisService{{ loop.index }}" aria-expanded="false" aria-controls="auralisService{{ loop.index }}">
+                                    <i class="fa-solid {{ service.icon }} text-primary me-3" aria-hidden="true"></i>{{ service.title }}
+                                </button>
+                            </h3>
+                            <div id="auralisService{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="auralisServiceHeading{{ loop.index }}" data-bs-parent="#auralisMansiHostServices">
+                                <div class="accordion-body">
+                                    <p class="mb-3">{{ service.description }}</p>
+                                    <a class="btn btn-outline-primary btn-sm" href="{{ service.url|e }}" target="_blank" rel="noopener noreferrer">
+                                        Más información <i class="fa-solid fa-arrow-up-right-from-square ms-1" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="text-center mt-4">
+                    <a class="btn btn-primary" href="{{ brandUrl|e }}" target="_blank" rel="noopener noreferrer">Visitar MansiHost.com</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

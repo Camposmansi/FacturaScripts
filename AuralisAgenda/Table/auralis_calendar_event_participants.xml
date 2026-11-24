@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Asistentes N:M de eventos de calendario Auralis (organizador sigue en asignado).
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>idevent</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>tipo</name>
+        <type>character varying(20)</type>
+    </column>
+    <column>
+        <name>codigo</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>email</name>
+        <type>character varying(150)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>estado_asistencia</name>
+        <type>character varying(20)</type>
+        <default>'pendiente'</default>
+    </column>
+    <column>
+        <name>nombre_snapshot</name>
+        <type>character varying(200)</type>
+        <null>yes</null>
+    </column>
+    <constraint>
+        <name>auralis_cal_event_part_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_cal_event_part_event</name>
+        <type>FOREIGN KEY (idevent) REFERENCES auralis_calendar_events (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>uniq_auralis_cal_event_part</name>
+        <type>UNIQUE (idevent, tipo, codigo)</type>
+    </constraint>
+    <index>
+        <name>auralis_cal_event_part_idevent_idx</name>
+        <columns>idevent</columns>
+    </index>
+    <index>
+        <name>auralis_cal_event_part_tipo_codigo_idx</name>
+        <columns>tipo, codigo</columns>
+    </index>
+</table>

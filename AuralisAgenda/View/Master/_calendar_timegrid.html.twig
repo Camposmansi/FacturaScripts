@@ -1,0 +1,132 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Partial de calendario en modo TimeGrid (vista 24 horas completas) para Auralis.
+ #              Permite mostrar eventos en franjas horarias con slots y colores dinámicos,
+ #              soporta enganche polimórfico de creación rápida mediante allow_create y origen_tipo.
+ #
+ # Variables esperadas:
+ #   calendar_data.days  - Array de días (con date, label, is_today, cards, timed_cards, etc.)
+ #   col_count           - Número de columnas de días (1, 3, 7)
+ #   view_type           - '1day', '3days' o 'week'
+ #   allow_create        - boolean (opcional, default false). Si es true, permite click-to-create
+ #   origen_tipo         - string (opcional, default 'general'). Identificador del plugin origen
+ #}
+
+{% set can_create = allow_create|default(false) %}
+{% set orig_type = origen_tipo|default('general') %}
+
+{% set grid_hours = timegrid_hours|default(range(0, 23)) %}
+{% set scroll_hour = timegrid_scroll_hour|default(7) %}
+
+<div class="z-timegrid-wrapper {% if can_create %}z-timegrid--creatable{% endif %}"
+     data-allow-create="{{ can_create ? '1' : '0' }}"
+     data-origen-tipo="{{ orig_type }}"
+     data-scroll-hour="{{ scroll_hour }}"{% if timegrid_hora_fin is defined %}
+     data-hora-fin="{{ timegrid_hora_fin }}"{% endif %}>
+
+    {# Cabecera de Días con columna vacía para el eje de horas #}
+    <div class="z-timegrid-header" style="grid-template-columns: 60px repeat({{ col_count }}, 1fr);">
+        <div class="z-timegrid-time-header">
+            <i class="fa-regular fa-clock"></i>
+        </div>
+        {% for day in calendar_data.days|slice(0, col_count) %}
+            <div class="z-timegrid-day-header {% if day.is_today %}is-today{% endif %}">
+                <span class="z-timegrid-day-name">{{ day.day_name }}</span>
+                <span class="z-timegrid-day-num">{{ day.day_num }}</span>
+                {% if day.is_today %}
+                    <span class="z-badge badge-today ms-1">{{ trans('today')|default('Hoy') }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    {# Franja superior: Eventos "Todo el día" / Sin Hora Especificada #}
+    <div class="z-timegrid-allday-row" style="grid-template-columns: 60px repeat({{ col_count }}, 1fr);">
+        <div class="z-timegrid-allday-label">
+            <span class="small text-muted">{{ trans('all-day')|default('Todo el día') }}</span>
+        </div>
+        {% for day in calendar_data.days|slice(0, col_count) %}
+            <div class="z-timegrid-allday-cell" style="max-height: 85px; overflow-y: auto;">
+                {% if day.allday_cards is defined and day.allday_cards is not empty %}
+                    {% for card in day.allday_cards %}
+                        <a href="{{ card.url }}" class="z-timegrid-allday-card card-color-{{ card.badge_color }}"
+                           data-event-id="{{ card.id|default('') }}"
+                           data-event-json="{{ card|json_encode|escape('html_attr') }}"
+                           style="{% if card.bg_color %}background-color: {{ card.bg_color }} !important; color: {{ card.text_color|default('#ffffff') }} !important; border-left-color: {{ card.border_color|default(card.bg_color) }} !important;{% endif %}"
+                           title="{{ card.title }} - {{ card.subtitle }}">
+                            {% if card.icon %}
+                                <i class="{{ card.icon }} me-1"></i>
+                            {% endif %}
+                            <span class="fw-bold me-1">{{ card.title }}</span>
+                            {% if card.subtitle %}
+                                <span class="opacity-75 small">{{ card.subtitle }}</span>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    {# Cuerpo con Rejilla de Horas (00:00 a 23:00 — 24h) #}
+    <div class="z-timegrid-body" style="grid-template-columns: 60px repeat({{ col_count }}, 1fr);">
+        {# Columna del eje horario #}
+        <div class="z-timegrid-time-axis">
+            {% for hour in grid_hours %}
+                <div class="z-timegrid-hour-slot">
+                    <span>{{ hour < 10 ? '0' ~ hour : hour }}:00</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        {# Columnas de contenido de cada día #}
+        {% for day in calendar_data.days|slice(0, col_count) %}
+            <div class="z-timegrid-day-column {% if day.is_today %}is-today{% endif %}" data-date="{{ day.date }}">
+                {% for hour in grid_hours %}
+                    {% set formatted_hour = hour < 10 ? '0' ~ hour ~ ':00' : hour ~ ':00' %}
+                    <div class="z-timegrid-hour-cell {% if can_create %}is-creatable{% endif %}"
+                         data-date="{{ day.date }}"
+                         data-hour="{{ formatted_hour }}"
+                         data-hour-num="{{ hour }}">
+                        {% if can_create %}
+                            <span class="z-timegrid-add-hint"><i class="fa-solid fa-plus me-1"></i>{{ trans('new-event') }}</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                {# Renderizado de Eventos con Hora #}
+                {% if day.timed_cards is defined and day.timed_cards is not empty %}
+                    {% for tcard in day.timed_cards %}
+                        {% set is_short = (tcard.duracion is defined and tcard.duracion < 45) or (tcard.height_pct is defined and tcard.height_pct < 3.0) %}
+                        <div class="z-timegrid-event card-color-{{ tcard.badge_color }} {% if is_short %}is-short-event{% endif %}"
+                             draggable="true"
+                             data-event-id="{{ tcard.id|default('') }}"
+                             data-event-json="{{ tcard|json_encode|escape('html_attr') }}"
+                             style="top: {{ tcard.top_pct }}%; height: {{ tcard.height_pct }}%; left: {{ tcard.left_pct|default(0) }}%; width: {{ tcard.width_pct|default(100) }}%; background-color: {{ tcard.bg_color|default('') }}; border-color: {{ tcard.border_color|default('') }};">
+                            <a href="{{ tcard.url|default('#') }}" class="z-timegrid-event-inner text-decoration-none" title="{{ tcard.title }} ({{ tcard.subtitle }})">
+                                <div class="fw-bold small text-truncate z-timegrid-event-title d-flex align-items-center justify-content-between" style="color: {{ tcard.text_color|default('#ffffff') }};">
+                                    <span class="text-truncate">{% if tcard.icon %}<i class="{{ tcard.icon }} me-1"></i>{% endif %}{{ tcard.title }}</span>
+                                    {% if tcard.estado and tcard.estado != 'completado' and tcard.estado != 'confirmado' and tcard.estado != 'pendiente' %}
+                                        <span class="badge bg-white text-dark py-0 px-1 ms-1 x-small opacity-90" style="font-size: 0.65rem;">{{ tcard.estado_nombre|default(tcard.estado) }}</span>
+                                    {% elseif tcard.estado == 'cancelado' %}
+                                        <span class="badge bg-danger text-white py-0 px-1 ms-1 x-small" style="font-size: 0.65rem;">{{ trans('cancelled')|default('Cancelado') }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="x-small text-truncate opacity-90 z-timegrid-event-subtitle" style="color: {{ tcard.text_color|default('#ffffff') }};">{{ tcard.subtitle }}</div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% include 'Master/_auralis_i18n_script.html.twig' %}
+<script src="{{ asset('Dinamic/Assets/JS/auralis-timegrid.js') }}?v={{ agendaAssetVersion('Dinamic/Assets/JS/auralis-timegrid.js') }}"></script>
+<script>
+    if (window.AuralisTimegrid && typeof window.AuralisTimegrid.initScroll === 'function') {
+        window.AuralisTimegrid.initScroll();
+    }
+</script>

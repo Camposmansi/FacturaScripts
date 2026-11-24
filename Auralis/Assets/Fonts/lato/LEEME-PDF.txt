@@ -1,0 +1,13 @@
+auralis-sans-pdf-400.ttf y auralis-sans-pdf-700.ttf
+====================================================
+
+Versión modificada de Lato (Copyright (c) 2010-2011 tyPoland Lukasz Dziedzic),
+reducida al subconjunto latino y convertida a TTF para incrustarla en los PDF.
+
+La licencia de Lato (SIL Open Font License 1.1, ver OFL.txt) reserva el nombre
+«Lato» («Reserved Font Name»). Por eso esta versión modificada se distribuye con
+otro nombre: «Auralis PDF Sans» dentro de la fuente y «auralis-sans-pdf-*» en el
+fichero, que es el nombre que aparece en el PDF. Conserva el aviso de copyright
+original y se distribuye bajo la misma licencia OFL 1.1.
+
+Los ficheros WOFF2 de esta carpeta son los de Lato para la web y no cambian.

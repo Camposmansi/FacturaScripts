@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Pestaña «Calendarios» de la ficha de rol: calendario común o personal y permiso. El rol lo fija la ficha.
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="id" display="none" order="90">
+                <widget type="text" fieldname="id" readonly="true"/>
+            </column>
+            <column name="auralis-calendario" numcolumns="4" order="100">
+                <widget type="select" fieldname="idcalendario" required="true"/>
+            </column>
+            <column name="auralis-calendario-permiso" numcolumns="4" order="110">
+                <widget type="select" fieldname="permiso" translate="true" required="true">
+                    <values title="auralis-calendario-permiso-ocupado">ocupado</values>
+                    <values title="auralis-calendario-permiso-ver">ver</values>
+                    <values title="auralis-calendario-permiso-editar">editar</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

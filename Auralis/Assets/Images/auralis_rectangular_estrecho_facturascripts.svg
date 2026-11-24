@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 104" role="img" aria-label="Auralis">
+  <defs><linearGradient id="g" x1="5" y1="5" x2="96" y2="99" gradientUnits="userSpaceOnUse"><stop stop-color="#745cff"/><stop offset=".55" stop-color="#3468bd"/><stop offset="1" stop-color="#12365f"/></linearGradient></defs>
+  <rect x="4" y="4" width="96" height="96" rx="24" fill="url(#g)"/>
+  <path d="m52 20 31 66H67l-7-15H44l7-14h5l-4-9-16 38H21l31-66Z" fill="#fff"/>
+  <circle cx="79" cy="28" r="5" fill="#7ee2ff"/>
+  <text x="121" y="67" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="48" font-weight="750" letter-spacing="-2">Auralis</text>
+</svg>
+

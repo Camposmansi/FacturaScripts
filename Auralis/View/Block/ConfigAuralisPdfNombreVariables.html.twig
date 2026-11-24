@@ -1,0 +1,46 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Ayuda de «Nombres de PDF»: tabla de variables del patrón (una por fila, con descripción y ejemplo). Cada variable se inserta al pulsarla en el último patrón enfocado (auralis-pdf-nombre-variables.js). Los datos salen de PdfNombreArchivo::catalogoVariables().
+ #}
+{% set variables = fsc.tab('ConfigAuralisPdfNombre').settings.auralis_variables ?? [] %}
+<div class="auralis-pdf-nombre-variables" data-auralis-pdf-nombre-variables
+     data-form="formConfigAuralisPdfNombre"
+     data-aviso-largo="{{ trans('auralis-pdf-nombre-variables-largo') | e('html_attr') }}">
+    <p class="small text-body-secondary mb-2">
+        <i class="fa-solid fa-circle-info me-1" aria-hidden="true"></i>{{ trans('auralis-pdf-nombre-variables-intro') | e }}
+    </p>
+    {% if variables is empty %}
+        <p class="text-body-secondary mb-0">-</p>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-2">
+                <thead>
+                <tr>
+                    <th scope="col">{{ trans('auralis-pdf-nombre-col-variable') | e }}</th>
+                    <th scope="col">{{ trans('auralis-pdf-nombre-col-descripcion') | e }}</th>
+                    <th scope="col">{{ trans('auralis-pdf-nombre-col-ejemplo') | e }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for variable in variables %}
+                    <tr>
+                        <td class="text-nowrap">
+                            <button type="button" class="btn btn-link p-0 border-0 align-baseline text-decoration-none"
+                                    data-auralis-pdf-variable="{{ variable.nombre | e('html_attr') }}"
+                                    title="{{ trans('auralis-pdf-nombre-variable-insertar') | e('html_attr') }}">
+                                <code>{{ ('{' ~ variable.nombre ~ '}') | e }}</code>
+                            </button>
+                        </td>
+                        <td>{{ variable.descripcion | e }}</td>
+                        <td class="text-body-secondary">{% if variable.ejemplo is not empty %}<code>{{ variable.ejemplo | e }}</code>{% else %}-{% endif %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    <p class="small text-body-secondary mb-0">
+        <i class="fa-solid fa-lightbulb me-1" aria-hidden="true"></i>{{ trans('auralis-pdf-nombre-variables-consejo') | e }}
+    </p>
+</div>

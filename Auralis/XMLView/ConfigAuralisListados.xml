@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Ajustes de los listados Auralis: ordenación y tablero.
+-->
+<view>
+    <columns>
+        <group name="name" numcolumns="12" display="none">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+        </group>
+        <group name="ordenacion-listados" title="auralis-listados-ordenacion" icon="fa-solid fa-arrow-down-a-z" numcolumns="12">
+            <column name="orden_todas_columnas" title="auralis-orden-todas-columnas" numcolumns="6" order="100">
+                <widget type="checkbox" fieldname="orden_todas_columnas"/>
+            </column>
+            <column name="orden_natural_codigos" title="auralis-orden-natural-codigos" numcolumns="6" order="110">
+                <widget type="checkbox" fieldname="orden_natural_codigos"/>
+            </column>
+        </group>
+        <!-- Tablero: una descripción común en el grupo; ventas en una fila y compras en otra (6+6, como las de ordenación) -->
+        <group name="kanban" title="auralis-kanban-tablero" icon="fa-solid fa-table-columns"
+               description="auralis-kanban-ajustes-ayuda" numcolumns="12">
+            <column name="kanban_presupuestos" title="auralis-kanban-ajuste-presupuestos-cliente" numcolumns="6" order="100">
+                <widget type="checkbox" fieldname="kanban_presupuestos"/>
+            </column>
+            <column name="kanban_pedidos_cliente" title="auralis-kanban-ajuste-pedidos-cliente" numcolumns="6" order="110">
+                <widget type="checkbox" fieldname="kanban_pedidos_cliente"/>
+            </column>
+        </group>
+        <group name="kanban-compras" numcolumns="12">
+            <column name="kanban_presupuestos_proveedor" title="auralis-kanban-ajuste-presupuestos-proveedor" numcolumns="6" order="100">
+                <widget type="checkbox" fieldname="kanban_presupuestos_proveedor"/>
+            </column>
+            <column name="kanban_pedidos_proveedor" title="auralis-kanban-ajuste-pedidos-proveedor" numcolumns="6" order="110">
+                <widget type="checkbox" fieldname="kanban_pedidos_proveedor"/>
+            </column>
+        </group>
+    </columns>
+</view>

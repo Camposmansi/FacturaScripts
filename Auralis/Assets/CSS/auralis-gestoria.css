@@ -1,0 +1,24 @@
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Estilos de ámbito de la pantalla «Documentos para la gestoría» (sin tocar controles del Core).
+ */
+.auralis-gestoria .auralis-gestoria-sugerencias {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    max-height: 16rem;
+    overflow-y: auto;
+    box-shadow: var(--bs-box-shadow);
+}
+
+.auralis-gestoria .auralis-gestoria-inactivo {
+    opacity: 0.55;
+}
+
+.auralis-gestoria .auralis-gestoria-atajo.active {
+    color: var(--bs-btn-active-color);
+    background-color: var(--bs-btn-active-bg);
+    border-color: var(--bs-btn-active-border-color);
+}

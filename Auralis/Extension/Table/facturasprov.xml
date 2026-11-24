@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Índice del tablero Kanban de facturas de proveedor: columna (idestado) ordenada por fecha desc e id desc.
+ *              DbUpdater lo crea como fs_auralis_factprov_kanban (el Core añade el prefijo fs_).
+ */
+-->
+<table>
+    <index>
+        <name>auralis_factprov_kanban</name>
+        <columns>idestado, fecha, idfactura</columns>
+    </index>
+</table>

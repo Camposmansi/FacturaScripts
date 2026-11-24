@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Tabla de tipos/roles de agente para clasificación centralizada en Auralis.
+ */
+-->
+<table>
+    <column>
+        <name>idtipo</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codigo</name>
+        <type>character varying(50)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>activo</name>
+        <type>boolean</type>
+        <default>true</default>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>auralis_tipos_agentes_pkey</name>
+        <type>PRIMARY KEY (idtipo)</type>
+    </constraint>
+    <constraint>
+        <name>auralis_tipos_agentes_codigo_unique</name>
+        <type>UNIQUE (codigo)</type>
+    </constraint>
+    <index>
+        <name>auralis_tipos_agentes_activo_idx</name>
+        <columns>activo</columns>
+    </index>
+</table>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Tabla de eventos central polimórfica para el sistema de calendario de Auralis.
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>fecha_fin</name>
+        <type>date</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>hora_inicio</name>
+        <type>time</type>
+    </column>
+    <column>
+        <name>duracion</name>
+        <type>integer</type>
+        <default>30</default>
+    </column>
+    <column>
+        <name>titulo</name>
+        <type>character varying(200)</type>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>asignado</name>
+        <type>character varying(50)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>codagente</name>
+        <type>character varying(10)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>idsala</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>codalmacen</name>
+        <type>character varying(4)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>idtipo</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>idparent</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>se_repite</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>rep_intervalo</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>rep_unidad</name>
+        <type>character varying(10)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>rep_fin_tipo</name>
+        <type>character varying(10)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>rep_fin_fecha</name>
+        <type>date</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>rep_fin_count</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>serie_activa</name>
+        <type>integer</type>
+        <default>1</default>
+    </column>
+    <column>
+        <name>rep_generados</name>
+        <type>integer</type>
+        <default>1</default>
+    </column>
+    <column>
+        <name>todo_dia</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>origen_tipo</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>origen_id</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>doc_modelo</name>
+        <type>character varying(50)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>doc_id</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>color</name>
+        <type>character varying(20)</type>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>character varying(20)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>codcliente</name>
+        <type>character varying(10)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>idcontacto</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>idempresa</name>
+        <type>integer</type>
+        <default>1</default>
+    </column>
+    <column>
+        <name>idcalendario</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>creacion</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>fechamod</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <constraint>
+        <name>auralis_calendar_events_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_cal_events_almacenes</name>
+        <type>FOREIGN KEY (codalmacen) REFERENCES almacenes (codalmacen) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_cal_events_types</name>
+        <type>FOREIGN KEY (idtipo) REFERENCES auralis_calendar_event_types (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_cal_events_calendarios</name>
+        <type>FOREIGN KEY (idcalendario) REFERENCES auralis_calendarios (idcalendario) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <index>
+        <name>auralis_cal_events_codalmacen_idx</name>
+        <columns>codalmacen</columns>
+    </index>
+    <index>
+        <name>auralis_cal_events_idtipo_idx</name>
+        <columns>idtipo</columns>
+    </index>
+    <index>
+        <name>auralis_cal_events_idparent_idx</name>
+        <columns>idparent</columns>
+    </index>
+    <index>
+        <name>auralis_cal_events_fecha_idx</name>
+        <columns>fecha</columns>
+    </index>
+    <index>
+        <name>auralis_cal_events_codagente_idx</name>
+        <columns>codagente</columns>
+    </index>
+    <index>
+        <name>auralis_cal_events_idsala_idx</name>
+        <columns>idsala</columns>
+    </index>
+    <index>
+        <name>auralis_cal_events_serie_idx</name>
+        <columns>se_repite, serie_activa</columns>
+    </index>
+    <index>
+        <name>auralis_cal_events_idcalendario_idx</name>
+        <columns>idcalendario</columns>
+    </index>
+    <index>
+        <name>auralis_cal_events_doc_idx</name>
+        <columns>doc_modelo, doc_id</columns>
+    </index>
+</table>

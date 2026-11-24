@@ -1,0 +1,236 @@
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Vista previa de la pestaña «PDF» de Diseño: hoja de papel con medidas relativas al ancho (1 pt del PDF = 100cqw / ancho de página), colocación lateral en pantallas anchas.
+ */
+
+/* Colocación: a partir de xxl la vista previa pasa a una columna a la derecha del formulario. */
+@media (min-width: 1400px) {
+  /* Solo el panel activo: Bootstrap oculta los demás con .tab-pane { display: none }. */
+  .tab-pane.zpdf-layout.active {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 480px;
+    column-gap: 1rem;
+    align-items: start;
+  }
+
+  .zpdf-layout > * {
+    grid-column: 1;
+  }
+
+  .zpdf-layout > .zpdf-lado {
+    grid-column: 2;
+    grid-row: 1 / span 6;
+    position: sticky;
+    top: 4.5rem;
+    align-self: start;
+  }
+}
+
+.zpdf-preview [hidden] {
+  display: none !important;
+}
+
+/* Marco: es el contenedor de consulta, así 100cqw es el ancho de la hoja. */
+.zpdf-marco {
+  container-type: inline-size;
+  max-width: 640px;
+  margin-inline: auto;
+  background-color: var(--bs-tertiary-bg, #f1f3f5);
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: var(--auralis-radius-card, 8px);
+  padding: 0.75rem;
+}
+
+.zpdf-hoja {
+  /* Medidas de la página en puntos (A4 por defecto); el JS las cambia con el papel. */
+  --zpdf-w: 595;
+  --zpdf-h: 842;
+  --zpdf-acento: #1f4e79;
+  --zpdf-texto: #000;
+  --zpdf-cabecera: #f2f2f2;
+  --zpdf-cabecera-texto: #000;
+  --zpdf-alterna: #f2f2f2;
+  --zpdf-linea: #8fa6bb;
+  --zpdf-base: 9;
+  --zpdf-logo-alto: 50;
+  --zpdf-empresa-nombre: 11;
+  --zpdf-empresa-datos: 8;
+  --zpdf-cabecera-espaciado: 8;
+  --zpdf-fuente: 'Helvetica', Arial, 'Liberation Sans', sans-serif;
+  /* 1 pt del PDF en píxeles de pantalla: la maqueta crece y encoge con su ancho. */
+  --zpdf-pt: calc(100cqw / var(--zpdf-w));
+  /* La letra se aumenta un 25 % sobre la escala real para que se lea en un panel estrecho; los márgenes no. */
+  --zpdf-zoom: 1.25;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  aspect-ratio: var(--zpdf-w) / var(--zpdf-h);
+  padding: calc(30 * var(--zpdf-pt));
+  overflow: hidden;
+  background-color: #fff;
+  color: var(--zpdf-texto);
+  font-family: var(--zpdf-fuente);
+  font-size: calc(var(--zpdf-base) * var(--zpdf-pt) * var(--zpdf-zoom));
+  line-height: 1.25;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.zpdf-hoja * {
+  box-sizing: border-box;
+}
+
+.zpdf-acento {
+  color: var(--zpdf-acento);
+}
+
+.zpdf-grande {
+  font-size: 1.67em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.zpdf-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 1.2em;
+  margin-bottom: calc(var(--zpdf-cabecera-espaciado) * var(--zpdf-pt));
+}
+
+.zpdf-logo {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--zpdf-logo-alto) * 1.6em / var(--zpdf-base));
+  height: calc(var(--zpdf-logo-alto) * 1em / var(--zpdf-base));
+  border: 1px dashed var(--zpdf-linea);
+  color: var(--zpdf-linea);
+  font-weight: 700;
+}
+
+.zpdf-empresa {
+  font-size: calc(var(--zpdf-empresa-datos) * 1em / var(--zpdf-base));
+}
+
+.zpdf-empresa .zpdf-grande {
+  font-size: calc(var(--zpdf-empresa-nombre) * 1em / var(--zpdf-empresa-datos));
+}
+
+.zpdf-empresa-derecha {
+  margin-left: auto;
+  text-align: right;
+}
+
+.zpdf-titulo {
+  margin-bottom: 0.2em;
+}
+
+.zpdf-regla {
+  height: 1px;
+  margin-bottom: 0.8em;
+  background-color: var(--zpdf-acento);
+}
+
+.zpdf-datos {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.zpdf-derecha {
+  text-align: right;
+}
+
+.zpdf-subtitulo {
+  margin: 1em 0 0.4em;
+  font-weight: 700;
+}
+
+.zpdf-subtitulo.zpdf-grande {
+  font-weight: 700;
+}
+
+.zpdf-tabla {
+  width: 100%;
+  margin-bottom: 0.9em;
+  border-collapse: collapse;
+  font-size: 1em;
+}
+
+.zpdf-tabla th,
+.zpdf-tabla td {
+  padding: 0.25em 0.45em;
+  border: 1px solid var(--zpdf-linea);
+  text-align: right;
+}
+
+.zpdf-tabla .zpdf-izquierda {
+  text-align: left;
+}
+
+.zpdf-tabla thead th {
+  background-color: var(--zpdf-cabecera);
+  color: var(--zpdf-cabecera-texto);
+  font-weight: 700;
+}
+
+.zpdf-recibos th,
+.zpdf-recibos td {
+  text-align: center;
+}
+
+.zpdf-recibos td:nth-child(3),
+.zpdf-recibos td:nth-child(4),
+.zpdf-recibos th:nth-child(3),
+.zpdf-recibos th:nth-child(4) {
+  text-align: right;
+}
+
+.zpdf-alternas .zpdf-lineas tbody tr:nth-child(even) td,
+.zpdf-alternas .zpdf-recibos tbody tr:nth-child(even) td {
+  background-color: var(--zpdf-alterna);
+}
+
+/* Totales: tabla estrecha a la derecha, sin cabecera. */
+.zpdf-totales {
+  width: 45%;
+  margin-left: auto;
+}
+
+.zpdf-bloque-final-al-pie {
+  position: absolute;
+  left: calc(30 * var(--zpdf-pt));
+  right: calc(30 * var(--zpdf-pt));
+  bottom: calc(45 * var(--zpdf-pt));
+}
+
+.zpdf-totales th {
+  background: none;
+  font-weight: 400;
+}
+
+.zpdf-clave {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.zpdf-clave th,
+.zpdf-clave td {
+  padding: 0.15em 0.45em 0.15em 0;
+  border: 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.zpdf-clave th {
+  width: 22%;
+  font-weight: 700;
+}
+
+.zpdf-pie {
+  position: absolute;
+  left: calc(30 * var(--zpdf-pt));
+  bottom: calc(10 * var(--zpdf-pt));
+}

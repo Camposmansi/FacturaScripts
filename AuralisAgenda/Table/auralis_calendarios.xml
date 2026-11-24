@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Calendarios de la agenda Auralis: personales (con dueño), comunes de empresa (sin dueño) y de módulo (uno por vertical activo).
+-->
+<table>
+    <column>
+        <name>idcalendario</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>codigo</name>
+        <type>character varying(30)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>color</name>
+        <type>character varying(20)</type>
+        <default>'#4285f4'</default>
+    </column>
+    <column>
+        <name>tipo</name>
+        <type>character varying(20)</type>
+        <default>'personal'</default>
+    </column>
+    <column>
+        <name>propietario</name>
+        <type>character varying(50)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>principal</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>idempresa</name>
+        <type>integer</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>activo</name>
+        <type>boolean</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>creado</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <constraint>
+        <name>auralis_calendarios_pkey</name>
+        <type>PRIMARY KEY (idcalendario)</type>
+    </constraint>
+    <constraint>
+        <name>uniq_auralis_calendarios_codigo</name>
+        <type>UNIQUE (codigo)</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_calendarios_users</name>
+        <type>FOREIGN KEY (propietario) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_calendarios_empresas</name>
+        <type>FOREIGN KEY (idempresa) REFERENCES empresas (idempresa) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <index>
+        <name>auralis_calendarios_tipo_idx</name>
+        <columns>tipo, activo</columns>
+    </index>
+    <index>
+        <name>auralis_calendarios_propietario_idx</name>
+        <columns>propietario</columns>
+    </index>
+    <index>
+        <name>auralis_calendarios_idempresa_idx</name>
+        <columns>idempresa</columns>
+    </index>
+</table>

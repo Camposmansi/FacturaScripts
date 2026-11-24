@@ -1,0 +1,478 @@
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Estilos de calendario interactivo Auralis + shell full-page (.auralis-calendar-page) sin card.
+ */
+
+.auralis-calendar .auralis-calendar-title,
+.auralis-calendar-section .auralis-calendar-title,
+.auralis-calendar-page .auralis-calendar-title,
+.zsalud-calendar .auralis-calendar-title {
+    font-size: 1rem;
+}
+
+.auralis-calendar .z-calendar-container,
+.auralis-calendar-section .z-calendar-container,
+.auralis-calendar-page .z-calendar-container,
+.zsalud-calendar .z-calendar-container {
+    transition: opacity 0.15s ease-in-out;
+}
+
+/* Widget Dashboard / embebido: la card sigue siendo válida */
+.auralis-calendar .card,
+.auralis-calendar-section.card {
+    border-radius: 12px;
+}
+
+/* Cifras alineadas (rango, eje horario y número de día) */
+.auralis-calendar-page .auralis-calendar-title,
+.z-timegrid-time-axis,
+.z-timegrid-day-num {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Shell full-page: sin caja; solo espacio */
+.auralis-calendar-page-body {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* Filtros de cabecera: tipo/estado/asistente (solo los activos en el DOM) */
+.auralis-calendar-filter-selects {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.auralis-calendar-filter-selects > .auralis-cal-filter-control.form-select:not(.ts-hidden-accessible),
+.auralis-calendar-filter-selects > .ts-wrapper {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    max-width: none;
+}
+
+.auralis-calendar-filters .ts-wrapper .ts-control {
+    min-height: calc(1.5em + 0.75rem + 2px);
+}
+
+/* PC: una sola fila (nav | filtros | vistas); no repartir como tablet */
+@media (min-width: 992px) {
+    .auralis-calendar-filters {
+        flex-wrap: nowrap;
+        flex: 0 1 auto;
+        width: auto;
+        max-width: 100%;
+    }
+
+    .auralis-calendar-filter-selects {
+        flex: 0 1 auto;
+        flex-wrap: nowrap !important;
+        width: auto;
+        min-width: 0;
+    }
+
+    .auralis-calendar-filter-selects > .auralis-cal-filter-control.form-select:not(.ts-hidden-accessible):not(.auralis-cal-filter-participante) {
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 8.5rem;
+        max-width: 11rem;
+    }
+
+    .auralis-calendar-filter-selects > .ts-wrapper,
+    .auralis-calendar-filter-selects > .auralis-cal-filter-participante.form-select:not(.ts-hidden-accessible) {
+        flex: 0 0 15rem;
+        width: 15rem;
+        min-width: 13rem;
+        max-width: 18rem;
+    }
+
+    .auralis-calendar-filters > .btn-group {
+        flex: 0 0 auto;
+    }
+}
+
+/* Dropdown asistente anclado a body: legible (nombre + email) */
+.ts-dropdown.auralis-cal-filter-participant-dropdown {
+    min-width: min(22rem, 92vw) !important;
+    max-width: min(28rem, 96vw);
+}
+
+.ts-dropdown.auralis-cal-filter-participant-dropdown .option {
+    white-space: normal;
+    line-height: 1.35;
+}
+
+/* —— Responsive agenda full-page (móvil / tablet) —— */
+@media (max-width: 991.98px) {
+    .auralis-calendar-page {
+        padding-top: 0.75rem !important;
+        padding-bottom: 4.5rem !important; /* hueco bottom-nav móvil */
+    }
+
+    .auralis-calendar-page-heading {
+        margin-bottom: 0.75rem !important;
+    }
+
+    .auralis-calendar-page-heading .h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.15rem !important;
+    }
+
+    .auralis-calendar-page-subtitle {
+        font-size: 0.75rem;
+    }
+
+    .auralis-calendar-page .auralis-calendar-header {
+        gap: 0.5rem !important;
+        margin-bottom: 0.75rem !important;
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: var(--bs-body-bg, #fff);
+        padding-bottom: 0.35rem;
+    }
+
+    .auralis-calendar-page .auralis-calendar-nav {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .auralis-calendar-page .auralis-calendar-title {
+        flex: 1 1 auto;
+        min-width: 0 !important;
+        font-size: 0.95rem !important;
+    }
+
+    .auralis-calendar-page .auralis-calendar-filters {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .auralis-calendar-page .auralis-calendar-filter-selects {
+        width: 100%;
+        flex: 0 0 auto;
+    }
+
+    /* Tablet: N filtros activos reparte la fila a partes iguales */
+    .auralis-calendar-page .auralis-calendar-filter-selects > .auralis-cal-filter-control.form-select:not(.ts-hidden-accessible),
+    .auralis-calendar-page .auralis-calendar-filter-selects > .ts-wrapper {
+        flex: 1 1 0;
+        width: auto;
+        max-width: none;
+        min-width: 0;
+    }
+
+    .auralis-calendar-page .auralis-calendar-filters .btn-group {
+        width: 100%;
+        display: flex;
+    }
+
+    .auralis-calendar-page .auralis-calendar-filters .btn-group > .btn {
+        flex: 1 1 0;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        font-size: 0.8rem;
+        min-height: 2.25rem;
+    }
+
+    .auralis-calendar-page .z-calendar-container {
+        min-height: min(70vh, calc(100dvh - 14rem));
+    }
+
+    .auralis-calendar-page .z-timegrid-body {
+        max-height: min(62vh, calc(100dvh - 16rem));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .auralis-calendar-page-subtitle {
+        display: none;
+    }
+
+    /* Móvil: 1 filtro por fila, ancho completo (solo los que existan en DOM) */
+    .auralis-calendar-page .auralis-calendar-filter-selects > .auralis-cal-filter-control.form-select:not(.ts-hidden-accessible),
+    .auralis-calendar-page .auralis-calendar-filter-selects > .ts-wrapper {
+        flex: 1 1 100%;
+        width: 100%;
+        max-width: none;
+    }
+
+    .auralis-calendar-page .auralis-calendar-filters .btn-group > .btn {
+        font-size: 0.72rem;
+        letter-spacing: -0.01em;
+    }
+
+    .auralis-calendar-page .z-timegrid-day-header {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.15rem;
+    }
+
+    .auralis-calendar-page-actions .btn {
+        font-size: 0.75rem;
+    }
+}
+
+/* Tom Select: por encima del modal Bootstrap (1055) y menú vertical */
+.ts-dropdown {
+    z-index: 2200 !important;
+}
+
+#auralisNewEventModal .ts-wrapper {
+    width: 100%;
+}
+
+/**
+ * Tom Select alineado a form-select / widgets Core / ConfigAuralis (--auralis-font-size-base).
+ * El vendor fija rem del root; sin esto el control no sigue el body de Ajustes.
+ */
+#auralisNewEventModal .ts-wrapper.form-select,
+#auralisNewEventModal .ts-control,
+#auralisNewEventModal .ts-control input {
+    font-size: var(--auralis-font-size-base, 1rem) !important;
+}
+
+#auralisNewEventModal .ts-control {
+    border-color: var(--bs-border-color, #E2E8F0);
+    border-radius: var(--auralis-radius-btn, 6px);
+    min-height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+}
+
+#auralisNewEventModal .ts-control:focus,
+#auralisNewEventModal .ts-wrapper.focus .ts-control {
+    border-color: var(--theme-input-focus-border, var(--v-primary));
+    box-shadow: 0 0 0 0.2rem rgba(var(--v-primary-rgb, 16, 185, 129), 0.2);
+}
+
+/* Single (Mascota, etc.): texto de input, sin chip */
+#auralisNewEventModal .ts-wrapper.single .ts-control .item {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    color: var(--bs-body-color, inherit) !important;
+    font-weight: 600;
+}
+
+/* Multi (Asistentes): chips con contraste WCAG sobre modal claro */
+#auralisNewEventModal .ts-wrapper.multi .ts-control .item {
+    background-color: color-mix(in srgb, var(--v-primary, #10B981) 15%, #ffffff) !important;
+    color: color-mix(in srgb, var(--v-primary, #10B981) 55%, #0F172A) !important;
+    border: 1px solid color-mix(in srgb, var(--v-primary, #10B981) 38%, transparent) !important;
+    border-radius: var(--auralis-radius-btn, 6px);
+    font-weight: 600;
+    font-size: inherit !important;
+}
+
+#auralisNewEventModal .ts-control .item .z-ts-tipo {
+    opacity: 0.75;
+    font-weight: 500;
+    margin-right: 0.15rem;
+}
+
+/* Dropdown anclado a body: misma tipografía sm */
+body > .ts-dropdown {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.875) !important;
+}
+
+body > .ts-dropdown .badge {
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+#auralisNewEventModal .ts-wrapper.multi .ts-control .item .remove {
+    color: color-mix(in srgb, var(--v-primary, #10B981) 55%, #0F172A) !important;
+    border-left-color: color-mix(in srgb, var(--v-primary, #10B981) 30%, transparent) !important;
+    opacity: 0.85;
+}
+
+#auralisNewEventModal .ts-wrapper.multi .ts-control .item .remove:hover {
+    background-color: color-mix(in srgb, var(--v-primary, #10B981) 22%, #ffffff) !important;
+    opacity: 1;
+}
+
+#auralisNewEventModal .ts-dropdown .option.active,
+#auralisNewEventModal .ts-dropdown .option:hover,
+body .ts-dropdown .option.active,
+body .ts-dropdown .option:hover {
+    background-color: var(--theme-dropdown-hover-bg, rgba(var(--v-primary-rgb, 16, 185, 129), 0.08)) !important;
+    color: var(--v-primary, #10B981) !important;
+}
+
+/* Solo Bootstrap dark real: modal oscuro → chips multi con texto claro */
+[data-bs-theme="dark"] #auralisNewEventModal .ts-wrapper.multi .ts-control .item {
+    background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.22) !important;
+    color: #F8FAFC !important;
+    border-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.45) !important;
+}
+
+[data-bs-theme="dark"] #auralisNewEventModal .ts-wrapper.multi .ts-control .item .remove {
+    color: #F8FAFC !important;
+    border-left-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/**
+ * Modal de cita / día: tipografía y cromática del tema activo (ConfigAuralis).
+ */
+#auralisNewEventModal,
+#auralisCalendarDayModal {
+    font-family: inherit;
+    font-size: var(--auralis-font-size-base, 1rem);
+    color: var(--bs-body-color, inherit);
+}
+
+#auralisNewEventModal .auralis-event-modal-content {
+    border-radius: var(--auralis-radius-btn, var(--bs-border-radius, 0.5rem));
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+#auralisNewEventModal .modal-title,
+#auralisCalendarDayModal .modal-title {
+    font-size: var(--auralis-font-size-h6, var(--auralis-font-size-base, 1rem));
+}
+
+#auralisNewEventModal .form-label,
+#auralisCalendarDayModal .form-label,
+#auralisNewEventModal .form-check-label {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.875);
+}
+
+/* Switch junto a la etiqueta: sin float ni margen negativo de .form-switch. */
+#auralisNewEventModal .auralis-event-toggles .form-check.form-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 0;
+    min-height: 0;
+}
+
+#auralisNewEventModal .auralis-event-toggles .form-check-input {
+    float: none;
+    margin-left: 0;
+    margin-top: 0;
+    position: relative;
+    width: 2em;
+    height: 1em;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+#auralisNewEventModal .auralis-event-modal-chrome,
+#auralisCalendarDayModal .auralis-event-modal-chrome {
+    background-color: var(--v-bg-secondary, var(--bs-secondary-bg, transparent));
+    color: var(--bs-body-color, inherit);
+}
+
+#auralisNewEventModal .auralis-event-modal-help-icon {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.75);
+}
+
+#auralisNewEventModal .auralis-event-modal-palette-icon {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.625);
+}
+
+/* Calendario del evento (Mi calendario, 1.77): punto de color dentro del selector, como en Google Calendar */
+#auralisNewEventModal .auralis-ev-cal-punto {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background-color: var(--zcal-color, #4285f4);
+}
+
+#auralisNewEventModal .auralis-ev-cal-select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+}
+
+#auralisNewEventModal .auralis-ev-cal-select .form-select {
+    width: auto;
+    max-width: 100%;
+    padding-left: 2rem;
+}
+
+#auralisNewEventModal .auralis-ev-cal-select .auralis-ev-cal-punto {
+    position: absolute;
+    left: 0.75rem;
+    z-index: 2;
+    pointer-events: none;
+}
+
+#auralisNewEventModal .auralis-ev-cal-fijo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+/* —— Agenda de página completa (1.75): horario visible, barra y marca de hoy —— */
+
+/* Alto por hora: auralis-calendar.js lo ajusta (--z-slot-h) para que el horario visible quepa sin scroll */
+.z-timegrid-wrapper .z-timegrid-hour-slot,
+.z-timegrid-wrapper .z-timegrid-hour-cell {
+    height: var(--z-slot-h, 50px);
+}
+
+/* Barra: botones con el estilo secundario del tema; solo la vista activa y «24 h» llevan el acento.
+   El tema fuerza .btn-outline-secondary con !important y no marca .active: hay que subir la especificidad. */
+.auralis-calendar-page .auralis-calendar-header .btn[data-cal-view].active,
+.auralis-calendar-page .auralis-calendar-header .auralis-cal-24h.active {
+    background-color: var(--v-primary, #10b981) !important;
+    border-color: var(--v-primary, #10b981) !important;
+    color: #ffffff !important;
+}
+
+.auralis-calendar-page .auralis-calendar-header .auralis-cal-24h.is-oculto {
+    display: none !important;
+}
+
+/* Hoy: una sola marca, el número en un círculo de color (sin columna teñida ni etiqueta «Hoy») */
+.auralis-calendar-page .z-timegrid-day-header.is-today,
+.auralis-calendar-page .z-timegrid-day-column.is-today {
+    background: transparent;
+}
+
+.auralis-calendar-page .z-timegrid-day-header .badge-today {
+    display: none;
+}
+
+.auralis-calendar-page .z-timegrid-day-header.is-today .z-timegrid-day-num,
+.auralis-calendar-page .z-calendar-day.is-today .z-calendar-day-label.d-lg-inline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2em;
+    height: 2em;
+    padding: 0 0.25em;
+    border-radius: 1em;
+    background-color: var(--v-primary, #10b981);
+    color: #ffffff;
+}
+
+@media (min-width: 992px) {
+    .auralis-calendar-page .z-calendar-day.is-today,
+    .auralis-calendar-page .z-calendar-header-col.is-today {
+        background: transparent;
+    }
+
+    .auralis-calendar-page .z-calendar-day .badge-today {
+        display: none;
+    }
+}
+
+/* Horas fuera del horario visible (auralis-calendar.js); «24 h» las vuelve a enseñar */
+.z-timegrid-wrapper .z-fuera-horario {
+    display: none !important;
+}
+
+/* Agenda de página completa: los tres <br> finales de MenuBghTemplate restan alto a la rejilla.
+   Solo en estas páginas (body:has, contrato de lienzo del README); el resto del ERP no cambia. */
+body:has(.auralis-calendar-page) > br {
+    display: none;
+}

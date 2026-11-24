@@ -1,0 +1,70 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Añade enlaces seguros de previsualización a los adjuntos del formulario de correo cuando se activa en Diseño → Nombres de PDF.
+ #}
+{% extends "@Core/SendMail.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+
+    {% if settings('auralis_pdf_nombre', 'previsualizar_adjuntos_email', false) %}
+        {# El PDF enviado por el Core puede llevar un sufijo temporal que no aparece en el nombre mostrado. #}
+        {% set diskFile = (fsc.request.queryOrInput is defined) ? fsc.request.queryOrInput('fileName', '') : '' %}
+        {% set diskFileOk = diskFile is not empty and '/' not in diskFile and '\\' not in diskFile and '..' not in diskFile %}
+        {% set attachmentsMap = {} %}
+        {% for name in fsc.newMail.getAttachmentNames() %}
+            {% set stem = name | split('.') | slice(0, -1) | join('.') %}
+            {% set diskName = (diskFileOk and stem is not empty and diskFile starts with (stem ~ '_mail_')) ? diskFile : name %}
+            {% set fileUrl = myFilesUrl('MyFiles/Tmp/Email/' ~ diskName) %}
+            {% set attachmentsMap = attachmentsMap | merge({ (name): fileUrl }) %}
+        {% endfor %}
+
+        <div id="auralis-adjuntos-preview-data"
+             data-attachments="{{ attachmentsMap | json_encode | e('html_attr') }}"
+             data-title="{{ trans('auralis-pdf-nombre-preview-adjunto-title') | e('html_attr') }}"
+             hidden></div>
+
+        <script>
+            (function () {
+                'use strict';
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const dataElement = document.getElementById('auralis-adjuntos-preview-data');
+                    if (!dataElement) {
+                        return;
+                    }
+
+                    let urls = {};
+                    try {
+                        urls = JSON.parse(dataElement.dataset.attachments || '{}');
+                    } catch (error) {
+                        return;
+                    }
+
+                    document.querySelectorAll('p i.fa-paperclip').forEach(function (icon) {
+                        const container = icon.parentElement;
+                        const fileName = container ? container.textContent.trim() : '';
+                        if (!container || !fileName || !urls[fileName]) {
+                            return;
+                        }
+
+                        const newIcon = document.createElement('i');
+                        newIcon.className = 'fas fa-paperclip fa-fw';
+                        newIcon.setAttribute('aria-hidden', 'true');
+
+                        const link = document.createElement('a');
+                        link.href = urls[fileName];
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        link.className = 'fw-bold text-primary text-decoration-underline';
+                        link.title = dataElement.dataset.title || '';
+                        link.textContent = fileName;
+
+                        container.replaceChildren(newIcon, document.createTextNode(' '), link);
+                    });
+                });
+            }());
+        </script>
+    {% endif %}
+{% endblock %}

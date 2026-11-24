@@ -1,0 +1,32 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Botón campana in-app Auralis (el panel HTML vive una sola vez en el layout).
+ #}
+{% set auralisNotifCount = auralisUnreadNotifications() %}
+{% set auralisHasUnreadNews = auralisHasUnreadNews() %}
+{% set auralisNotifEnabled = true %}
+{% if auralisNotifEnabled and fsc.user %}
+<li class="nav-item auralis-notif-bell-wrap{{ auralisNotifCount > 0 or auralisHasUnreadNews ? ' has-unread' : '' }}" title="{{ trans('auralis-inapp-notifications') }}">
+    <a class="nav-link {{ mobile|default(false) ? 'px-1 py-0' : '' }}"
+       href="#"
+       id="{{ bellId|default('menuIconAuralisNotif') }}"
+       role="button"
+       data-auralis-notif-toggle="1"
+       aria-expanded="false"
+       aria-controls="auralis-notif-shared-panel"
+       aria-haspopup="true">
+        <i class="fa-solid fa-bell {{ mobile|default(false) ? 'fa-lg' : '' }}" aria-hidden="true"></i>
+        {# Actividad: burbuja numérica #}
+        <span class="auralis-notif-badge {{ auralisNotifCount > 0 ? '' : 'is-empty' }}"
+              data-auralis-notif-badge
+              {% if auralisNotifCount == 0 %}hidden{% endif %}>{% if auralisNotifCount > 0 %}{{ auralisNotifCount > 99 ? '99+' : auralisNotifCount }}{% else %}0{% endif %}</span>
+        {# Solo novedades: mismo data-attr que el tab (punto dedicado, no reutilizar el badge) #}
+        <span class="auralis-notif-bell-news-dot {{ auralisHasUnreadNews and auralisNotifCount == 0 ? '' : 'is-empty' }}"
+              data-auralis-notif-news-dot
+              data-auralis-notif-bell-news="1"
+              title="{{ trans('auralis-inapp-news-unread') }}"
+              {% if not (auralisHasUnreadNews and auralisNotifCount == 0) %}hidden{% endif %}></span>
+    </a>
+</li>
+{% endif %}

@@ -1,0 +1,157 @@
+{#
+ /**
+  * @package FacturaScripts
+  * @author MansiHost.com
+  * @description Vista de autenticación en dos pasos (2FA) adaptada al tema Auralis.
+  */
+#}
+{% extends "Master/MicroTemplate.html.twig" %}
+
+{% block messages %}
+    {% include 'Macro/Toasts.html.twig' %}
+    {% from 'Macro/Utils.html.twig' import message as showMessage %}
+    {% set allMessages = log.read('master', ['error', 'critical', 'warning', 'notice', 'info']) | merge(log.read('database', ['error', 'critical', 'warning', 'notice', 'info'])) %}
+    {% set hasLog = allMessages|length > 0 %}
+    {% if hasLog %}
+        <div class="px-2 pt-2 position-absolute top-0 start-0 w-100 z-3">
+            {{ showMessage(log, ['error', 'critical'], 'danger') }}
+            {{ showMessage(log, ['warning'], 'warning') }}
+            {{ showMessage(log, ['notice'], 'success') }}
+            {{ showMessage(log, ['info'], 'info') }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% set temaColor = settings('auralis', 'tema_color', 'auralis') %}
+    {% set fontFamily = settings('auralis', 'tipografia', 'plus_jakarta_sans') %}
+    {% set fontSizeBase = settings('auralis', 'font_size_base', '16') %}
+    {% set borderRadiusCards = settings('auralis', 'border_radius_cards', '12') %}
+    {% set borderRadiusBotones = settings('auralis', 'border_radius_botones', '8') %}
+    {% set borderRadiusInputs = settings('auralis', 'border_radius_inputs', '6') %}
+
+    {% set loginLogo = settings('auralis', 'login_logo') ?: 'Dinamic/Assets/Images/auralis_rectangular_ancho_facturascripts.svg' %}
+    {% set loginLogoHeight = settings('auralis', 'login_logo_height', '50') %}
+    {% set loginFooterText = settings('auralis', 'login_footer_text', '© {year} Diseñado por MansiHost.com')|replace({'{year}': 'now'|date('Y')}) %}
+
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis.css') }}?v={{ auralisAssetVersion('Dinamic/Assets/CSS/auralis.css') }}"/>
+
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-fonts.css') }}?v={{ auralisAssetVersion('Dinamic/Assets/CSS/auralis-fonts.css') }}"/>
+    <style>
+        /* Fuentes cargadas desde Assets/CSS/auralis-fonts.css (sin Google Fonts) */
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            font-size: {{ fontSizeBase }}px;
+            {% if fontFamily == 'inter' %}
+                font-family: 'Inter', sans-serif;
+            {% elseif fontFamily == 'lato' %}
+                font-family: 'Lato', sans-serif;
+            {% elseif fontFamily == 'merriweather' %}
+                font-family: 'Merriweather', Georgia, serif;
+            {% elseif fontFamily == 'montserrat' %}
+                font-family: 'Montserrat', sans-serif;
+            {% elseif fontFamily == 'nunito' %}
+                font-family: 'Nunito', sans-serif;
+            {% elseif fontFamily == 'open_sans' %}
+                font-family: 'Open Sans', sans-serif;
+            {% elseif fontFamily == 'roboto' %}
+                font-family: 'Roboto', sans-serif;
+            {% elseif fontFamily == 'poppins' %}
+                font-family: 'Poppins', sans-serif;
+            {% elseif fontFamily == 'outfit' %}
+                font-family: 'Outfit', sans-serif;
+            {% elseif fontFamily == 'plus_jakarta_sans' %}
+                font-family: 'Plus Jakarta Sans', sans-serif;
+            {% else %}
+                font-family: system-ui, -apple-system, sans-serif;
+            {% endif %}
+        }
+
+        .auralis-2fa-card {
+            border-radius: {{ borderRadiusCards }}px !important;
+        }
+
+        .auralis-2fa-card .btn-primary {
+            background-color: var(--v-primary) !important;
+            border-color: var(--v-primary) !important;
+            color: #ffffff !important;
+            border-radius: {{ borderRadiusBotones }}px !important;
+        }
+
+        .auralis-2fa-card .btn-primary:hover {
+            background-color: var(--v-primary-hover) !important;
+            border-color: var(--v-primary-hover) !important;
+        }
+
+        .auralis-2fa-card .input-group {
+            border-radius: {{ borderRadiusInputs }}px !important;
+        }
+
+        .auralis-2fa-card .text-primary {
+            color: var(--v-primary) !important;
+        }
+
+        .auralis-2fa-card .input-group:focus-within {
+            box-shadow: 0 0 0 0.25rem rgba(var(--v-primary-rgb), 0.25) !important;
+            border-color: var(--v-primary) !important;
+        }
+
+        .auralis-2fa-card .input-group input:focus {
+            box-shadow: none;
+        }
+    </style>
+
+    <div class="auralis-login-container auralis-theme-{{ temaColor }} d-flex justify-content-center align-items-center bg-light min-vh-100 p-3">
+        <div class="card border-0 shadow-lg auralis-2fa-card w-100" style="max-width: 480px;">
+            <div class="card-body p-4 p-sm-5">
+                <div class="text-center mb-4">
+                    {% if loginLogo %}
+                        <img src="{{ asset(loginLogo) }}" alt="Logo" class="img-fluid mb-3" style="height: {{ loginLogoHeight }}px; width: auto;"/>
+                    {% endif %}
+                    <div class="mb-2">
+                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill small fw-bold">
+                            <i class="fa-solid fa-shield-halved me-1"></i> {{ trans('two-factor-code') }}
+                        </span>
+                    </div>
+                    <h4 class="fw-bold text-dark mt-2 mb-1">{{ fsc.two_factor_user|e }}</h4>
+                    <p class="text-muted small mb-0">{{ trans('two-factor-code') }}</p>
+                </div>
+
+                <form action="{{ asset('login') }}" method="post" class="form">
+                    {{ formToken() }}
+                    <input type="hidden" name="action" value="two-factor-validation">
+                    <input type="hidden" name="fsNick" value="{{ fsc.two_factor_user|e('html_attr') }}">
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-secondary">{{ trans('code') }}</label>
+                        <div class="input-group input-group-lg bg-light border">
+                            <span class="input-group-text bg-transparent border-0 text-muted"><i class="fa-solid fa-key"></i></span>
+                            <input type="text" name="fsTwoFactorCode" class="form-control bg-transparent border-0 px-2 text-center letter-spacing-2 fw-bold fs-5"
+                                   maxlength="10" placeholder="123456" required autocomplete="off" autofocus/>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm py-3">
+                            <i class="fa-solid fa-check-circle me-2"></i>{{ trans('verify') }}
+                        </button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="{{ asset('login') }}" class="text-decoration-none small text-secondary fw-semibold">
+                            <i class="fa-solid fa-arrow-left me-1"></i>{{ trans('cancelar') }}
+                        </a>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4 text-muted small border-top pt-3">
+                    {{ auralisFooterHtml(loginFooterText) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

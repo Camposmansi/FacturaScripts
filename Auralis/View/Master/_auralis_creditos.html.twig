@@ -1,0 +1,5 @@
+{# Crédito visual común, sin enlaces ni llamadas externas. #}
+{% set footerText = settings('auralis', 'login_footer_text', '© {year} Diseñado por MansiHost.com')|replace({'{year}': 'now'|date('Y')}) %}
+<div class="auralis-creditos text-muted text-center small py-2">
+    {{ auralisFooterHtml(footerText) }}
+</div>

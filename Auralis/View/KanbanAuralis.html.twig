@@ -1,0 +1,158 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Tablero Kanban de Auralis: cabecera con el conmutador «Lista | Tablero» y el tablero.
+ #}
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% set kanbanConBuscar = fsc.barraFiltros|filter(c => c.tipo == 'buscar')|length > 0 %}
+{% set kanbanOrden = {
+    board: fsc.provider ? fsc.provider.key() : '',
+    opciones: fsc.opcionesOrden,
+    orden: fsc.orden,
+    dir: fsc.dirOrden,
+    en_url: fsc.ordenEnUrl,
+    usuario: fsc.user ? fsc.user.nick : ''
+} %}
+
+{% block css %}
+    {{ parent() }}
+    {% if kanbanConBuscar %}
+        <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/vendor/tom-select/tom-select.bootstrap5.min.css') }}?v=2.6.2"/>
+    {% endif %}
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-kanban.css') }}?v={{ auralisAssetVersion('Dinamic/Assets/CSS/auralis-kanban.css') }}"/>
+    {# CSS propio del detalle del proveedor (solo en modo modal; rutas validadas en el controlador) #}
+    {% for ruta in fsc.detalleAssets.css|default([]) %}
+        <link rel="stylesheet" href="{{ asset(ruta) }}?v={{ auralisAssetVersion(ruta) }}"/>
+    {% endfor %}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container-fluid auralis-kanban-page mb-4">
+        {% if fsc.provider is null %}
+            <h1 class="h3 mt-3 mb-3">
+                <i class="fa-solid fa-table-columns me-2" aria-hidden="true"></i>{{ trans('auralis-kanban-tablero') }}
+            </h1>
+            <div class="alert alert-info" role="alert">
+                <i class="fa-solid fa-circle-info me-2" aria-hidden="true"></i>{{ trans('auralis-kanban-no-disponible') }}
+            </div>
+        {% else %}
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3 mb-3">
+                <h1 class="h3 mb-0">
+                    <i class="fa-solid fa-table-columns me-2" aria-hidden="true"></i>{{ fsc.provider.title() }}
+                </h1>
+                <div class="btn-group" role="group" aria-label="{{ trans('auralis-kanban-tablero')|e('html_attr') }}">
+                    {% set kanbanUrlLista = asset(fsc.provider.listUrl()) ~ (fsc.detallePedido ? '?' ~ {detalle: fsc.detallePedido}|url_encode : '') %}
+                    {% if fsc.barraFiltros is not empty %}
+                        {# el listado del Core solo lee sus filtros por POST: «Lista» los envía en el formulario de abajo #}
+                        <button type="submit" form="zk-form-lista" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-list me-1" aria-hidden="true"></i>{{ trans('auralis-kanban-lista') }}
+                        </button>
+                    {% else %}
+                        <a class="btn btn-outline-secondary" href="{{ kanbanUrlLista|e('html_attr') }}">
+                            <i class="fa-solid fa-list me-1" aria-hidden="true"></i>{{ trans('auralis-kanban-lista') }}
+                        </a>
+                    {% endif %}
+                    <a class="btn btn-outline-secondary active" href="{{ (fsc.urlTablero ?: '#')|e('html_attr') }}" aria-current="page">
+                        <i class="fa-solid fa-table-columns me-1" aria-hidden="true"></i>{{ trans('auralis-kanban-tablero') }}
+                    </a>
+                </div>
+            </div>
+
+            {% if fsc.barraFiltros is not empty %}
+                <form id="zk-form-lista" method="post" action="{{ kanbanUrlLista|e('html_attr') }}" hidden>
+                    {% for campo, valor in fsc.camposLista %}
+                        <input type="hidden" name="{{ campo|e('html_attr') }}" value="{{ valor|e('html_attr') }}">
+                    {% endfor %}
+                </form>
+
+                {# Barra de filtros: GET, así quedan en la URL y se pueden compartir #}
+                <form method="get" action="{{ fsc.url()|e('html_attr') }}" class="auralis-kanban-filtros row g-2 align-items-end mb-3"
+                      data-kanban-filtros
+                      data-buscar-url="{{ fsc.url()|e('html_attr') }}"
+                      data-board="{{ fsc.provider.key()|e('html_attr') }}"
+                      aria-label="{{ trans('filters')|e('html_attr') }}">
+                    <input type="hidden" name="board" value="{{ fsc.provider.key()|e('html_attr') }}">
+                    {% if fsc.detallePedido %}
+                        <input type="hidden" name="detalle" value="{{ fsc.detallePedido|e('html_attr') }}">
+                    {% endif %}
+                    {% for nombre, valor in fsc.filtrosOcultos %}
+                        <input type="hidden" name="{{ nombre|e('html_attr') }}" value="{{ valor|e('html_attr') }}">
+                    {% endfor %}
+
+                    {% for control in fsc.barraFiltros %}
+                        {% set idControl = 'zk-filtro-' ~ control.nombre %}
+                        <div class="col-12 col-sm-6 col-lg">
+                            <label class="form-label" for="{{ idControl|e('html_attr') }}">{{ control.etiqueta }}</label>
+                            {% if control.tipo == 'fecha' %}
+                                <input type="date" class="form-control" id="{{ idControl|e('html_attr') }}"
+                                       name="{{ control.nombre|e('html_attr') }}" value="{{ control.valor|e('html_attr') }}">
+                            {% elseif control.tipo == 'buscar' %}
+                                <select class="form-select" id="{{ idControl|e('html_attr') }}" name="{{ control.nombre|e('html_attr') }}"
+                                        data-kanban-buscar="{{ control.nombre|e('html_attr') }}"
+                                        placeholder="{{ trans('auralis-kanban-buscar')|e('html_attr') }}">
+                                    <option value="">{{ trans('all') }}</option>
+                                    {% if control.valor %}
+                                        <option value="{{ control.valor|e('html_attr') }}" selected>{{ control.texto ?: control.valor }}</option>
+                                    {% endif %}
+                                </select>
+                            {% else %}
+                                <select class="form-select" id="{{ idControl|e('html_attr') }}" name="{{ control.nombre|e('html_attr') }}">
+                                    <option value="">{{ trans('all') }}</option>
+                                    {% for valor, texto in control.opciones %}
+                                        <option value="{{ valor|e('html_attr') }}" {{ (valor ~ '') == control.valor ? 'selected' : '' }}>{{ texto }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    {% if fsc.opcionesOrden is not empty %}
+                        {% include 'Master/_kanban_orden.html.twig' with kanbanOrden|merge({clase: 'col-12 col-sm-6 col-lg'}) %}
+                    {% endif %}
+
+                    <div class="col-12 col-lg-auto d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-filter me-1" aria-hidden="true"></i>{{ trans('filter') }}
+                        </button>
+                        {% set kanbanLimpiar = {board: fsc.provider.key()}|merge(fsc.detallePedido ? {detalle: fsc.detallePedido} : {}) %}
+                        <a class="btn btn-outline-secondary" href="{{ (fsc.url() ~ '?' ~ kanbanLimpiar|url_encode)|e('html_attr') }}">{{ trans('auralis-kanban-limpiar-filtros') }}</a>
+                    </div>
+                </form>
+            {% elseif fsc.opcionesOrden is not empty %}
+                {# tablero sin barra de filtros: el selector va solo, en su propia fila #}
+                <div class="row g-2 mb-3">
+                    {% include 'Master/_kanban_orden.html.twig' with kanbanOrden|merge({clase: 'col-12 col-sm-6 col-lg-4 col-xl-3'}) %}
+                </div>
+            {% endif %}
+
+            {% include 'Master/_kanban_board.html.twig' with {
+                board: fsc.provider.key(),
+                url: fsc.url(),
+                filters: fsc.filtros,
+                can_move: fsc.puedeMover,
+                detail: fsc.modoDetalle
+            } %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if fsc.provider is not null %}
+        {% if kanbanConBuscar %}
+            <script src="{{ asset('Dinamic/Assets/JS/vendor/tom-select/tom-select.complete.min.js') }}?v=2.6.2"></script>
+        {% endif %}
+        {% if fsc.barraFiltros is not empty %}
+            <script src="{{ asset('Dinamic/Assets/JS/auralis-kanban-filtros.js') }}?v={{ auralisAssetVersion('Dinamic/Assets/JS/auralis-kanban-filtros.js') }}"></script>
+        {% endif %}
+        <script src="{{ asset('Dinamic/Assets/JS/vendor/sortable/Sortable.min.js') }}?v={{ auralisAssetVersion('Dinamic/Assets/JS/vendor/sortable/Sortable.min.js') }}"></script>
+        <script src="{{ asset('Dinamic/Assets/JS/auralis-kanban-dnd.js') }}?v={{ auralisAssetVersion('Dinamic/Assets/JS/auralis-kanban-dnd.js') }}"></script>
+        <script src="{{ asset('Dinamic/Assets/JS/auralis-kanban.js') }}?v={{ auralisAssetVersion('Dinamic/Assets/JS/auralis-kanban.js') }}"></script>
+        {# JS propio del detalle del proveedor (solo en modo modal; rutas validadas en el controlador) #}
+        {% for ruta in fsc.detalleAssets.js|default([]) %}
+            <script src="{{ asset(ruta) }}?v={{ auralisAssetVersion(ruta) }}"></script>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

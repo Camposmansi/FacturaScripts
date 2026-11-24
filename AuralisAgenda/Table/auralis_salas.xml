@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Tabla de salas/espacios asociados a almacén para el calendario Auralis.
+ */
+-->
+<table>
+    <column>
+        <name>idsala</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codalmacen</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>activa</name>
+        <type>boolean</type>
+        <default>true</default>
+    </column>
+    <constraint>
+        <name>auralis_salas_pkey</name>
+        <type>PRIMARY KEY (idsala)</type>
+    </constraint>
+    <constraint>
+        <name>ca_auralis_salas_almacenes</name>
+        <type>FOREIGN KEY (codalmacen) REFERENCES almacenes (codalmacen) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <index>
+        <name>auralis_salas_activa_idx</name>
+        <columns>activa</columns>
+    </index>
+    <index>
+        <name>auralis_salas_codalmacen_idx</name>
+        <columns>codalmacen</columns>
+    </index>
+</table>

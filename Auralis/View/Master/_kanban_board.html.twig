@@ -1,0 +1,84 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Contenedor del tablero Kanban (reutilizable como pestaña HTML): DOM, token y textos para el JS.
+ #              Variables: board (clave del tablero), url (controlador AJAX), filters (mapa nombre => valor),
+ #              can_move (bool), detail ('page' | 'modal'; por defecto fsc.modoDetalle o 'page').
+ #              Los assets los carga la página que lo incluye.
+ #}
+{% set kanbanBoard = board|default('presupuestos-cliente') %}
+{% set kanbanUrl = url|default('KanbanAuralis') %}
+{% set kanbanFilters = filters|default({}) %}
+{% set kanbanDetail = detail|default(fsc.modoDetalle|default('page')) %}
+{% if kanbanDetail not in ['page', 'modal'] %}
+    {% set kanbanDetail = 'page' %}
+{% endif %}
+{% set kanbanJsonFlags = constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP') b-or constant('JSON_HEX_APOS') b-or constant('JSON_HEX_QUOT') %}
+{% set kanbanClaves = [
+    'auralis-kanban-tablero',
+    'auralis-kanban-lista',
+    'auralis-kanban-cargar-mas',
+    'auralis-kanban-mover-a',
+    'auralis-kanban-mas-acciones',
+    'auralis-kanban-abrir-ficha',
+    'auralis-kanban-arrastra-aqui',
+    'auralis-kanban-vacio',
+    'auralis-kanban-sin-resultados',
+    'auralis-kanban-limpiar-filtros',
+    'auralis-kanban-error-carga',
+    'auralis-kanban-reintentar',
+    'auralis-kanban-deshacer',
+    'auralis-kanban-movido',
+    'auralis-kanban-confirmar-titulo',
+    'auralis-kanban-confirmar',
+    'auralis-kanban-cancelar',
+    'auralis-kanban-bloqueado-corto',
+    'auralis-kanban-vencida',
+    'auralis-kanban-tarjetas',
+    'auralis-kanban-una-tarjeta',
+    'auralis-kanban-importe-en',
+    'auralis-kanban-importe-en-una',
+    'auralis-kanban-pista-movil',
+    'auralis-kanban-anuncio-posicion',
+    'auralis-kanban-anuncio-levantada',
+    'auralis-kanban-anuncio-cancelado',
+    'auralis-kanban-error-red',
+    'auralis-kanban-cargando',
+    'auralis-kanban-columna-region',
+    'auralis-kanban-columna-region-una',
+    'auralis-kanban-abrir-ficha-completa',
+    'auralis-kanban-guardar',
+    'auralis-kanban-cerrar',
+    'auralis-kanban-guardado',
+    'auralis-kanban-detalle-error',
+    'auralis-kanban-campo-requerido',
+    'auralis-kanban-campo-no-valido',
+    'auralis-kanban-detalle-titulo',
+    'auralis-kanban-sin-cambios',
+    'auralis-kanban-validez',
+    'auralis-kanban-vence-pronto',
+    'auralis-kanban-columna-bloqueada',
+    'auralis-kanban-genera-desde-ficha',
+    'auralis-kanban-genera-desde-ficha-corto',
+    'auralis-kanban-mostrar-columna',
+    'auralis-kanban-plegar-columna',
+    'auralis-kanban-orden-asc',
+    'auralis-kanban-orden-desc',
+    'auralis-kanban-orden-invertir',
+    'auralis-kanban-orden-anuncio'
+] %}
+{% set kanbanI18n = {} %}
+{% for clave in kanbanClaves %}
+    {% set kanbanI18n = kanbanI18n|merge({ (clave): trans(clave) }) %}
+{% endfor %}
+<div id="auralis-kanban" class="auralis-kanban"
+     data-board="{{ kanbanBoard|e('html_attr') }}"
+     data-url="{{ kanbanUrl|e('html_attr') }}"
+     data-filters="{{ (kanbanFilters|length > 0 ? kanbanFilters|json_encode(kanbanJsonFlags) : '{}')|e('html_attr') }}"
+     data-can-move="{{ can_move|default(false) ? '1' : '0' }}"
+     data-detail="{{ kanbanDetail }}">
+    <input type="hidden" name="multireqtoken" value="{{ formToken(false) }}">
+    <div class="auralis-kanban-root"></div>
+    <div class="visually-hidden" aria-live="polite" data-kanban-live></div>
+</div>
+<script type="application/json" id="auralis-kanban-i18n">{{ kanbanI18n|json_encode(kanbanJsonFlags)|raw }}</script>

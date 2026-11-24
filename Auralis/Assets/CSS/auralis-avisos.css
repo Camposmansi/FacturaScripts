@@ -1,0 +1,177 @@
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Estilos del banner de avisos internos Auralis en documentos.
+ */
+
+.auralis-avisos-wrap {
+    order: 9999 !important;
+    width: 100%;
+    margin: 0.25rem 0 0.35rem 0;
+}
+
+/*
+ * Fondo amarillento de alerta (tono claro).
+ * Cabeceras: color primario del tema (--v-primary).
+ * Columnas desacopladas: sin height:100% ni stretch de fila.
+ */
+.auralis-avisos-banner.alert.alert-warning {
+    --bs-alert-color: #212529;
+    --bs-alert-link-color: var(--v-primary, var(--bs-primary, #10B981));
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+    border-left: 4px solid var(--v-primary, var(--bs-primary, #10B981));
+    color: #212529;
+}
+
+/* Columnas independientes: cada cajón conserva su propia altura */
+.auralis-avisos-columns {
+    align-items: flex-start !important;
+}
+
+.auralis-avisos-columns > [class*="col-"] {
+    align-self: flex-start;
+}
+
+/* Cabecera principal + columnas: siempre color primario del tema */
+.auralis-avisos-banner .auralis-avisos-toggle,
+.auralis-avisos-banner .auralis-avisos-toggle i,
+.auralis-avisos-banner .auralis-avisos-toggle span,
+.auralis-avisos-banner .auralis-avisos-section-toggle,
+.auralis-avisos-banner .auralis-avisos-section-toggle i,
+.auralis-avisos-banner .auralis-avisos-section-toggle span,
+.auralis-avisos-banner .auralis-avisos-section-title {
+    color: var(--v-primary, var(--bs-primary, #10B981)) !important;
+}
+
+.auralis-avisos-banner .auralis-avisos-toggle:hover,
+.auralis-avisos-banner .auralis-avisos-toggle:focus,
+.auralis-avisos-banner .auralis-avisos-section-toggle:hover,
+.auralis-avisos-banner .auralis-avisos-section-toggle:focus {
+    color: var(--v-primary-hover, var(--v-primary, var(--bs-primary, #10B981))) !important;
+}
+
+.auralis-avisos-section-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.auralis-avisos-chevron,
+.auralis-avisos-chevron-sm {
+    transition: transform 0.2s ease;
+    font-size: 0.85em;
+}
+
+/* Colapsado por defecto: chevron hacia la derecha */
+.auralis-avisos-toggle[aria-expanded="false"] .auralis-avisos-chevron,
+.auralis-avisos-section-toggle[aria-expanded="false"] .auralis-avisos-chevron-sm {
+    transform: rotate(-90deg);
+}
+
+/* Subcajas: tono amarillo más oscuro; altura según contenido (desacopladas) */
+.auralis-avisos-section {
+    background: #ffe8a1;
+    border: 1px solid #f0d78c;
+    border-radius: 0.45rem;
+    padding: 0.55rem 0.7rem;
+    box-shadow: 0 1px 2px rgba(120, 90, 20, 0.08);
+    height: auto;
+}
+
+.auralis-avisos-list {
+    max-height: 10rem;
+    overflow-y: auto;
+    margin-top: 0.35rem;
+    padding-top: 0.35rem;
+    border-top: 1px dashed rgba(120, 90, 20, 0.28);
+}
+
+.auralis-avisos-item {
+    font-size: 0.875rem;
+}
+
+.auralis-avisos-item + .auralis-avisos-item {
+    margin-top: 0.4rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid rgba(120, 90, 20, 0.12);
+}
+
+.auralis-avisos-item-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.1rem;
+    color: #212529 !important;
+}
+
+.auralis-avisos-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.35;
+    color: #334155 !important;
+}
+
+/*
+ * Tema oscuro: mismos tonos amarillentos (no oliva/carbón).
+ * Las cabeceras siguen usando --v-primary (turquesa).
+ */
+body.auralis-theme-auralis_dark .auralis-avisos-banner.alert.alert-warning,
+body.auralis-theme-auralis_oscuro .auralis-avisos-banner.alert.alert-warning,
+body.auralis-theme-prestige .auralis-avisos-banner.alert.alert-warning,
+body.auralis-theme-cyber .auralis-avisos-banner.alert.alert-warning,
+body.auralis-theme-serenity .auralis-avisos-banner.alert.alert-warning,
+body.auralis-theme-blaze .auralis-avisos-banner.alert.alert-warning,
+body.auralis-theme-nexus .auralis-avisos-banner.alert.alert-warning,
+body.auralis-theme-zafiro .auralis-avisos-banner.alert.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+    color: #212529;
+}
+
+body.auralis-theme-auralis_dark .auralis-avisos-section,
+body.auralis-theme-auralis_oscuro .auralis-avisos-section,
+body.auralis-theme-prestige .auralis-avisos-section,
+body.auralis-theme-cyber .auralis-avisos-section,
+body.auralis-theme-serenity .auralis-avisos-section,
+body.auralis-theme-blaze .auralis-avisos-section,
+body.auralis-theme-nexus .auralis-avisos-section {
+    background: #ffe8a1;
+    border-color: #f0d78c;
+    box-shadow: 0 1px 2px rgba(120, 90, 20, 0.08);
+}
+
+body.auralis-theme-auralis_dark .auralis-avisos-item-title,
+body.auralis-theme-auralis_dark .auralis-avisos-text,
+body.auralis-theme-auralis_oscuro .auralis-avisos-item-title,
+body.auralis-theme-auralis_oscuro .auralis-avisos-text,
+body.auralis-theme-prestige .auralis-avisos-item-title,
+body.auralis-theme-prestige .auralis-avisos-text,
+body.auralis-theme-cyber .auralis-avisos-item-title,
+body.auralis-theme-cyber .auralis-avisos-text,
+body.auralis-theme-serenity .auralis-avisos-item-title,
+body.auralis-theme-serenity .auralis-avisos-text,
+body.auralis-theme-blaze .auralis-avisos-item-title,
+body.auralis-theme-blaze .auralis-avisos-text,
+body.auralis-theme-nexus .auralis-avisos-item-title,
+body.auralis-theme-nexus .auralis-avisos-text {
+    color: #212529 !important;
+}
+
+body.auralis-theme-auralis_dark .auralis-avisos-item + .auralis-avisos-item,
+body.auralis-theme-auralis_oscuro .auralis-avisos-item + .auralis-avisos-item,
+body.auralis-theme-prestige .auralis-avisos-item + .auralis-avisos-item,
+body.auralis-theme-cyber .auralis-avisos-item + .auralis-avisos-item,
+body.auralis-theme-serenity .auralis-avisos-item + .auralis-avisos-item,
+body.auralis-theme-blaze .auralis-avisos-item + .auralis-avisos-item,
+body.auralis-theme-nexus .auralis-avisos-item + .auralis-avisos-item {
+    border-top-color: rgba(120, 90, 20, 0.12);
+}
+
+body.auralis-theme-auralis_dark .auralis-avisos-list,
+body.auralis-theme-auralis_oscuro .auralis-avisos-list,
+body.auralis-theme-prestige .auralis-avisos-list,
+body.auralis-theme-cyber .auralis-avisos-list,
+body.auralis-theme-serenity .auralis-avisos-list,
+body.auralis-theme-blaze .auralis-avisos-list,
+body.auralis-theme-nexus .auralis-avisos-list {
+    border-top-color: rgba(120, 90, 20, 0.28);
+}

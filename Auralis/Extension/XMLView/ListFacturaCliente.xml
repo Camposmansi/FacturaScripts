@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Columnas % cobrado / por cobrar según recibos de la factura.
+-->
+<view>
+    <columns>
+        <column name="auralis-factura-cobrado" display="right" order="425">
+            <widget type="zPctBadge" fieldname="zk_pct_cobrado" tonefield="zk_pct_cobrado_tone"
+                    titlekey="auralis-factura-cobrado-ayuda" readonly="true"/>
+        </column>
+        <column name="auralis-factura-por-cobrar" display="none" order="426">
+            <widget type="zPctBadge" fieldname="zk_pct_pendiente" tonefield="zk_pct_pendiente_tone"
+                    titlekey="auralis-factura-por-cobrar-ayuda" readonly="true"/>
+        </column>
+    </columns>
+</view>

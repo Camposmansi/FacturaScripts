@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Preferencias de cada usuario sobre los calendarios que ve (visible y color propio), por clave cal:{id}.
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>clave</name>
+        <type>character varying(40)</type>
+    </column>
+    <column>
+        <name>visible</name>
+        <type>boolean</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>color</name>
+        <type>character varying(20)</type>
+        <null>yes</null>
+    </column>
+    <constraint>
+        <name>auralis_calendario_preferencias_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <!-- Ningún nombre puede contener «fs_»: DataBase::getIndexes() trata esos índices como del XML y
+         DbUpdater los borra en cada revisión (con «prefs_» la UNIQUE caía y MySQL lo impedía por la FK). -->
+    <constraint>
+        <name>ca_auralis_cal_pref_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>uniq_auralis_cal_pref_nick_clave</name>
+        <type>UNIQUE (nick, clave)</type>
+    </constraint>
+    <index>
+        <name>auralis_cal_pref_nick_idx</name>
+        <columns>nick</columns>
+    </index>
+</table>

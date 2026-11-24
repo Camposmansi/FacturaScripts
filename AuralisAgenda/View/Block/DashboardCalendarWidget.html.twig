@@ -1,0 +1,38 @@
+<section class="card shadow-sm border-0 mb-4" id="auralis-agenda-dashboard-widget">
+    <div class="card-header bg-transparent d-flex align-items-center justify-content-between gap-3">
+        <div>
+            <div class="small text-uppercase text-primary fw-semibold">{{ trans('agenda-widget-kicker') }}</div>
+            <h2 class="h5 mb-0">{{ trans('agenda-widget-title') }}</h2>
+        </div>
+        <a class="btn btn-sm btn-outline-primary" href="CalendarioUsuario">
+            <i class="fa-solid fa-up-right-from-square me-1"></i>{{ trans('agenda-widget-open') }}
+        </a>
+    </div>
+    <div class="card-body p-0">
+        <div id="auralis-agenda-dashboard-content" class="z-calendar-container" aria-live="polite">
+            <div class="py-5 text-center text-muted">
+                <i class="fa-solid fa-spinner fa-spin me-2"></i>{{ trans('loading') }}
+            </div>
+        </div>
+    </div>
+</section>
+<link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-calendar.css') }}">
+<script>
+(function () {
+    var target = document.getElementById('auralis-agenda-dashboard-content');
+    if (!target) return;
+    var now = new Date();
+    var start = new Date(now); start.setDate(now.getDate() - now.getDay() + 1);
+    var end = new Date(start); end.setDate(start.getDate() + 6);
+    var iso = function (d) { return d.toISOString().slice(0, 10); };
+    var url = new URL('CalendarioUsuario', window.location.href);
+    url.searchParams.set('action', 'calendar-events');
+    url.searchParams.set('start', iso(start));
+    url.searchParams.set('end', iso(end));
+    url.searchParams.set('view', 'week');
+    fetch(url.toString(), {headers: {'X-Requested-With': 'XMLHttpRequest'}})
+        .then(function (response) { return response.ok ? response.json() : Promise.reject(); })
+        .then(function (data) { target.innerHTML = data.html || '<div class="p-4 text-center text-muted">' + {{ trans('agenda-widget-empty')|json_encode|raw }} + '</div>'; })
+        .catch(function () { target.innerHTML = '<div class="p-4 text-center text-muted">' + {{ trans('agenda-widget-unavailable')|json_encode|raw }} + '</div>'; });
+})();
+</script>

@@ -1,0 +1,14 @@
+{% if fsc.user and settings('auralis_calendario', 'calendar_inapp_notifications', '1') == '1' %}
+<div id="auralis-agenda-notifications" data-endpoint="AuralisAgendaNotificationsAjax" data-token="{{ formToken(false) }}">
+    <button type="button" class="btn btn-link nav-link agenda-notif-toggle" title="{{ trans('auralis-inapp-notifications') }}" aria-expanded="false">
+        <i class="fa-solid fa-bell"></i><span class="agenda-notif-badge" hidden>0</span>
+    </button>
+    <div class="agenda-notif-panel shadow" hidden>
+        <div class="agenda-notif-header"><strong>{{ trans('auralis-inapp-notifications') }}</strong></div>
+        <div class="agenda-notif-list"><div class="p-3 text-muted text-center">{{ trans('loading') }}</div></div>
+        <a class="agenda-notif-footer" href="CalendarioUsuario">{{ trans('agenda-widget-open') }}</a>
+    </div>
+</div>
+<link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-agenda-notifications.css') }}">
+<script src="{{ asset('Dinamic/Assets/JS/auralis-agenda-notifications.js') }}" defer></script>
+{% endif %}

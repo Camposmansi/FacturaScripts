@@ -1,0 +1,146 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Vista previa de la pestaña «PDF»: maqueta HTML de una factura ficticia que sigue en vivo los ajustes del formulario (auralis-pdf-preview.js). Es orientativa, no genera ningún PDF. Con PlantillasPDF activo no se dibuja: se muestra el mismo aviso de la pestaña.
+ #}
+{% set vista = fsc.tab('ConfigAuralisPdf').settings.auralis_preview ?? {} %}
+{% set lineas = [
+    {ref: 'CAM-001', desc: 'auralis-pdf-preview-linea-1', cant: 3, precio: 12.5, dto: 10},
+    {ref: 'PAN-014', desc: 'auralis-pdf-preview-linea-2', cant: 2, precio: 39.9, dto: 0},
+    {ref: 'ZAP-207', desc: 'auralis-pdf-preview-linea-3', cant: 1, precio: 64, dto: 15},
+    {ref: 'MOC-033', desc: 'auralis-pdf-preview-linea-4', cant: 1, precio: 45.5, dto: 5},
+    {ref: 'ENV-001', desc: 'auralis-pdf-preview-linea-5', cant: 1, precio: 6, dto: 0}
+] %}
+{% set neto = lineas | reduce((acumulado, linea) => acumulado + linea.cant * linea.precio * (1 - linea.dto / 100), 0) %}
+{% set iva = neto * 0.21 %}
+{% set total = neto + iva %}
+<div class="zpdf-preview" data-zpdf-preview
+     data-form="formConfigAuralisPdf"
+     data-fuente-tema="{{ (vista.fuente_tema ?? 'Helvetica') | e('html_attr') }}"
+     data-acento-defecto="{{ (vista.acento_defecto ?? '#1f4e79') | e('html_attr') }}">
+    {% if vista.plantillas ?? false %}
+        <div class="alert alert-warning mb-0" role="status">
+            <i class="fa-solid fa-triangle-exclamation me-1" aria-hidden="true"></i>{{ trans('auralis-pdf-plantillaspdf-activo') | e }}
+        </div>
+    {% else %}
+        <p class="small text-body-secondary mb-2">
+            <i class="fa-solid fa-circle-info me-1" aria-hidden="true"></i>{{ trans('auralis-pdf-preview-aviso') | e }}
+        </p>
+        <div class="alert alert-info small py-2 mb-2" role="status" data-zpdf-inactivo hidden>
+            <i class="fa-solid fa-power-off me-1" aria-hidden="true"></i>{{ trans('auralis-pdf-preview-inactivo') | e }}
+        </div>
+        <div class="zpdf-marco" data-zpdf-marco>
+            <div class="zpdf-hoja" data-zpdf-hoja role="img" aria-label="{{ trans('auralis-pdf-preview-hoja') | e('html_attr') }}">
+                <div class="zpdf-cabecera" data-zpdf-cabecera>
+                    <div class="zpdf-logo" data-zpdf-oculto-si="logo"><span>{{ trans('auralis-pdf-preview-logo') | e }}</span></div>
+                    <div class="zpdf-empresa" data-zpdf-empresa>
+                        <div class="zpdf-acento zpdf-grande">{{ trans('auralis-pdf-preview-empresa') | e }}</div>
+                        <div>{{ trans('auralis-pdf-preview-empresa-datos') | e }}</div>
+                        <div>{{ trans('cifnif') | e }}: B00000000</div>
+                        <div data-zpdf-empresa-contacto hidden>910 000 000 · empresa.example</div>
+                    </div>
+                </div>
+                <div class="zpdf-acento zpdf-grande zpdf-titulo"><span data-zpdf-oculto-si="tipo_documento">{{ trans('invoice') | e }} </span>FAC2026A42</div>
+                <div class="zpdf-regla"></div>
+                <div class="zpdf-datos">
+                    <div>
+                        <strong>{{ trans('customer') | e }}:</strong> {{ trans('auralis-pdf-preview-cliente') | e }}<br/>
+                        {{ trans('cifnif') | e }}: A00000000<br/>
+                        {{ trans('auralis-pdf-preview-cliente-datos') | e }}
+                    </div>
+                    <div class="zpdf-derecha">
+                        <strong>{{ trans('date') | e }}:</strong> {{ '2026-10-28' | date('d-m-Y') }}<br/>
+                        <span data-zpdf-oculto-si="forma_pago"><strong>{{ trans('payment-method') | e }}:</strong> {{ trans('auralis-pdf-preview-pago') | e }}</span>
+                    </div>
+                </div>
+                <table class="zpdf-tabla zpdf-lineas">
+                    <thead>
+                    <tr>
+                        <th class="zpdf-izquierda">
+                            <span data-zpdf-oculto-si="referencia">{{ trans('reference') | e }} - </span>{{ trans('description') | e }}
+                        </th>
+                        <th>{{ trans('quantity') | e }}</th>
+                        <th>{{ trans('price') | e }}</th>
+                        <th data-zpdf-oculto-si="descuentos">{{ trans('dto') | e }}</th>
+                        <th>{{ trans('net') | e }}</th>
+                        <th>{{ trans('tax') | e }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for linea in lineas %}
+                        <tr>
+                            <td class="zpdf-izquierda"><span data-zpdf-oculto-si="referencia">{{ linea.ref | e }} - </span>{{ trans(linea.desc) | e }}</td>
+                            <td>{{ number(linea.cant, 0) }}</td>
+                            <td>{{ number(linea.precio, 2) }}</td>
+                            <td data-zpdf-oculto-si="descuentos">{{ number(linea.dto, 0) }} %</td>
+                            <td>{{ number(linea.cant * linea.precio * (1 - linea.dto / 100), 2) }}</td>
+                            <td>21 %</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div data-zpdf-bloque-final>
+                <table class="zpdf-tabla zpdf-totales">
+                    <tbody>
+                    <tr><th class="zpdf-izquierda">{{ trans('net') | e }}</th><td>{{ number(neto, 2) }}</td></tr>
+                    <tr><th class="zpdf-izquierda">{{ trans('tax') | e }} 21 %</th><td>{{ number(iva, 2) }}</td></tr>
+                    <tr><th class="zpdf-izquierda">{{ trans('total') | e }}</th><td><strong>{{ number(total, 2) }}</strong></td></tr>
+                    </tbody>
+                </table>
+                <div data-zpdf-visible-si="recibos" hidden>
+                    <table class="zpdf-tabla zpdf-pago">
+                        <thead>
+                        <tr>
+                            <th class="zpdf-izquierda">{{ trans('payment-method') | e }}</th>
+                            <th>{{ trans('expiration') | e }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="zpdf-izquierda">{{ trans('auralis-pdf-preview-pago') | e }}<span data-zpdf-oculto-si="iban"> · {{ trans('iban') | e }} ES00 0000 0000 0000 0000 0000</span></td>
+                            <td>{{ '2026-12-28' | date('d-m-Y') }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div data-zpdf-oculto-si="recibos">
+                    <div class="zpdf-subtitulo">{{ trans('receipts') | e }}</div>
+                    <table class="zpdf-tabla zpdf-recibos">
+                        <thead>
+                        <tr>
+                            <th>{{ trans('receipt') | e }}</th>
+                            <th>{{ trans('payment-method') | e }}</th>
+                            <th>{{ trans('amount') | e }}</th>
+                            <th>{{ trans('expiration') | e }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for numero in [1, 2] %}
+                            <tr>
+                                <td>{{ numero }}</td>
+                                <td>{{ trans('auralis-pdf-preview-pago') | e }}<span data-zpdf-oculto-si="iban"> · {{ trans('iban') | e }} ES00 0000 0000 0000 0000 0000</span></td>
+                                <td>{{ number(total / 2, 2) }}</td>
+                                <td>{{ (numero == 1 ? '2026-11-28' : '2026-12-28') | date('d-m-Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div data-zpdf-oculto-si="envio">
+                    <div class="zpdf-acento zpdf-grande zpdf-subtitulo">{{ trans('shipping-address') | e }}</div>
+                    <table class="zpdf-clave">
+                        <tbody>
+                        <tr><th>{{ trans('name') | e }}</th><td>{{ trans('auralis-pdf-preview-envio-nombre') | e }}</td></tr>
+                        <tr><th>{{ trans('address') | e }}</th><td>{{ trans('auralis-pdf-preview-cliente-datos') | e }}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+                <div class="zpdf-pie" data-zpdf-oculto-si="numeracion">1 / 1</div>
+            </div>
+        </div>
+        <p class="small text-body-secondary mt-2 mb-0" data-zpdf-nota-estandar hidden>
+            <i class="fa-solid fa-font me-1" aria-hidden="true"></i>{{ trans('auralis-pdf-preview-fuentes-sistema') | e }}
+        </p>
+    {% endif %}
+</div>

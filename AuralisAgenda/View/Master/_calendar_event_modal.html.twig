@@ -1,0 +1,469 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Partial de Modales Polimórficos de Calendario (Creación/Edición y Vista de Eventos del Día).
+ #              Reutilizable para cualquier plugin o vista que integre el calendario Auralis.
+ #
+ # Flujo cognitivo del formulario: título → slot top → tipo/estado → fecha/horas → toggles/recurrencia
+ #   → recursos (agente/sala/almacén/organizador) → asistentes → notas → avisos → color → slot bajo.
+ #   Tipo antes de horas evita que data-duration/data-color pisen ajustes manuales posteriores.
+ #
+ # Variables opcionales:
+ #   origen_tipo           - string (default 'general'). Tipo de origen polimórfico (ej: 'general', 'recibos', 'tareas').
+ #   day_modal_title       - string (default trans('eventos')). Título del modal de día.
+ #   include_event_form    - bool (default true). Si es false, solo se incluye el modal de listado del día
+ #                           (útil en DashBoardAuralis en modo receipts, sin UX de crear/editar eventos).
+ #   show_agents           - bool (default false). Muestra el selector de agente comercial (codagente); personas van por Tom Select.
+ #   show_rooms            - bool (default true). Muestra el selector de sala/espacio (idsala).
+ #   show_assigned_user    - bool (default false). Muestra el selector de organizador; si false, asignado = sesión (hidden).
+ #   show_participants     - bool (default true). Muestra el selector multi-asistentes (Tom Select).
+ #   show_notifications    - bool (default true). Muestra la sección de recordatorios/notificaciones por email.
+ #   show_event_types      - bool (default false). Tipo de evento (catálogo); satélites verticales lo activan.
+ #   show_status           - bool (default false). Estado (pendiente/…); satélites CRM/taller lo activan.
+ #   show_warehouses       - bool (default true). Selector de almacén/sede.
+ #   extra_fields_top_view  - string Twig path. Slot alto (tras título): campos clave del vertical (ej. mascota).
+ #   extra_fields_view      - string Twig path. Slot bajo (tras color) para campos extra de satélites.
+ #   extra_footer_view      - string Twig path. Slot en el pie izquierdo del modal (junto a Eliminar).
+ #   calendars_list         - array (opcional, Mi calendario). Respuesta de calendarios-list: añade «Calendario»
+ #                            junto al color, con punto de color. Selector (idcalendario) con los que tienen permiso
+ #                            editar y `defecto` elegido; si solo hay uno, nombre fijo y el select deshabilitado.
+ #                            Sin él, el modal es el de siempre (satélites).
+ #
+ # Permisos (los de la página que incluye el partial, es decir, los roles del Core):
+ #   sin allowUpdate -> solo lectura: campos bloqueados, sin Guardar, no se crea ni se arrastra; las acciones del pie
+ #                      (extra_footer_view) siguen activas y cada una decide según el permiso de su página destino.
+ #   sin allowDelete -> sin botón Eliminar.
+ #}
+
+{% set orig_type = origen_tipo|default('general') %}
+{# No usar |default(true): en Twig, false se considera vacío y se sustituiría por true #}
+{% set show_event_form      = include_event_form is not defined ? true : include_event_form %}
+{% set show_agents          = show_agents is not defined ? false : show_agents %}
+{% set show_rooms           = show_rooms is not defined ? true : show_rooms %}
+{% set show_assigned_user   = show_assigned_user is not defined ? false : show_assigned_user %}
+{% set show_participants    = show_participants is not defined ? true : show_participants %}
+{% set show_notifications   = show_notifications is not defined ? true : show_notifications %}
+{% set show_event_types     = show_event_types is not defined ? false : show_event_types %}
+{% set show_status          = show_status is not defined ? false : show_status %}
+{% set show_warehouses      = show_warehouses is not defined ? true : show_warehouses %}
+{# Sin permisos informados (fsc sin `permissions`) se asume acceso completo: no cambia el comportamiento previo. #}
+{% set z_puede_editar = (fsc.permissions is not defined) or (fsc.permissions.allowUpdate is not defined) or fsc.permissions.allowUpdate %}
+{% set z_puede_borrar = (fsc.permissions is not defined) or (fsc.permissions.allowDelete is not defined) or fsc.permissions.allowDelete %}
+{% set default_duracion = settings('auralis_calendario', 'calendar_duracion_default', 60) %}
+
+{%- if show_event_form -%}
+<div class="modal fade auralis-modal" id="auralisNewEventModal" tabindex="-1" aria-labelledby="auralisNewEventModalLabel" aria-hidden="true" data-auralis-modal-rev="1.50.1"{% if not z_puede_editar %} data-z-readonly="1"{% endif %}{% if not z_puede_borrar %} data-z-sin-borrar="1"{% endif %}>
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable auralis-event-modal-dialog">
+        <div class="modal-content auralis-event-modal-content">
+            <form id="formAuralisCalendarEvent" autocomplete="off">
+                <input type="hidden" name="action" value="save-event">
+                <input type="hidden" name="id" id="zEvId" value="">
+                <input type="hidden" name="origen_tipo" id="zEvOrigenTipo" value="{{ orig_type }}">
+                <input type="hidden" name="origen_id" id="zEvOrigenId" value="">
+                <input type="hidden" name="codcliente" id="zEvCodcliente" value="">
+                <input type="hidden" name="scope" id="zEvScope" value="esta">
+                <input type="hidden" name="duracion" id="zEvDuracion" value="{{ default_duracion }}"
+                       data-default-duration="{{ default_duracion }}" min="5" max="480">
+                {% if not show_assigned_user %}
+                <input type="hidden" name="asignado" id="zEvAsignado" value="{{ fsc.user.nick }}">
+                {% endif %}
+                {% if not show_agents %}
+                <input type="hidden" name="codagente" id="zEvCodagente" value="">
+                {% endif %}
+                {{ formToken() }}
+
+                <div class="modal-header py-2 px-3 border-bottom auralis-event-modal-chrome">
+                    <h5 class="modal-title fw-bold mb-0" id="auralisNewEventModalLabel">
+                        <i class="fa-solid fa-calendar-plus me-2 text-primary"></i>{{ trans('new-event') }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ trans('cerrar') }}"></button>
+                </div>
+                <div class="modal-body p-3">
+                    {# fieldset disabled: bloquea de forma nativa todos los campos (también los de los slots) sin tocar el JS del modal. #}
+                    <fieldset class="z-event-fieldset border-0 p-0 m-0" style="min-width:0"{% if not z_puede_editar %} disabled{% endif %}>
+                    <div class="row g-2">
+                        {# 1. Título #}
+                        <div class="col-12">
+                            <input type="text" class="form-control fw-semibold" id="zEvTitulo" name="titulo"
+                                   required autofocus autocomplete="off"
+                                   placeholder="{{ trans('calendar-event-title-placeholder') }}"
+                                   aria-label="{{ trans('calendar-event-title') }}">
+                        </div>
+
+                        {# 2. Campos clave del vertical (p. ej. mascota) — alto, tras título #}
+                        {% if extra_fields_top_view is defined and extra_fields_top_view %}
+                        <div class="col-12 js-calendar-plugin-hook auralis-extra-fields-top-wrap">
+                            {% include extra_fields_top_view %}
+                        </div>
+                        {% endif %}
+
+                        {# 3. Tipo y Estado — antes de horas (JS data-duration/data-color no pisa ajustes posteriores) #}
+                        {% if show_event_types or show_status %}
+                        <div class="col-12">
+                            <div class="row g-2">
+                                {% if show_event_types %}
+                                <div class="{{ show_status ? 'col-6' : 'col-12' }}">
+                                    <label class="form-label text-muted mb-0" for="zEvIdtipo">{{ trans('calendar-event-type') }}</label>
+                                    <select class="form-select" id="zEvIdtipo" name="idtipo">
+                                        <option value="">{{ trans('calendar-event-no-type') }}</option>
+                                        {% for t in fsc.eventTypesList|default([]) %}
+                                            <option value="{{ t.id }}" data-color="{{ t.color }}" data-duration="{{ t.duracion }}">{{ t.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% endif %}
+                                {% if show_status %}
+                                <div class="{{ show_event_types ? 'col-6' : 'col-12' }}">
+                                    <label class="form-label text-muted mb-0" for="zEvEstado">{{ trans('calendar-event-status') }}</label>
+                                    <select class="form-select" id="zEvEstado" name="estado">
+                                        <option value="">{{ trans('calendar-event-no-status') }}</option>
+                                        {% for s in fsc.eventStatusesList|default([]) %}
+                                            <option value="{{ s.codestado }}">{{ s.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {# 4. Fecha, hora inicio y hora fin (duracion se sincroniza en JS) #}
+                        <div class="col-6 col-md-5">
+                            <label class="form-label text-muted mb-0" for="zEvFecha">{{ trans('date') }}</label>
+                            <input type="date" class="form-control" id="zEvFecha" name="fecha"
+                                   required autocomplete="off">
+                        </div>
+                        <div class="col-3 col-md-3">
+                            <label class="form-label text-muted mb-0" for="zEvHoraInicio">{{ trans('calendar-event-start-time') }}</label>
+                            <input type="time" class="form-control" id="zEvHoraInicio" name="hora_inicio"
+                                   step="60" required autocomplete="off">
+                        </div>
+                        <div class="col-3 col-md-4">
+                            <label class="form-label text-muted mb-0" for="zEvHoraFin">{{ trans('calendar-event-end-time') }}</label>
+                            <input type="time" class="form-control" id="zEvHoraFin"
+                                   step="60" autocomplete="off"
+                                   aria-label="{{ trans('calendar-event-end-time') }}">
+                        </div>
+
+                        {# 5. Toggles: todo el día + repetir. Flex propio: el float de Bootstrap tapa la etiqueta. #}
+                        <div class="col-12 d-flex flex-wrap align-items-center gap-3 py-1 auralis-event-toggles">
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" role="switch" id="zEvTodoDia" name="todo_dia" value="1">
+                                <label class="form-check-label text-muted" for="zEvTodoDia">{{ trans('all-day')|default('Todo el día') }}</label>
+                            </div>
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" role="switch" id="zEvSeRepite" name="se_repite" value="1">
+                                <label class="form-check-label text-muted" for="zEvSeRepite">{{ trans('calendar-event-repeats') }}</label>
+                            </div>
+                            <div class="d-none align-items-center gap-1 ms-auto" id="zEvFechaFinContainer">
+                                <label class="form-label text-muted mb-0" for="zEvFechaFin" style="white-space: nowrap;">{{ trans('calendar-event-span-end')|default(trans('hasta')) }}:</label>
+                                <input type="date" class="form-control" id="zEvFechaFin" name="fecha_fin" style="max-width: 140px;">
+                            </div>
+                        </div>
+
+                        {# 5b. Campos de recurrencia (solo si Se repite) #}
+                        <div class="col-12 d-none" id="zEvRepEndHeader">
+                            <div class="d-flex align-items-center gap-1 flex-wrap">
+                                <label class="form-label text-muted mb-0" for="zEvRepFinTipo" style="white-space: nowrap;">{{ trans('calendar-event-rep-end') }}:</label>
+                                <select class="form-select" id="zEvRepFinTipo" name="rep_fin_tipo" style="max-width: 160px;">
+                                    <option value="nunca">{{ trans('calendar-event-rep-end-never') }}</option>
+                                    <option value="fecha">{{ trans('calendar-event-rep-end-date') }}</option>
+                                    <option value="count">{{ trans('calendar-event-rep-end-count') }}</option>
+                                </select>
+                                <div class="d-none align-items-center gap-1" id="zEvRepFinFechaWrap">
+                                    <input type="date" class="form-control" id="zEvRepFinFecha" name="rep_fin_fecha" style="max-width: 140px;" aria-label="{{ trans('calendar-event-rep-end-date') }}">
+                                </div>
+                                <div class="d-none align-items-center gap-1" id="zEvRepFinCountWrap">
+                                    <input type="number" class="form-control" id="zEvRepFinCount" name="rep_fin_count" value="10" min="1" max="999" style="max-width: 80px;" aria-label="{{ trans('calendar-event-rep-end-count') }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 d-none" id="zEvRecurrenceFields">
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <label class="form-label text-muted mb-0" for="zEvRepIntervalo">{{ trans('calendar-event-rep-interval') }}</label>
+                                    <input type="number" class="form-control" id="zEvRepIntervalo" name="rep_intervalo" value="1" min="1" max="365">
+                                </div>
+                                <div class="col-8">
+                                    <label class="form-label text-muted mb-0" for="zEvRepUnidad">{{ trans('calendar-event-rep-unit') }}</label>
+                                    <select class="form-select" id="zEvRepUnidad" name="rep_unidad">
+                                        <option value="day">{{ trans('calendar-event-rep-unit-day') }}</option>
+                                        <option value="week" selected>{{ trans('calendar-event-rep-unit-week') }}</option>
+                                        <option value="month">{{ trans('calendar-event-rep-unit-month') }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# 6. Agente y sala #}
+                        {% if show_agents or show_rooms %}
+                        <div class="col-12">
+                            <div class="row g-2">
+                                {% if show_agents %}
+                                <div class="{{ show_rooms ? 'col-6' : 'col-12' }}">
+                                    <label class="form-label text-muted mb-0" for="zEvCodagente">{{ trans('calendar-event-agent') }}</label>
+                                    <select class="form-select" id="zEvCodagente" name="codagente">
+                                        <option value="">{{ trans('calendar-event-no-agent') }}</option>
+                                        {% for ag in fsc.agentesList|default([]) %}
+                                            <option value="{{ ag.codagente }}">{{ ag.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% endif %}
+                                {% if show_rooms %}
+                                <div class="{{ show_agents ? 'col-6' : 'col-12' }}">
+                                    <label class="form-label text-muted mb-0" for="zEvIdsala">{{ trans('calendar-event-room') }}</label>
+                                    <select class="form-select" id="zEvIdsala" name="idsala">
+                                        <option value="">{{ trans('calendar-event-no-room') }}</option>
+                                        {% for sala in fsc.salasList|default([]) %}
+                                            <option value="{{ sala.id }}" data-codalmacen="{{ sala.codalmacen|default('') }}">{{ sala.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {# 6.1 Almacén / Sede #}
+                        {% if show_warehouses %}
+                        <div class="col-12">
+                            <label class="form-label text-muted mb-0" for="zEvCodalmacen">{{ trans('warehouse')|default('Almacén / Sede') }}</label>
+                            <select class="form-select" id="zEvCodalmacen" name="codalmacen">
+                                <option value="">{{ trans('calendar-event-no-warehouse')|default('-- Sede general --') }}</option>
+                                {% for alm in fsc.almacenesList|default([]) %}
+                                    <option value="{{ alm.codalmacen }}">{{ alm.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+
+                        {# 6.2 Organizador (solo si el satélite lo pide) #}
+                        {% if show_assigned_user %}
+                        <div class="col-12">
+                            <label class="form-label text-muted mb-0" for="zEvAsignado">{{ trans('calendar-event-organizer')|default(trans('calendar-event-assigned-user')) }}</label>
+                            <select class="form-select" id="zEvAsignado" name="asignado">
+                                {% for u in fsc.usersList %}
+                                    <option value="{{ u.nick }}" {% if u.nick == fsc.user.nick %}selected{% endif %}>{{ u.nombre }} ({{ u.nick }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+
+                        {# 7. Asistentes N:M #}
+                        {% if show_participants %}
+                        <div class="col-12">
+                            <label class="form-label text-muted mb-0" for="zEvParticipants">
+                                {{ trans('calendar-event-participants') }}
+                                <i class="fa-solid fa-circle-info text-muted ms-1 auralis-event-modal-help-icon"
+                                   title="{{ trans('calendar-event-participants-help')|e('html_attr') }}"
+                                   data-bs-toggle="tooltip" data-bs-placement="top"></i>
+                            </label>
+                            <input type="hidden" name="participants_json" id="zEvParticipantsJson" value="[]">
+                            <select id="zEvParticipants" class="form-select"
+                                    multiple
+                                    placeholder="{{ trans('calendar-event-participants-placeholder') }}"
+                                    data-group-users="{{ trans('calendar-participants-group-users') }}"
+                                    data-group-clients="{{ trans('calendar-participants-group-clients') }}"
+                                    data-group-contacts="{{ trans('calendar-participants-group-contacts') }}"
+                                    data-tipo-user="{{ trans('calendar-participant-tipo-user') }}"
+                                    data-tipo-cliente="{{ trans('calendar-participant-tipo-cliente') }}"
+                                    data-tipo-contacto="{{ trans('calendar-participant-tipo-contacto') }}"
+                                    data-tipo-group="{{ trans('calendar-participant-tipo-group') }}"
+                                    data-group-confirm="{{ trans('calendar-participant-group-confirm') }}"
+                                    data-group-truncated="{{ trans('calendar-participant-group-truncated') }}">
+                            </select>
+                        </div>
+                        {% endif %}
+
+                        {# 8. Descripción / Notas #}
+                        <div class="col-12">
+                            <textarea class="form-control" id="zEvDescripcion" name="descripcion" rows="2"
+                                      placeholder="{{ trans('calendar-event-notes-placeholder') }}"
+                                      aria-label="{{ trans('calendar-event-notes') }}"></textarea>
+                        </div>
+
+                        {# 9. Notificaciones (tras notas) #}
+                        {% if show_notifications %}
+                        <div class="col-12" id="zEvNotificationsBody">
+                            <div id="zEvNotificationsSection"
+                                 data-i18n-minutes="{{ trans('calendar-notif-minutes')|e('html_attr') }}"
+                                 data-i18n-hours="{{ trans('calendar-notif-hours')|e('html_attr') }}"
+                                 data-i18n-days="{{ trans('calendar-notif-days')|e('html_attr') }}"
+                                 data-i18n-weeks="{{ trans('calendar-notif-weeks')|e('html_attr') }}"
+                                 data-i18n-type-notification="{{ trans('calendar-notif-type-notification')|e('html_attr') }}"
+                                 data-i18n-no-types="{{ trans('calendar-notif-no-types')|e('html_attr') }}"
+                                 data-i18n-remove="{{ trans('eliminar')|e('html_attr') }}">
+                                <div class="d-flex justify-content-between align-items-center mb-1 gap-2">
+                                    <span class="form-label text-muted mb-0">
+                                        <i class="fa-solid fa-bell me-1"></i>{{ trans('calendar-event-notifications-toggle') }}
+                                    </span>
+                                    <button type="button" class="btn btn-link p-0 text-decoration-none flex-shrink-0" id="zEvAddNotification">
+                                        <i class="fa-solid fa-plus me-1"></i>{{ trans('calendar-add-notification') }}
+                                    </button>
+                                </div>
+                                <div id="zEvNotificationsList" class="d-flex flex-column gap-2"></div>
+                                <input type="hidden" name="notifications_json" id="zEvNotificationsJson" value="[]">
+                            </div>
+                        </div>
+                        {% endif %}
+
+{% if calendars_list is defined and calendars_list %}
+                        {# 10a. Calendario del evento (solo Mi calendario), pegado al color como en Google Calendar.
+                           Selector con los calendarios que el usuario puede editar (nunca de módulo); con uno solo no hay
+                           nada que elegir: se oculta, va deshabilitado (no se envía, el servidor pone el de por defecto)
+                           y se enseña el nombre. auralis-calendar-sidebar.js lo recalcula al abrir cada evento. #}
+                        {% set z_cal_editables = calendars_list.calendarios|default([])|filter(c => c.permiso == 'editar' and c.tipo != 'modulo') %}
+                        {% set z_cal_con_selector = z_cal_editables|length > 1 %}
+                        {% set z_cal_inicial = z_cal_editables|filter(c => c.idcalendario == calendars_list.defecto|default(0))|first %}
+                        {% set z_cal_inicial = z_cal_inicial ?: z_cal_editables|first %}
+                        {% set z_cal_color = z_cal_inicial and z_cal_inicial.color matches '/^#[0-9a-fA-F]{6}$/' ? z_cal_inicial.color : '' %}
+                        <div class="col-12 py-1 auralis-ev-calendario" id="zEvCalendarioBloque"{% if not z_cal_inicial %} hidden{% endif %}>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="text-muted" id="zEvCalendarioEtiqueta">{{ trans('calendar') }}:</span>
+                                <div class="auralis-ev-cal-select{{ z_cal_con_selector ? '' : ' d-none' }}" id="zEvCalendarioSelector">
+                                    <select class="form-select" id="zEvIdcalendario" name="idcalendario"
+                                            data-defecto="{{ calendars_list.defecto|default('') }}"
+                                            aria-labelledby="zEvCalendarioEtiqueta"{% if not z_cal_con_selector %} disabled{% endif %}>
+                                        {% for grupo in ['propios', 'empresa', 'otros'] %}
+                                            {% set z_cal_grupo = z_cal_editables|filter(c => (grupo == 'propios' and c.tipo == 'personal' and c.propio)
+                                                or (grupo == 'empresa' and c.tipo == 'comun')
+                                                or (grupo == 'otros' and c.tipo == 'personal' and not c.propio)) %}
+                                            {% if z_cal_grupo is not empty %}
+                                                <optgroup label="{{ trans(grupo == 'propios' ? 'auralis-calendario-mis-calendarios' : (grupo == 'empresa' ? 'auralis-calendario-de-la-empresa' : 'auralis-calendario-otros'))|e('html_attr') }}">
+                                                    {% for c in z_cal_grupo %}
+                                                        <option value="{{ c.idcalendario }}" data-color="{{ c.color|e('html_attr') }}"{% if c.idcalendario == calendars_list.defecto|default(0) %} selected{% endif %}>{{ c.nombre }}</option>
+                                                    {% endfor %}
+                                                </optgroup>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <span class="auralis-ev-cal-punto" aria-hidden="true"{% if z_cal_color %} style="--zcal-color: {{ z_cal_color }};"{% endif %}></span>
+                                </div>
+                                <span class="auralis-ev-cal-fijo{{ z_cal_con_selector ? ' d-none' : '' }}" id="zEvCalendarioFijo">
+                                    <span class="auralis-ev-cal-punto" aria-hidden="true"{% if z_cal_color %} style="--zcal-color: {{ z_cal_color }};"{% endif %}></span>
+                                    <span class="text-truncate" id="zEvCalendarioFijoNombre">{{ z_cal_inicial ? z_cal_inicial.nombre : '' }}</span>
+                                </span>
+                            </div>
+                        </div>
+{% endif %}
+                        {# 10. Color #}
+                        <div class="col-12 py-1">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="text-muted">{{ trans('calendar-event-color') }}:</span>
+                                <div class="d-flex gap-2 align-items-center z-event-color-picker">
+                                    <input type="hidden" name="color" id="zEvColor" value="#4285f4">
+                                    <button type="button" class="z-color-dot active" data-color="#4285f4" style="background-color: #4285f4; --dot-color: #4285f4;" title="{{ trans('calendar-event-color-blue') }}"></button>
+                                    <button type="button" class="z-color-dot" data-color="#34a853" style="background-color: #34a853; --dot-color: #34a853;" title="{{ trans('calendar-event-color-green') }}"></button>
+                                    <button type="button" class="z-color-dot" data-color="#fbbc05" style="background-color: #fbbc05; --dot-color: #fbbc05;" title="{{ trans('calendar-event-color-yellow') }}"></button>
+                                    <button type="button" class="z-color-dot" data-color="#ea4335" style="background-color: #ea4335; --dot-color: #ea4335;" title="{{ trans('calendar-event-color-red') }}"></button>
+                                    <button type="button" class="z-color-dot" data-color="#ab47bc" style="background-color: #ab47bc; --dot-color: #ab47bc;" title="{{ trans('calendar-event-color-purple') }}"></button>
+                                    <button type="button" class="z-color-dot" data-color="#00acc1" style="background-color: #00acc1; --dot-color: #00acc1;" title="{{ trans('calendar-event-color-cyan') }}"></button>
+                                    <button type="button" class="z-color-dot" data-color="#ff7043" style="background-color: #ff7043; --dot-color: #ff7043;" title="{{ trans('calendar-event-color-orange') }}"></button>
+                                    <button type="button" class="z-color-dot" data-color="#78909c" style="background-color: #78909c; --dot-color: #78909c;" title="{{ trans('calendar-event-color-gray') }}"></button>
+                                    <div class="position-relative d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;">
+                                        <button type="button" class="z-color-dot z-color-dot-custom d-flex align-items-center justify-content-center" id="zEvCustomDot" data-color="" style="--dot-color: #4285f4;" title="{{ trans('calendar-event-color-custom')|default('Color personalizado') }}">
+                                            <i class="fa-solid fa-palette auralis-event-modal-palette-icon"></i>
+                                        </button>
+                                        <input type="color" id="zEvColorPickerInput" style="position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; top: 0; left: 0; padding: 0; border: none;" title="{{ trans('calendar-event-color-custom')|default('Color personalizado') }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# 11. Campos adicionales inyectables por plugins satélite #}
+                        {% if extra_fields_view is defined and extra_fields_view %}
+                        <div class="col-12 js-calendar-plugin-hook auralis-extra-fields-wrap">
+                            {% include extra_fields_view %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    </fieldset>
+                </div>
+                <div class="modal-footer py-2 px-3 border-top d-flex align-items-center auralis-event-modal-chrome">
+                    <div class="flex-fill d-flex justify-content-start">
+                        <button type="button" class="btn btn-outline-danger d-none" id="btnDeleteAuralisEvent">
+                            <i class="fa-solid fa-trash me-1"></i>{{ trans('eliminar')|default('Eliminar') }}
+                        </button>
+                    </div>
+                    <div class="flex-fill d-flex justify-content-center gap-2">
+                        {# Acciones satélite (p. ej. doc venta) centradas: lejos de Eliminar. #}
+                        {% if extra_footer_view is defined and extra_footer_view %}
+                            {% include extra_footer_view %}
+                        {% endif %}
+                    </div>
+                    <div class="flex-fill d-flex justify-content-end">
+                        {# Sin Cancelar: el cierre es la X del header. #}
+                        <button type="submit" class="btn btn-primary px-3" id="btnSaveAuralisEvent">
+                            <i class="fa-solid fa-check me-1"></i>{{ trans('guardar') }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% if not z_puede_editar or not z_puede_borrar %}
+<style>
+    #auralisNewEventModal[data-z-readonly] #btnSaveAuralisEvent,
+    #auralisNewEventModal[data-z-sin-borrar] #btnDeleteAuralisEvent { display: none !important; }
+    #auralisNewEventModal .z-event-fieldset:disabled .ts-wrapper,
+    #auralisNewEventModal .z-event-fieldset:disabled label { pointer-events: none; }
+    #auralisNewEventModal .z-event-fieldset:disabled .ts-control { opacity: .65; }
+</style>
+{% endif %}
+{% if not z_puede_editar %}
+<script>
+    (function () {
+        var modal = document.getElementById('auralisNewEventModal');
+        if (!modal) {
+            return;
+        }
+        // Solo lectura: no se abre el modal para crear (sin id), solo para ver una cita existente.
+        modal.addEventListener('show.bs.modal', function (e) {
+            var idEl = document.getElementById('zEvId');
+            if (!idEl || String(idEl.value || '').trim() === '') {
+                e.preventDefault();
+            }
+        });
+        // Solo lectura: tampoco se arrastran eventos (el servidor igualmente lo rechaza).
+        document.addEventListener('dragstart', function (e) {
+            if (e.target && e.target.closest && e.target.closest('.z-timegrid-event')) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }, true);
+    })();
+</script>
+{% endif %}
+{%- endif -%}
+
+<div class="modal fade auralis-modal" id="auralisCalendarDayModal" tabindex="-1" aria-labelledby="auralisCalendarDayModalLabel" aria-hidden="true"
+     data-label-event="{{ trans('event')|default('evento')|e('html_attr') }}"
+     data-label-events="{{ trans('events')|default('eventos')|e('html_attr') }}"
+     data-label-receipt="{{ trans('recibo')|default('recibo')|e('html_attr') }}"
+     data-label-receipts="{{ trans('recibos-count')|default('recibos')|e('html_attr') }}"
+     data-label-all-day="{{ trans('all-day')|default('Todo el día')|e('html_attr') }}"
+     data-label-add="{{ trans('new-event')|default('Nuevo evento')|e('html_attr') }}"
+     data-day-kind="{{ day_modal_title|default('')|e('html_attr') }}">
+    <div class="modal-dialog modal-dialog-centered z-calendar-day-modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header py-2 px-3 align-items-center border-bottom auralis-event-modal-chrome">
+                <div class="me-2 min-w-0">
+                    <h5 class="modal-title fw-bold mb-0 text-truncate" id="auralisCalendarDayModalLabel">
+                        <i class="fa-solid fa-calendar-days me-2 text-primary"></i>{{ day_modal_title|default(trans('eventos')|default('Eventos del día')) }}
+                    </h5>
+                    <span class="text-muted small d-block" id="auralisCalendarDayModalCount"></span>
+                </div>
+                <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="modal" aria-label="{{ trans('cerrar') }}"></button>
+            </div>
+            <div class="modal-body px-3 py-3 z-calendar-day-modal-body" id="auralisCalendarDayModalBody"></div>
+            <div class="modal-footer py-2 px-3 border-top justify-content-between auralis-event-modal-chrome">
+                <button type="button" class="btn btn-outline-primary d-none" id="auralisCalendarDayModalAdd">
+                    <i class="fa-solid fa-plus me-1"></i><span id="auralisCalendarDayModalAddLabel">{{ trans('new-event')|default('Nuevo evento') }}</span>
+                </button>
+                <button type="button" class="btn btn-secondary ms-auto" data-bs-dismiss="modal">{{ trans('cerrar') }}</button>
+            </div>
+        </div>
+    </div>
+</div>

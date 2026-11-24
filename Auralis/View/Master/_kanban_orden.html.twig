@@ -1,0 +1,32 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Selector «Ordenar por» del tablero Kanban y botón de invertir el orden (los maneja auralis-kanban.js).
+ #              Variables: board (clave del tablero), opciones (lista de {clave, texto, dir}), orden, dir,
+ #              en_url (el criterio viene en la URL), usuario (nick, para recordarlo por usuario) y clase (columna).
+ #              Dentro de la barra de filtros los campos «orden» y «dir» viajan en la URL con los demás filtros.
+ #}
+{% set zkDir = dir == 'asc' ? 'asc' : 'desc' %}
+{% set zkSentido = trans('auralis-kanban-orden-' ~ zkDir) %}
+{% set zkInvertir = trans('auralis-kanban-orden-invertir', {'%sentido%': zkSentido}) %}
+<div class="{{ clase|default('')|e('html_attr') }} auralis-kanban-orden"
+     data-kanban-orden
+     data-board="{{ board|e('html_attr') }}"
+     data-orden="{{ orden|e('html_attr') }}"
+     data-dir="{{ zkDir }}"
+     data-orden-url="{{ en_url ? '1' : '0' }}"
+     data-usuario="{{ usuario|default('')|e('html_attr') }}">
+    <label class="form-label" for="zk-orden">{{ trans('auralis-kanban-orden-por') }}</label>
+    <div class="input-group">
+        <select class="form-select" id="zk-orden" name="orden" data-kanban-orden-select>
+            {% for opcion in opciones %}
+                <option value="{{ opcion.clave|e('html_attr') }}" data-dir="{{ opcion.dir|e('html_attr') }}" {{ opcion.clave == orden ? 'selected' : '' }}>{{ opcion.texto }}</option>
+            {% endfor %}
+        </select>
+        <button type="button" class="btn btn-outline-secondary zk-orden-dir" data-kanban-orden-dir
+                aria-label="{{ zkInvertir|e('html_attr') }}" title="{{ zkInvertir|e('html_attr') }}">
+            <i class="fa-solid {{ zkDir == 'asc' ? 'fa-arrow-up-short-wide' : 'fa-arrow-down-wide-short' }} fa-fw" aria-hidden="true"></i>
+        </button>
+    </div>
+    <input type="hidden" name="dir" value="{{ zkDir }}" data-kanban-orden-dir-campo>
+</div>

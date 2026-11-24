@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Vista de edición de un tipo de evento del calendario Auralis.
+ */
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id" readonly="dinamic"/>
+            </column>
+            <column name="name" numcolumns="6" order="110">
+                <widget type="text" fieldname="nombre" required="true" maxlength="100" icon="fa-solid fa-tag"/>
+            </column>
+            <column name="color" numcolumns="3" order="120">
+                <widget type="color" fieldname="color"/>
+            </column>
+            <column name="duration" description="calendar-event-type-duration-help" numcolumns="3" order="130">
+                <widget type="number" fieldname="duracion" min="5" max="1440" step="5" icon="fa-solid fa-hourglass-half"/>
+            </column>
+            <column name="origen_tipo" numcolumns="6" order="140">
+                <widget type="select" fieldname="origen_tipo" required="true">
+                    <values>
+                        <value code="general" title="calendar-origin-general"/>
+                    </values>
+                </widget>
+            </column>
+            <column name="active" numcolumns="6" order="150">
+                <widget type="checkbox" fieldname="activo"/>
+            </column>
+        </group>
+    </columns>
+</view>

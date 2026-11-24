@@ -1,0 +1,467 @@
+<link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-admin.css') }}?v=1.1"/>
+
+<div class="auralis-admin-container mt-3">
+    <div class="row">
+        <!-- Panel de Configuración -->
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="card-title mb-0 text-primary">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>{{ trans('configuracion-pantalla-login') }}
+                    </h5>
+                    <button type="submit" form="auralisLoginConfigForm" class="btn btn-primary btn-sm px-3">
+                        <i class="fa-solid fa-floppy-disk me-1"></i>{{ trans('guardar') }}
+                    </button>
+                </div>
+                <div class="card-body py-4">
+                    <form method="post" action="{{ fsc.url() }}" id="auralisLoginConfigForm" enctype="multipart/form-data">
+                        {{ formToken() }}
+                        <input type="hidden" name="action" value="save_login"/>
+                        <input type="hidden" name="activetab" value="LoginAuralis"/>
+                        <script>(function(){var i=document.querySelector('#auralisLoginConfigForm input[name="multireqtoken"]');if(i&&i.value){window.AURALIS_LIBRARY_CSRF=i.value;}})();</script>
+
+                        <!-- Sección 1: Textos -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary mb-3">
+                                <i class="fa-solid fa-font me-2 text-primary"></i>{{ trans('textos-pantalla') }}
+                            </label>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="login_maintenance_warning">{{ trans('aviso-mantenimiento') }}</label>
+                                <textarea class="form-control" name="login_maintenance_warning" id="login_maintenance_warning" rows="2" placeholder="{{ trans('placeholder-aviso-mantenimiento') }}">{{ settings('auralis', 'login_maintenance_warning') }}</textarea>
+                                <div class="form-text">{{ trans('aviso-mantenimiento-help') }}</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="login_left_text">{{ trans('texto-presentacion-izquierda') }}</label>
+                                <textarea class="form-control" name="login_left_text" id="login_left_text" rows="2" placeholder="Panel de Gestión&#10;Accede a tu plataforma empresarial">{{ settings('auralis', 'login_left_text', 'Panel de Gestión\nAccede a tu plataforma empresarial') }}</textarea>
+                                <div class="form-text">{{ trans('texto-presentacion-help') }}</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="login_footer_text">{{ trans('texto-pie-pagina') }}</label>
+                                <input type="text" class="form-control" name="login_footer_text" id="login_footer_text" value="{{ settings('auralis', 'login_footer_text', '© {year} Diseñado por MansiHost.com') }}">
+                                <div class="form-text">{{ trans('texto-pie-pagina-help') }}</div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25"/>
+
+                        <!-- Sección: Opciones de Recuperación de Contraseña -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary mb-3">
+                                <i class="fa-solid fa-key me-2 text-primary"></i>{{ trans('recuperacion-contrasena') }}
+                            </label>
+
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" role="switch" id="login_show_forgot_password" name="login_show_forgot_password" value="1" {{ settings('auralis', 'login_show_forgot_password', true) ? 'checked' : '' }}>
+                                <label class="form-check-label fw-bold" for="login_show_forgot_password">
+                                    {{ trans('mostrar-olvidado-contrasena') }}
+                                </label>
+                                <div class="form-text">{{ trans('mostrar-olvidado-contrasena-help') }}</div>
+                            </div>
+
+                            <div id="login_custom_recovery_block" class="{{ settings('auralis', 'login_show_forgot_password', true) ? '' : 'opacity-50' }}">
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="login_custom_password_recovery" name="login_custom_password_recovery" value="1" {{ settings('auralis', 'login_custom_password_recovery', false) ? 'checked' : '' }} {{ settings('auralis', 'login_show_forgot_password', true) ? '' : 'disabled' }}>
+                                    <label class="form-check-label fw-bold" for="login_custom_password_recovery">
+                                        {{ trans('activar-recuperacion-personalizada') }}
+                                    </label>
+                                    <div class="form-text">{{ trans('activar-recuperacion-personalizada-help') }}</div>
+                                </div>
+                            </div>
+                            <div class="alert alert-warning border-0 border-start border-4 border-warning bg-warning bg-opacity-10 p-3 mb-3 rounded-end">
+                                <div class="d-flex align-items-start">
+                                    <i class="fa-solid fa-envelope-circle-check fa-xl text-warning me-3 mt-1"></i>
+                                    <div>
+                                        <strong class="d-block text-dark mb-1" style="font-size: 0.95rem;">
+                                            <i class="fa-solid fa-triangle-exclamation me-1 text-warning"></i> {{ trans('requisito-configuracion') }}
+                                        </strong>
+                                        <p class="text-secondary small mb-1">
+                                            {{ trans('requisito-configuracion-desc') }}
+                                        </p>
+                                        <div class="bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded p-2 mt-2 text-wrap text-start" style="font-size: 0.82rem; font-weight: 600; line-height: 1.5;">
+                                            <i class="fa-solid fa-circle-info me-1"></i>
+                                            {{ trans('requisito-email-importante') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25"/>
+
+                        <!-- Sección 2: Identidad visual -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary mb-3">
+                                <i class="fa-solid fa-wand-magic-sparkles me-2 text-primary"></i>Identidad visual
+                            </label>
+
+                            <div class="row g-3 mb-4">
+                                <!-- Icono / Logo Cabecera (Área izquierda) -->
+                                <div class="col-md-6">
+                                    <div class="p-3 border rounded bg-light h-100 d-flex flex-column justify-content-between">
+                                        <div>
+                                            <label class="form-label fw-bold mb-2">Marca secundaria <span class="text-muted fw-normal">(opcional)</span></label>
+                                            <div class="mb-2">
+                                                {{ fsc.getLogoLibraryWidget('login_header_logo_id', settings('auralis', 'login_header_logo_id'))|raw }}
+                                            </div>
+                                            <div class="form-text mb-2" style="font-size: 0.8rem;">Aparece discretamente en la esquina superior del portal.</div>
+                                            <div class="mt-3">
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <label class="form-label mb-0 small fw-semibold" for="login_header_logo_height">Alto (px)</label>
+                                                    <span class="badge bg-light text-dark border" id="login_header_logo_height_val">{{ settings('auralis', 'login_header_logo_height', '55') }}px</span>
+                                                </div>
+                                                <input type="range" class="form-range" name="login_header_logo_height" id="login_header_logo_height" min="20" max="150" value="{{ settings('auralis', 'login_header_logo_height', '55') }}" oninput="document.getElementById('login_header_logo_height_val').textContent = this.value + 'px';"/>
+                                            </div>
+                                        </div>
+                                        {% set loginHeaderLogo = settings('auralis', 'login_header_logo') %}
+                                        {% if loginHeaderLogo %}
+                                            <div class="d-flex align-items-center justify-content-between bg-white p-2 rounded border mt-2">
+                                                <div class="me-2 p-1 bg-light rounded border">
+                                                    <img src="{{ asset(loginHeaderLogo) }}" height="28" alt="{{ trans('logo-cabecera') }}"/>
+                                                </div>
+                                                <button type="submit" name="delete_login_header_logo" value="1" class="btn btn-sm btn-outline-danger" title="{{ trans('eliminar') }}">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Logotipo del Formulario (Área derecha) -->
+                                <div class="col-md-6">
+                                    <div class="p-3 border rounded bg-light h-100 d-flex flex-column justify-content-between">
+                                        <div>
+                                            <label class="form-label fw-bold mb-2">Logotipo principal</label>
+                                            <div class="mb-2">
+                                                {{ fsc.getLogoLibraryWidget('login_logo_id', settings('auralis', 'login_logo_id'))|raw }}
+                                            </div>
+                                            <div class="form-text mb-2" style="font-size: 0.8rem;">Se muestra en el centro de la tarjeta de acceso y recuperación.</div>
+                                            <div class="mt-3">
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <label class="form-label mb-0 small fw-semibold" for="login_logo_height">Alto (px)</label>
+                                                    <span class="badge bg-light text-dark border" id="login_logo_height_val">{{ settings('auralis', 'login_logo_height', '180') }}px</span>
+                                                </div>
+                                                <input type="range" class="form-range" name="login_logo_height" id="login_logo_height" min="20" max="225" value="{{ settings('auralis', 'login_logo_height', '180') }}" oninput="document.getElementById('login_logo_height_val').textContent = this.value + 'px';"/>
+                                            </div>
+                                        </div>
+                                        {% set loginLogo = settings('auralis', 'login_logo') %}
+                                        {% if loginLogo %}
+                                            <div class="d-flex align-items-center justify-content-between bg-white p-2 rounded border mt-2">
+                                                <div class="me-2 p-1 bg-light rounded border">
+                                                    <img src="{{ asset(loginLogo) }}" height="28" alt="{{ trans('logotipo-login') }}"/>
+                                                </div>
+                                                <button type="submit" name="delete_login_logo" value="1" class="btn btn-sm btn-outline-danger" title="{{ trans('eliminar') }}">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Fondo del portal -->
+                                <div class="col-md-6">
+                                    <div class="p-3 border rounded bg-light h-100 d-flex flex-column justify-content-between">
+                                        <div>
+                                            <label class="form-label fw-bold mb-2">Fondo del portal</label>
+                                            <div class="mb-2">
+                                                {{ fsc.getLogoLibraryWidget('login_bg_image_id', settings('auralis', 'login_bg_image_id'))|raw }}
+                                            </div>
+                                            <div class="form-text mb-2" style="font-size: 0.8rem;">Ocupa toda la pantalla. Se aplica una capa de contraste automáticamente.</div>
+                                        </div>
+                                        {% set loginBg = settings('auralis', 'login_bg_image') %}
+                                        {% if loginBg %}
+                                            <div class="d-flex align-items-center justify-content-between bg-white p-2 rounded border mt-2">
+                                                <div class="me-2 p-1 bg-light rounded border" style="width: 50px; height: 28px; overflow: hidden;">
+                                                    <img src="{{ asset(loginBg) }}" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ trans('fondo-login') }}"/>
+                                                </div>
+                                                <button type="submit" name="delete_login_bg_image" value="1" class="btn btn-sm btn-outline-danger" title="{{ trans('eliminar') }}">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Ilustración -->
+                                <div class="col-md-6">
+                                    <div class="p-3 border rounded bg-light h-100 d-flex flex-column justify-content-between">
+                                        <div>
+                                            <label class="form-label fw-bold mb-2">Elemento decorativo <span class="text-muted fw-normal">(opcional)</span></label>
+                                            <div class="mb-2">
+                                                {{ fsc.getLogoLibraryWidget('login_left_image_id', settings('auralis', 'login_left_image_id'))|raw }}
+                                            </div>
+                                            <div class="form-text mb-2" style="font-size: 0.8rem;">Aparece de forma sutil en el fondo, siempre fuera del formulario.</div>
+                                        </div>
+                                        {% set loginLeftImg = settings('auralis', 'login_left_image') %}
+                                        {% if loginLeftImg %}
+                                            <div class="d-flex align-items-center justify-content-between bg-white p-2 rounded border mt-2">
+                                                <div class="me-2 p-1 bg-light rounded border" style="width: 32px; height: 32px;">
+                                                    <img src="{{ asset(loginLeftImg) }}" style="width: 100%; height: 100%; object-fit: contain;" alt="{{ trans('ilustracion') }}"/>
+                                                </div>
+                                                <button type="submit" name="delete_login_left_image" value="1" class="btn btn-sm btn-outline-danger" title="{{ trans('eliminar') }}">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-2">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="fa-solid fa-save me-2"></i>{{ trans('guardar') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna de Previsualización e Información -->
+        <div class="col-lg-5 mb-4">
+            <div class="sticky-top" style="top: 20px; z-index: 10;">
+                <!-- Tarjeta de Previsualización Dinámica -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
+                        <h5 class="card-title mb-0 text-secondary" style="font-size: 1rem;">
+                            <i class="fa-solid fa-eye me-2 text-primary"></i>{{ trans('previsualizacion-en-vivo') }}
+                        </h5>
+                        <div class="btn-group btn-group-sm" role="group" id="login_preview_device_selector">
+                            <button type="button" class="btn btn-outline-primary active" id="btn_login_prev_pc" title="Vista escritorio">
+                                <i class="fa-solid fa-desktop"></i> PC
+                            </button>
+                            <button type="button" class="btn btn-outline-primary" id="btn_login_prev_mobile" title="Vista móvil">
+                                <i class="fa-solid fa-mobile-screen"></i> {{ trans('movil-tablet') }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-3 bg-light d-flex justify-content-center align-items-center position-relative overflow-hidden">
+                        
+                        <!-- Previsualización Contenedor -->
+                        <div id="login_preview_stage" class="w-100 rounded border shadow-sm bg-white overflow-hidden auralis-theme-{{ settings('auralis', 'tema_color', 'auralis') }}" style="min-height: 280px; transition: all 0.3s ease;">
+                            
+                            {% set prevHeaderLogo = settings('auralis', 'login_header_logo') %}
+                            {% set prevFormLogo = settings('auralis', 'login_logo') ?: 'Dinamic/Assets/Images/auralis_rectangular_ancho_facturascripts.svg' %}
+                            {% set prevLeftImg = settings('auralis', 'login_left_image') %}
+                            {% set prevBg = settings('auralis', 'login_bg_image') %}
+
+                            <!-- Vista de escritorio del Portal Auralis -->
+                            <div id="prev_view_pc" class="position-relative w-100 overflow-hidden d-flex align-items-center justify-content-center p-3"
+                                 style="display: flex; min-height: 280px; background: {% if prevBg %}linear-gradient(135deg, rgba(5,18,39,.86), rgba(28,74,128,.58)), url('{{ asset(prevBg) }}') center/cover{% else %}radial-gradient(circle at 18% 18%, rgba(116,92,255,.8), transparent 34%), linear-gradient(135deg,#07152b,#285eae){% endif %};">
+                                {% if prevHeaderLogo %}
+                                    <img src="{{ asset(prevHeaderLogo) }}" alt="Logo" class="prev-header-logo-img position-absolute" style="top: 12px; left: 12px; max-height: 20px; max-width: 80px;">
+                                {% endif %}
+                                {% if prevLeftImg %}
+                                    <img src="{{ asset(prevLeftImg) }}" alt="" class="position-absolute" style="right: -12px; bottom: 4px; max-height: 130px; max-width: 42%; object-fit: contain; opacity: .18;">
+                                {% endif %}
+                                <div class="position-absolute w-100 h-100" style="inset:0; opacity:.12; background-image:linear-gradient(rgba(255,255,255,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.2) 1px,transparent 1px); background-size:22px 22px;"></div>
+                                <div class="position-relative bg-white p-3 shadow-lg text-dark" style="z-index:1; width: 47%; min-width: 150px; border-radius: 16px; background: rgba(255,255,255,.95)!important;">
+                                    <div id="prev_pc_alert" class="alert alert-warning p-1 mb-2 text-truncate" style="font-size: 7px; display: {{ settings('auralis', 'login_maintenance_warning') ? 'block' : 'none' }};">
+                                        <i class="fa-solid fa-triangle-exclamation me-1"></i><span id="prev_pc_alert_txt">{{ settings('auralis', 'login_maintenance_warning')|e }}</span>
+                                    </div>
+                                    <div class="text-center mb-2 fw-bold" style="font-size: 11px;">
+                                        {% if prevFormLogo %}<img src="{{ asset(prevFormLogo) }}" alt="Logo" class="prev-form-logo-img" style="max-height: 25px; max-width: 100%;">{% else %}Auralis{% endif %}
+                                        <div id="prev_pc_left_text" class="text-muted fw-normal mt-1" style="font-size: 6px; line-height: 1.35;">{{ settings('auralis', 'login_left_text', 'Panel de Gestión\nAccede a tu plataforma empresarial')|e|nl2br }}</div>
+                                    </div>
+                                    <div class="mb-1 p-1 bg-light rounded border" style="font-size: 7px; color:#94a3b8;"><i class="fa-regular fa-user me-1"></i>{{ trans('usuario') }}</div>
+                                    <div class="mb-2 p-1 bg-light rounded border" style="font-size: 7px; color:#94a3b8;"><i class="fa-solid fa-lock me-1"></i>{{ trans('contrasena') }}</div>
+                                    <div class="btn btn-primary btn-sm w-100 py-1" style="font-size: 8px;">{{ trans('acceder') }} <i class="fa-solid fa-arrow-right-long ms-1"></i></div>
+                                </div>
+                                <div id="prev_pc_footer" class="position-absolute text-white-50 text-center" style="bottom: 8px; left: 8px; right: 8px; font-size: 6px;">{{ auralisFooterHtml(settings('auralis', 'login_footer_text', '© {year} Diseñado por MansiHost.com')) }}</div>
+                            </div>
+
+                            <!-- Vista móvil del Portal Auralis -->
+                            <div id="prev_view_mobile" class="position-relative flex-column align-items-center justify-content-center w-100 overflow-hidden p-3"
+                                 style="display: none; min-height: 280px; background: {% if prevBg %}linear-gradient(135deg, rgba(5,18,39,.86), rgba(28,74,128,.58)), url('{{ asset(prevBg) }}') center/cover{% else %}radial-gradient(circle at 20% 15%, rgba(116,92,255,.8), transparent 35%), linear-gradient(145deg,#07152b,#285eae){% endif %};">
+                                <div class="position-relative bg-white p-3 shadow-lg text-dark" style="z-index:1; width: 82%; max-width: 220px; border-radius: 16px; background:rgba(255,255,255,.95)!important;">
+                                    <div id="prev_mob_alert" class="alert alert-warning p-1 mb-2 text-truncate" style="font-size: 7px; display: {{ settings('auralis', 'login_maintenance_warning') ? 'block' : 'none' }};">
+                                        <i class="fa-solid fa-triangle-exclamation me-1"></i><span id="prev_mob_alert_txt">{{ settings('auralis', 'login_maintenance_warning')|e }}</span>
+                                    </div>
+                                    <div class="text-center mb-3 fw-bold" style="font-size: 12px;">
+                                        {% if prevFormLogo %}<img src="{{ asset(prevFormLogo) }}" alt="Logo" class="prev-form-logo-img" style="max-height: 27px; max-width: 100%;">{% else %}Auralis{% endif %}
+                                    </div>
+                                    <div class="mb-2 p-2 bg-light rounded border" style="font-size: 8px; color:#64748b;"><i class="fa-regular fa-user me-1"></i>{{ trans('usuario') }}</div>
+                                    <div class="mb-2 p-2 bg-light rounded border" style="font-size: 8px; color:#64748b;"><i class="fa-solid fa-lock me-1"></i>{{ trans('contrasena') }}</div>
+                                    <div class="btn btn-primary btn-sm w-100 py-1 fw-bold" style="font-size: 9px;">{{ trans('acceder') }}</div>
+                                </div>
+                                <div id="prev_mob_footer" class="position-absolute text-white-50 text-center" style="bottom: 9px; left: 8px; right: 8px; font-size: 6px;">{{ auralisFooterHtml(settings('auralis', 'login_footer_text', '© {year} Diseñado por MansiHost.com')) }}</div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Card sobre esta pantalla -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <h5 class="card-title mb-0 text-secondary">
+                            <i class="fa-solid fa-circle-info me-2 text-primary"></i>{{ trans('sobre-esta-pantalla') }}
+                        </h5>
+                    </div>
+                    <div class="card-body py-4 bg-light text-muted small">
+                        <p>{{ trans('sobre-pantalla-desc') }}</p>
+                        <ul>
+                            <li><strong>{{ trans('escritorio') }}</strong> {{ trans('escritorio-desc') }}</li>
+                            <li><strong>{{ trans('movil-tablet-label') }}</strong> {{ trans('movil-tablet-desc') }}</li>
+                            <li><strong>{{ trans('aviso-mantenimiento-label') }}</strong> {{ trans('aviso-mantenimiento-desc') }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btnPc = document.getElementById('btn_login_prev_pc');
+    const btnMobile = document.getElementById('btn_login_prev_mobile');
+    
+    const stage = document.getElementById('login_preview_stage');
+    const viewPc = document.getElementById('prev_view_pc');
+    const viewMobile = document.getElementById('prev_view_mobile');
+
+    function setActiveBtn(activeBtn) {
+        [btnPc, btnMobile].forEach(btn => btn.classList.remove('active'));
+        activeBtn.classList.add('active');
+    }
+
+    btnPc.addEventListener('click', function() {
+        setActiveBtn(this);
+        stage.style.maxWidth = '100%';
+        viewPc.style.display = 'flex';
+        viewMobile.style.display = 'none';
+    });
+
+    btnMobile.addEventListener('click', function() {
+        setActiveBtn(this);
+        stage.style.maxWidth = '65%';
+        stage.style.margin = '0 auto';
+        viewPc.style.display = 'none';
+        viewMobile.style.display = 'flex';
+    });
+
+    // Reactividad en tiempo real con los campos del formulario
+    const inputWarning = document.getElementById('login_maintenance_warning');
+    const inputLeftText = document.getElementById('login_left_text');
+    const inputFooterText = document.getElementById('login_footer_text');
+
+    function renderFooterPreview(target, value) {
+        if (!target) return;
+
+        let decoded = value.replace(/\{year\}/g, String(new Date().getFullYear()));
+        const decoder = document.createElement('textarea');
+        for (let i = 0; i < 2; i++) {
+            decoder.innerHTML = decoded;
+            const next = decoder.value;
+            if (next === decoded) break;
+            decoded = next;
+        }
+        decoded = decoded.replace(/\\([:\/.?#=&_%\-])/g, '$1');
+
+        const parsed = new DOMParser().parseFromString('<div>' + decoded + '</div>', 'text/html');
+        const source = parsed.body.firstElementChild;
+        target.textContent = '';
+        if (!source) {
+            target.textContent = decoded;
+            return;
+        }
+
+        source.childNodes.forEach(node => {
+            if (node.nodeType !== Node.ELEMENT_NODE || node.tagName.toLowerCase() !== 'a') {
+                target.append(document.createTextNode(node.textContent || ''));
+                return;
+            }
+
+            try {
+                const url = new URL(node.getAttribute('href') || '', window.location.href);
+                if (!['http:', 'https:'].includes(url.protocol)) throw new Error('URL no permitida');
+                const link = document.createElement('a');
+                link.href = url.href;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.textContent = node.textContent || '';
+                target.append(link);
+            } catch (e) {
+                target.append(document.createTextNode(node.textContent || ''));
+            }
+        });
+    }
+
+    if(inputWarning) {
+        inputWarning.addEventListener('input', function() {
+            const val = this.value.trim();
+            const alerts = [document.getElementById('prev_pc_alert'), document.getElementById('prev_mob_alert')];
+            const txts = [document.getElementById('prev_pc_alert_txt'), document.getElementById('prev_mob_alert_txt')];
+            alerts.forEach(a => a.style.display = val ? 'block' : 'none');
+            txts.forEach(t => t.textContent = val);
+        });
+    }
+
+    if(inputLeftText) {
+        inputLeftText.addEventListener('input', function() {
+            const target = document.getElementById('prev_pc_left_text');
+            if (target) {
+                target.textContent = this.value;
+            }
+        });
+    }
+
+    if(inputFooterText) {
+        inputFooterText.addEventListener('input', function() {
+            const footers = [document.getElementById('prev_pc_footer'), document.getElementById('prev_mob_footer')];
+            footers.forEach(f => renderFooterPreview(f, this.value));
+        });
+    }
+
+    const inputHeaderLogoHeight = document.getElementById('login_header_logo_height');
+    const inputLogoHeight = document.getElementById('login_logo_height');
+
+    if (inputHeaderLogoHeight) {
+        inputHeaderLogoHeight.addEventListener('input', function() {
+            const val = this.value + 'px';
+            const badge = document.getElementById('login_header_logo_height_val');
+            if (badge) badge.textContent = val;
+            const logoImgs = document.querySelectorAll('.prev-header-logo-img');
+            logoImgs.forEach(img => img.style.height = val);
+        });
+    }
+
+    if (inputLogoHeight) {
+        inputLogoHeight.addEventListener('input', function() {
+            const val = this.value + 'px';
+            const badge = document.getElementById('login_logo_height_val');
+            if (badge) badge.textContent = val;
+            const logoImgs = document.querySelectorAll('.prev-form-logo-img');
+            logoImgs.forEach(img => img.style.height = val);
+        });
+    }
+
+    const showForgot = document.getElementById('login_show_forgot_password');
+    const customRecovery = document.getElementById('login_custom_password_recovery');
+    const customRecoveryBlock = document.getElementById('login_custom_recovery_block');
+
+    function syncPasswordRecoveryToggles() {
+        if (!showForgot || !customRecovery) {
+            return;
+        }
+        const enabled = showForgot.checked;
+        customRecovery.disabled = !enabled;
+        if (customRecoveryBlock) {
+            customRecoveryBlock.classList.toggle('opacity-50', !enabled);
+        }
+        if (!enabled) {
+            customRecovery.checked = false;
+        }
+    }
+
+    if (showForgot) {
+        showForgot.addEventListener('change', syncPasswordRecoveryToggles);
+        syncPasswordRecoveryToggles();
+    }
+});
+</script>

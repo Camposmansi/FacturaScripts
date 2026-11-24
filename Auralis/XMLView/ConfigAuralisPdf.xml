@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Estilo básico del PDF del Core (motor ezPDF): colores, tipografía, papel y datos a ocultar, con vista previa en el pie.
+-->
+<view>
+    <columns>
+        <group name="name" numcolumns="12" display="none">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+        </group>
+        <group name="pdf-estilo" title="auralis-pdf-estilo" icon="fa-solid fa-file-pdf" numcolumns="12">
+            <column name="aviso_plantillas" numcolumns="12" order="90">
+                <widget type="info" alert="warning" icon="fa-solid fa-triangle-exclamation" text="auralis-pdf-plantillaspdf-activo"/>
+            </column>
+            <column name="activo" title="auralis-pdf-activo" numcolumns="12" order="100"
+                    description="auralis-pdf-activo-help">
+                <widget type="checkbox" fieldname="activo"/>
+            </column>
+            <column name="color_acento" title="auralis-pdf-color-acento" numcolumns="4" order="110"
+                    description="auralis-pdf-color-acento-help">
+                <widget type="color" fieldname="color_acento"/>
+            </column>
+            <column name="color_texto" title="auralis-pdf-color-texto" numcolumns="4" order="120">
+                <widget type="color" fieldname="color_texto"/>
+            </column>
+            <column name="color_cabecera" title="auralis-pdf-color-cabecera" numcolumns="4" order="130"
+                    description="auralis-pdf-color-cabecera-help">
+                <widget type="color" fieldname="color_cabecera"/>
+            </column>
+            <column name="fuente" title="auralis-pdf-fuente" numcolumns="4" order="140"
+                    description="auralis-pdf-fuente-help">
+                <widget type="select" fieldname="fuente" translate="true" required="true">
+                    <values title="auralis-pdf-fuente-tema">tema</values>
+                    <values title="Inter">inter</values>
+                    <values title="Lato">lato</values>
+                    <values title="Merriweather">merriweather</values>
+                    <values title="Montserrat">montserrat</values>
+                    <values title="Nunito">nunito</values>
+                    <values title="Open Sans">open_sans</values>
+                    <values title="Outfit">outfit</values>
+                    <values title="Plus Jakarta Sans">plus_jakarta_sans</values>
+                    <values title="Poppins">poppins</values>
+                    <values title="Roboto">roboto</values>
+                    <values title="Helvetica">Helvetica</values>
+                    <values title="Times">Times-Roman</values>
+                    <values title="Courier">Courier</values>
+                </widget>
+            </column>
+            <column name="tamano_base" title="auralis-pdf-tamano-base" numcolumns="4" order="150"
+                    description="auralis-pdf-tamano-base-help">
+                <widget type="number" fieldname="tamano_base" min="7" max="12" step="1" decimal="0" required="true"/>
+            </column>
+            <column name="papel" title="auralis-pdf-papel" numcolumns="4" order="160">
+                <widget type="select" fieldname="papel" translate="true" required="true">
+                    <values title="auralis-pdf-papel-a4">a4</values>
+                    <values title="auralis-pdf-papel-carta">letter</values>
+                </widget>
+            </column>
+            <column name="filas_alternas" title="auralis-pdf-filas-alternas" numcolumns="12" order="170">
+                <widget type="checkbox" fieldname="filas_alternas"/>
+            </column>
+            <column name="totales_posicion" title="auralis-pdf-totales-posicion" numcolumns="6" order="175"
+                    description="auralis-pdf-totales-posicion-help">
+                <widget type="select" fieldname="totales_posicion" translate="true" required="true">
+                    <values title="auralis-pdf-totales-despues">despues_articulos</values>
+                    <values title="auralis-pdf-totales-pie">pie_pagina</values>
+                </widget>
+            </column>
+        </group>
+        <group name="pdf-cabecera" title="auralis-pdf-cabecera" icon="fa-solid fa-heading" numcolumns="12">
+            <column name="cabecera_posicion" title="auralis-pdf-cabecera-posicion" numcolumns="3" order="180"
+                    description="auralis-pdf-cabecera-posicion-help">
+                <widget type="select" fieldname="cabecera_posicion" translate="true" required="true">
+                    <values title="auralis-pdf-cabecera-izquierda">izquierda</values>
+                    <values title="auralis-pdf-cabecera-derecha">derecha</values>
+                </widget>
+            </column>
+            <column name="logo_tamano" title="auralis-pdf-logo-tamano" numcolumns="3" order="181"
+                    description="auralis-pdf-logo-tamano-help">
+                <widget type="number" fieldname="logo_tamano" min="20" max="90" step="1" decimal="0" required="true"/>
+            </column>
+            <column name="empresa_nombre_tamano" title="auralis-pdf-empresa-nombre-tamano" numcolumns="3" order="182">
+                <widget type="number" fieldname="empresa_nombre_tamano" min="8" max="18" step="1" decimal="0" required="true"/>
+            </column>
+            <column name="empresa_datos_tamano" title="auralis-pdf-empresa-datos-tamano" numcolumns="3" order="183">
+                <widget type="number" fieldname="empresa_datos_tamano" min="6" max="12" step="1" decimal="0" required="true"/>
+            </column>
+            <column name="mostrar_contacto_empresa" title="auralis-pdf-empresa-contacto" numcolumns="12" order="184"
+                    description="auralis-pdf-empresa-contacto-help">
+                <widget type="checkbox" fieldname="mostrar_contacto_empresa"/>
+            </column>
+            <column name="cabecera_espaciado" title="auralis-pdf-cabecera-espaciado" numcolumns="3" order="185"
+                    description="auralis-pdf-cabecera-espaciado-help">
+                <widget type="number" fieldname="cabecera_espaciado" min="0" max="60" step="1" decimal="0" required="true"/>
+            </column>
+        </group>
+        <group name="pdf-ocultar" title="auralis-pdf-ocultar" icon="fa-solid fa-eye-slash" numcolumns="12">
+            <column name="ocultar_tipo_documento" title="auralis-pdf-ocultar-tipo-documento" numcolumns="3" order="195"
+                    description="auralis-pdf-ocultar-tipo-documento-help">
+                <widget type="checkbox" fieldname="ocultar_tipo_documento"/>
+            </column>
+            <column name="ocultar_logo" title="auralis-pdf-ocultar-logo" numcolumns="3" order="200">
+                <widget type="checkbox" fieldname="ocultar_logo"/>
+            </column>
+            <column name="ocultar_forma_pago" title="auralis-pdf-ocultar-forma-pago" numcolumns="3" order="205"
+                    description="auralis-pdf-ocultar-forma-pago-help">
+                <widget type="checkbox" fieldname="ocultar_forma_pago"/>
+            </column>
+            <column name="ocultar_iban" title="auralis-pdf-ocultar-iban" numcolumns="3" order="210"
+                    description="auralis-pdf-ocultar-iban-help">
+                <widget type="checkbox" fieldname="ocultar_iban"/>
+            </column>
+            <column name="ocultar_recibos" title="auralis-pdf-ocultar-recibos" numcolumns="3" order="220"
+                    description="auralis-pdf-ocultar-recibos-help">
+                <widget type="checkbox" fieldname="ocultar_recibos"/>
+            </column>
+            <column name="ocultar_envio" title="auralis-pdf-ocultar-envio" numcolumns="3" order="230">
+                <widget type="checkbox" fieldname="ocultar_envio"/>
+            </column>
+            <column name="ocultar_referencia" title="auralis-pdf-ocultar-referencia" numcolumns="3" order="240"
+                    description="auralis-pdf-ocultar-referencia-help">
+                <widget type="checkbox" fieldname="ocultar_referencia"/>
+            </column>
+            <column name="ocultar_descuentos" title="auralis-pdf-ocultar-descuentos" numcolumns="3" order="250">
+                <widget type="checkbox" fieldname="ocultar_descuentos"/>
+            </column>
+            <column name="ocultar_numeracion" title="auralis-pdf-ocultar-numeracion" numcolumns="3" order="260">
+                <widget type="checkbox" fieldname="ocultar_numeracion"/>
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="footer">
+            <group name="pdf-preview" title="auralis-pdf-preview" numcolumns="12" html="Block/AuralisPdfPreview.html.twig"/>
+        </row>
+    </rows>
+</view>

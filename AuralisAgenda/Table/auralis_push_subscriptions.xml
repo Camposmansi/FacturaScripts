@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Suscripciones Web Push por usuario (PWA Auralis).
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>endpoint</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>p256dh</name>
+        <type>text</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>auth</name>
+        <type>character varying(255)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>user_agent</name>
+        <type>character varying(250)</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>created_at</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>last_success_at</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <column>
+        <name>last_ping_at</name>
+        <type>timestamp</type>
+        <null>yes</null>
+    </column>
+    <constraint>
+        <name>auralis_push_subscriptions_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>auralis_push_subscriptions_endpoint_unique</name>
+        <type>UNIQUE (endpoint)</type>
+    </constraint>
+    <index>
+        <name>auralis_push_subscriptions_nick_idx</name>
+        <columns>nick</columns>
+    </index>
+</table>

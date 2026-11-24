@@ -1,0 +1,214 @@
+{#
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Editor embebido de líneas de producto (widget zLineasProducto).
+ *              autoadd: clona fila al elegir producto; si no, botón «Añadir línea» (la fila vacía
+ *              inicial solo sale cuando no hay líneas guardadas).
+ *              mostrarPrecios / mostrarFacturable: ocultan columna (los arrays POST siguen paralelos vía hidden).
+ *              maxLineas: tope de filas (bloqueadas incluidas); 0 = sin límite. Molde <template> para clonar.
+ *              filasProducto / filaNueva / filaMolde: datos de fila calculados en el widget (id por clave
+ *              primaria, clave[] de la fila, cantidad de quantityfield y detalle ya pintado). El detalle es la
+ *              segunda línea de la fila; sus campos viajan como detalle[<clave>][campo]. El molde usa la clave
+ *              __ZLP__, que el JS cambia por una única al clonar.
+ */
+#}
+{% set listaId = listaId|default('zlp-list') %}
+{% set codclienteLineas = codclienteLineas|default('') %}
+{% set lineasBloqueadas = lineasBloqueadas|default({}) %}
+{% set lineasProducto = lineasProducto|default([]) %}
+{% set autoadd = autoadd|default(false) %}
+{% set autocompleteAction = autocompleteAction|default('autocomplete-producto-lineas') %}
+{% set autocompleteFilter = autocompleteFilter|default('') %}
+{% set mostrarPrecios = mostrarPrecios ?? true %}
+{% set mostrarFacturable = mostrarFacturable ?? true %}
+{% set maxLineas = maxLineas|default(0) %}
+{% set cantidadVacia = cantidadVacia ?? false %}
+{% set tituloLineas = tituloLineas|default(trans('auralis-lineas-producto')) %}
+{% set tituloCantidad = tituloCantidad|default(trans('quantity')) %}
+{% set tituloPrecio = tituloPrecio|default(trans('auralis-precio-unitario')) %}
+{% set filasProducto = filasProducto|default([]) %}
+{% set filaNueva = filaNueva|default({'linea': null, 'id': '', 'clave': 'n0', 'bloqueada': false, 'codigoDoc': '', 'cantidad': 1, 'detalleHtml': ''}) %}
+{% set filaMolde = filaMolde|default({'linea': null, 'id': '', 'clave': '__ZLP__', 'bloqueada': false, 'codigoDoc': '', 'cantidad': 1, 'detalleHtml': ''}) %}
+{% set nLineas = lineasProducto|length %}
+{% set limiteAlcanzado = maxLineas > 0 and nLineas >= maxLineas %}
+{% set abierto = nLineas > 0 %}
+{% set hintVacio = trans('auralis-lineas-hint-vacio') %}
+{% set hintN = trans('auralis-lineas-hint-n') %}
+<div class="zlp-embed mb-3" data-zlp-lineas="1"
+     data-zlp-codcliente="{{ codclienteLineas|e('html_attr') }}"
+     data-zlp-autoadd="{{ autoadd ? '1' : '0' }}"
+     data-zlp-autocomplete-action="{{ autocompleteAction|e('html_attr') }}"
+     data-zlp-autocomplete-filter="{{ autocompleteFilter|e('html_attr') }}"
+     data-zlp-max-lineas="{{ maxLineas|e('html_attr') }}"
+     data-zlp-cantidad-vacia="{{ cantidadVacia ? '1' : '0' }}"
+     data-hint-vacio="{{ hintVacio|e('html_attr') }}"
+     data-hint-n="{{ hintN|e('html_attr') }}">
+    {% if codclienteLineas %}
+        <input type="hidden" name="codcliente_lineas" value="{{ codclienteLineas|e('html_attr') }}"/>
+    {% endif %}
+    <button class="zlp-toggle{{ abierto ? '' : ' collapsed' }}" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapse-{{ listaId }}"
+            aria-expanded="{{ abierto ? 'true' : 'false' }}" aria-controls="collapse-{{ listaId }}"
+            title="{{ trans('auralis-lineas-pulsa-para') }}"
+            aria-label="{{ tituloLineas|e('html_attr') }} — {{ trans('auralis-lineas-pulsa-para')|e('html_attr') }}">
+        <span class="zlp-toggle-icon" aria-hidden="true">
+            <i class="fa-solid fa-box-open"></i>
+        </span>
+        <span class="zlp-toggle-copy">
+            <span class="zlp-toggle-title">{{ tituloLineas|e }}</span>
+            <span class="zlp-toggle-hint">
+                {% if nLineas > 0 %}
+                    {{ trans('auralis-lineas-hint-n', {'%n%': nLineas}) }}
+                {% else %}
+                    {{ hintVacio }}
+                {% endif %}
+            </span>
+        </span>
+        <span class="badge rounded-pill text-bg-secondary zlp-badge{{ nLineas > 0 ? '' : ' d-none' }}">{{ nLineas }}</span>
+        <i class="fa-solid fa-chevron-down zlp-chevron" aria-hidden="true"></i>
+    </button>
+    <div id="collapse-{{ listaId }}" class="collapse{{ abierto ? ' show' : '' }}">
+        <div class="zlp-body">
+            <div id="{{ listaId }}" class="zlp-list" data-work="zLineasProducto">
+                {% for fila in filasProducto %}
+                    {{ _self.filaProducto(listaId, loop.index0, fila, puedeEditar, mostrarPrecios, mostrarFacturable, tituloCantidad, tituloPrecio) }}
+                {% endfor %}
+                {# Fila vacía inicial: con autoadd siempre (es donde se busca el siguiente producto);
+                 # con el botón «Añadir línea», solo si aún no hay líneas. #}
+                {% if not limiteAlcanzado and (autoadd or nLineas == 0) %}
+                    {{ _self.filaProducto(listaId, 'nuevo', filaNueva, puedeEditar, mostrarPrecios, mostrarFacturable, tituloCantidad, tituloPrecio) }}
+                {% endif %}
+            </div>
+            {% if puedeEditar %}
+                {# Molde de fila vacía: el JS clona desde aquí; los inputs de un <template> no se envían. #}
+                <template class="zlp-molde">
+                    {{ _self.filaProducto(listaId, 'molde', filaMolde, puedeEditar, mostrarPrecios, mostrarFacturable, tituloCantidad, tituloPrecio) }}
+                </template>
+            {% endif %}
+            {% if puedeEditar and not autoadd %}
+                <div class="zlp-add-bar mt-2{{ limiteAlcanzado ? ' d-none' : '' }}">
+                    <button type="button" class="btn btn-outline-primary zlp-add-line">
+                        <i class="fa-solid fa-plus me-1"></i>{{ trans('auralis-lineas-anadir') }}
+                    </button>
+                </div>
+            {% endif %}
+            <p class="zlp-foot">
+                <i class="fa-solid fa-info-circle me-1"></i>{{ trans('auralis-lineas-se-guardan-con-ficha') }}
+            </p>
+            {% if lineasBloqueadas|length > 0 %}
+                <p class="zlp-foot">
+                    <i class="fa-solid fa-lock me-1"></i>{{ trans('auralis-lineas-facturadas-bloqueadas') }}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    window.zlpProductoNotFound = {{ trans('auralis-producto-no-encontrado')|json_encode|raw }};
+</script>
+
+{# fila: {linea, id, clave, bloqueada, codigoDoc, cantidad, detalleHtml} calculado en WidgetZLineasProducto. #}
+{% macro filaProducto(listaId, indexProduct, fila, puedeEditar, mostrarPrecios = true, mostrarFacturable = true, tituloCantidad = '', tituloPrecio = '') %}
+    {% set dataProduct = fila.linea ?? null %}
+    {% set bloqueada = fila.bloqueada ?? false %}
+    {% set codigoDoc = fila.codigoDoc ?? '' %}
+    {% set editable = puedeEditar and not bloqueada %}
+    {% set idlinea = fila.id ?? '' %}
+    {% set ref = dataProduct.referencia ?? '' %}
+    {% set desc = dataProduct.descripcion ?? '' %}
+    {% set cant = fila.cantidad ?? 1 %}
+    {% set precio = dataProduct.precio ?? 0 %}
+    {% set facturable = dataProduct is null or (dataProduct.facturable ?? 1) != 0 %}
+    {% set filaId = listaId ~ '-fila-' ~ indexProduct %}
+    {% set detalleHtml = fila.detalleHtml ?? '' %}
+    <div id="{{ filaId }}" class="row g-2 align-items-end zlp-fila{{ bloqueada ? ' zlp-fila-bloqueada' : '' }}{{ detalleHtml is empty ? '' : ' zlp-fila-con-detalle' }}"
+         data-product-id="{{ filaId }}">
+        <input type="hidden" name="idlinea[]" value="{{ idlinea|e('html_attr') }}">
+        <input type="hidden" name="clave[]" value="{{ (fila.clave ?? '')|e('html_attr') }}" class="zlp-clave">
+        <div class="col-sm-3 col-md-2">
+            <label class="form-label">{{ trans('reference') }}</label>
+            <div class="input-group">
+                <span class="zlp-search-ref {{ ref is empty ? '' : 'd-none' }} input-group-text">
+                    <i class="fa-solid fa-search fa-fw"></i>
+                </span>
+                <button class="zlp-clear-ref {{ ref is empty ? 'd-none' : '' }} btn btn-outline-warning"
+                        type="button" data-product="{{ filaId }}"
+                        title="{{ trans('delete') }}"
+                        {% if not editable %}disabled{% endif %}>
+                    <i class="fa-solid fa-times" aria-hidden="true"></i>
+                </button>
+                <input type="hidden" name="referencia[]" value="{{ ref|e('html_attr') }}">
+                <input type="text" value="{{ ref|e('html_attr') }}" class="form-control zlp-search-product"
+                       autocomplete="off"
+                       placeholder="{{ trans('auralis-buscar-producto')|e('html_attr') }}"
+                       data-product="{{ filaId }}"
+                       {% if not editable %}readonly{% endif %}/>
+            </div>
+        </div>
+        {# Sin columna de precio, la descripción gana su hueco (sm 5→7, md 4→6). #}
+        <div class="{{ mostrarPrecios ? 'col-sm-5 col-md-4' : 'col-sm-7 col-md-6' }}">
+            <label class="form-label">{{ trans('description') }}</label>
+            <textarea name="descripcion[]" rows="1" class="form-control"
+                      {% if not editable %}readonly{% endif %}>{{ desc|e }}</textarea>
+        </div>
+        <div class="col-6 col-sm-2 col-md-2">
+            <label class="form-label">{{ tituloCantidad is empty ? trans('quantity') : tituloCantidad }}</label>
+            <input type="number" name="cantidad[]" value="{{ cant }}" class="form-control"
+                   step="any" autocomplete="off" {% if not editable %}readonly{% endif %}>
+        </div>
+        {% if mostrarPrecios %}
+            <div class="col-6 col-sm-3 col-md-2">
+                <label class="form-label">{{ tituloPrecio is empty ? trans('auralis-precio-unitario') : tituloPrecio }}</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-euro-sign fa-fw"></i></span>
+                    <input type="number" name="precio[]" value="{{ precio|e('html_attr') }}" class="form-control"
+                           step="any" autocomplete="off" {% if not editable %}readonly{% endif %}>
+                </div>
+            </div>
+        {% else %}
+            {# Precio oculto: mantiene paralelos los arrays POST; el autocomplete lo sigue rellenando. #}
+            <input type="hidden" name="precio[]" value="{{ precio|e('html_attr') }}">
+        {% endif %}
+        <div class="col-auto">
+            <div class="zlp-fila-acciones">
+                {% if mostrarFacturable %}
+                    <div class="form-check form-switch mb-0">
+                        <input type="hidden" name="facturable[]" value="{{ facturable ? '1' : '0' }}" class="zlp-facturable-valor">
+                        <input type="checkbox" class="form-check-input zlp-facturable-check" role="switch"
+                               id="{{ filaId }}-facturable"
+                               {% if facturable %}checked{% endif %}
+                               {% if not editable %}disabled{% endif %}>
+                        <label class="form-check-label" for="{{ filaId }}-facturable">{{ trans('auralis-facturable') }}</label>
+                    </div>
+                {% else %}
+                    {# Sin interruptor: 1 en filas nuevas, valor guardado en las existentes. #}
+                    <input type="hidden" name="facturable[]" value="{{ facturable ? '1' : '0' }}" class="zlp-facturable-valor">
+                {% endif %}
+                {% if bloqueada %}
+                    {% set textoCandado = codigoDoc is not empty
+                        ? trans('auralis-linea-facturada-en', {'%codigo%': codigoDoc})
+                        : trans('auralis-linea-facturada') %}
+                    <button type="button" class="btn btn-outline-secondary zlp-candado"
+                            title="{{ textoCandado|e('html_attr') }}" aria-label="{{ textoCandado|e('html_attr') }}"
+                            tabindex="-1">
+                        <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-outline-danger zlp-delete-fila" title="{{ trans('delete') }}"
+                            data-product="{{ filaId }}"
+                            {% if not editable %}disabled{% endif %}>
+                        <i class="fa-solid fa-trash-alt"></i>
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        {% if detalleHtml is not empty %}
+            {# Segunda línea: plantilla «detail» del consumidor, ya escapada por su propio Twig. #}
+            <div class="col-12 zlp-detalle">
+                {{ detalleHtml|raw }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}

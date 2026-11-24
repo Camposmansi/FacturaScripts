@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Tabla de estados de eventos (pipeline) para el calendario Auralis.
+ */
+-->
+<table>
+    <column>
+        <name>codestado</name>
+        <type>character varying(20)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>orden</name>
+        <type>integer</type>
+        <default>10</default>
+    </column>
+    <column>
+        <name>origen_tipo</name>
+        <type>character varying(50)</type>
+        <default>'general'</default>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>activo</name>
+        <type>boolean</type>
+        <default>true</default>
+    </column>
+    <constraint>
+        <name>auralis_calendar_event_statuses_pkey</name>
+        <type>PRIMARY KEY (codestado)</type>
+    </constraint>
+    <index>
+        <name>auralis_cal_event_statuses_origen_idx</name>
+        <columns>origen_tipo, activo</columns>
+    </index>
+</table>

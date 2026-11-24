@@ -1,0 +1,428 @@
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Lateral de calendarios de Mi calendario (.auralis-calendar-con-lateral): plegable en escritorio,
+ *              offcanvas en móvil, mini-calendario, filas de calendario y modales de calendario / compartir.
+ *              Solo colores --bs-* / --v-* (claro y oscuro) y tipografía --auralis-font-size-*.
+ */
+
+.auralis-calendar-con-lateral .min-w-0 {
+    min-width: 0;
+}
+
+.auralis-calendar-con-lateral .auralis-calendar-main {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.auralis-calendar-sidebar {
+    --bs-offcanvas-width: min(20rem, 88vw);
+    font-size: var(--auralis-font-size-base, 1rem);
+}
+
+.auralis-calendar-sidebar .auralis-calendar-sidebar-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Cabecera del panel (móvil/tablet): misma cromática que la cabecera de los modales (el h5 lo colorea el tema) */
+.auralis-calendar-sidebar .offcanvas-header {
+    background-color: var(--v-bg-secondary, var(--bs-secondary-bg, transparent));
+    border-bottom: 1px solid var(--bs-border-color, rgba(0, 0, 0, 0.1));
+}
+
+@media (min-width: 992px) {
+    /* Escritorio: lateral en blanco, separado de la rejilla por un borde fino */
+    .auralis-calendar-con-lateral .auralis-calendar-sidebar {
+        border-right: 1px solid var(--bs-border-color, rgba(0, 0, 0, 0.1));
+        padding-right: 1rem;
+        /* Su propio scroll: auralis-calendar.js le fija max-height al alto libre de la ventana.
+           Barra fina que solo se ve al pasar el ratón o con el foco dentro. */
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+    }
+
+    .auralis-calendar-con-lateral .auralis-calendar-sidebar:hover,
+    .auralis-calendar-con-lateral .auralis-calendar-sidebar:focus-within {
+        scrollbar-color: var(--bs-border-color, #cbd5e1) transparent;
+    }
+}
+
+@media (min-width: 992px) {
+    /* El lateral llega hasta el pie de la rejilla (su borde acompaña al calendario); max-height le pone el tope. */
+    .auralis-calendar-con-lateral .auralis-calendar-layout {
+        display: flex;
+        align-items: stretch;
+        gap: 1.5rem;
+    }
+
+    .auralis-calendar-con-lateral .auralis-calendar-sidebar {
+        flex: 0 0 16rem;
+        width: 16rem;
+    }
+
+    .auralis-calendar-con-lateral.auralis-calendar-lateral-plegado .auralis-calendar-sidebar {
+        display: none;
+    }
+}
+
+/* Crear: botón del Core, plano y con el radio de los demás */
+.auralis-calendar-sidebar .auralis-cal-crear {
+    align-self: flex-start;
+}
+
+/* Mini-calendario */
+.auralis-minical-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.auralis-minical-titulo {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: var(--auralis-font-size-h6, var(--auralis-font-size-base, 1rem));
+}
+
+.auralis-minical .auralis-minical-nav {
+    color: var(--bs-secondary-color, #6c757d);
+    padding: 0.25rem 0.5rem;
+    line-height: 1;
+}
+
+.auralis-minical-rejilla {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.auralis-minical-semana {
+    color: var(--bs-secondary-color, #6c757d);
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.75);
+    font-weight: 600;
+    padding: 0.25rem 0;
+}
+
+.auralis-minical-dia {
+    aspect-ratio: 1;
+    width: 100%;
+    max-width: 2.25rem;
+    justify-self: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--bs-body-color, inherit);
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.8125);
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+}
+
+.auralis-minical-dia:hover,
+.auralis-minical-dia:focus-visible {
+    background-color: var(--bs-tertiary-bg, rgba(0, 0, 0, 0.05));
+    outline: none;
+}
+
+.auralis-minical-dia.es-otro-mes {
+    color: var(--bs-secondary-color, #6c757d);
+    opacity: 0.7;
+}
+
+.auralis-minical-dia.es-seleccionado {
+    background-color: rgba(var(--v-primary-rgb, 13, 110, 253), 0.16);
+    color: var(--v-primary, var(--bs-primary));
+    font-weight: 600;
+}
+
+.auralis-minical-dia.es-hoy {
+    background-color: var(--v-primary, var(--bs-primary));
+    color: #ffffff;
+    font-weight: 600;
+    opacity: 1;
+}
+
+/* Secciones y filas de calendario */
+.auralis-cal-seccion-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.auralis-cal-seccion-titulo {
+    font-size: var(--auralis-font-size-h6, var(--auralis-font-size-base, 1rem));
+    font-weight: 600;
+    margin: 0;
+}
+
+.auralis-cal-plegable {
+    width: 100%;
+    background: none;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    text-align: left;
+}
+
+.auralis-cal-plegable .auralis-cal-plegable-icono {
+    transition: transform 0.15s ease;
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.auralis-cal-plegable.collapsed .auralis-cal-plegable-icono {
+    transform: rotate(-90deg);
+}
+
+.auralis-cal-fila {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: var(--bs-border-radius, 0.375rem);
+    padding: 0 0 0 0.5rem;
+}
+
+.auralis-cal-fila:hover,
+.auralis-cal-fila:focus-within {
+    background-color: var(--bs-tertiary-bg, rgba(0, 0, 0, 0.04));
+}
+
+.auralis-cal-fila-etiqueta {
+    color: var(--bs-body-color, inherit); /* nombres con contraste AA (el tema pinta los label en gris) */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    padding: 0.25rem 0;
+    cursor: pointer;
+}
+
+.auralis-cal-fila .auralis-cal-check {
+    flex-shrink: 0;
+    margin: 0;
+    border-color: var(--zcal-color, var(--bs-border-color));
+    cursor: pointer;
+}
+
+.auralis-cal-fila .auralis-cal-check:checked {
+    background-color: var(--zcal-color, var(--bs-primary));
+    border-color: var(--zcal-color, var(--bs-primary));
+}
+
+.auralis-cal-fila .auralis-cal-check:focus {
+    box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--zcal-color, var(--bs-primary)) 30%, transparent);
+}
+
+.auralis-cal-punto {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background-color: var(--zcal-color, var(--bs-primary));
+}
+
+.auralis-cal-nombre {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.auralis-cal-fila-enlace,
+.auralis-cal-fila .auralis-cal-menu-btn {
+    color: var(--bs-secondary-color, #6c757d);
+    padding: 0.25rem 0.5rem;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.auralis-cal-fila-enlace:hover,
+.auralis-cal-fila .auralis-cal-menu-btn:hover {
+    color: var(--bs-body-color, inherit);
+}
+
+/* Escritorio con ratón: ⋮ al pasar por la fila; en táctil siempre visible */
+@media (hover: hover) {
+    .auralis-cal-fila .auralis-cal-menu-btn {
+        opacity: 0;
+    }
+
+    .auralis-cal-fila:hover .auralis-cal-menu-btn,
+    .auralis-cal-fila:focus-within .auralis-cal-menu-btn,
+    .auralis-cal-fila .auralis-cal-menu-btn[aria-expanded="true"] {
+        opacity: 1;
+    }
+}
+
+.auralis-cal-vacio {
+    color: var(--bs-secondary-color, #6c757d);
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.875);
+    padding: 0.25rem 0;
+}
+
+.auralis-calendar-sidebar .auralis-cal-nuevo {
+    padding: 0.25rem 0;
+    text-decoration: none;
+}
+
+/* Menú ⋮ */
+.auralis-cal-menu {
+    font-size: var(--auralis-font-size-base, 1rem);
+    min-width: 14rem;
+}
+
+.auralis-cal-menu-paleta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.25rem 1rem 0.5rem;
+    max-width: 15rem;
+}
+
+.auralis-cal-menu-paleta .z-color-dot,
+.auralis-cal-paleta .z-color-dot {
+    width: 24px;
+    height: 24px;
+}
+
+.auralis-cal-color-libre {
+    /* Fondo y color neutros: .z-color-dot-custom (auralis-dashboard.css); el JS pinta el color libre elegido */
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.625);
+    margin: 0;
+    overflow: hidden;
+}
+
+.auralis-cal-color-libre .auralis-cal-color-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+}
+
+/* Filtros: contador discreto (visible con el bloque plegado) y «Quitar filtros» */
+.auralis-cal-filtros-contador {
+    display: inline-block;
+    min-width: 1.5rem;
+    margin-left: 0.5rem;
+    padding: 0 0.5rem;
+    border-radius: 1rem;
+    background-color: var(--bs-secondary-bg, #e9ecef);
+    color: var(--bs-secondary-color, #6c757d);
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.75);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.auralis-calendar-sidebar .auralis-cal-quitar-filtros {
+    padding: 0.25rem 0;
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.875);
+    text-decoration: none;
+}
+
+/* Filtros movidos al lateral: cada control a todo el ancho */
+.auralis-calendar-sidebar-filtros > .form-select:not(.ts-hidden-accessible),
+.auralis-calendar-sidebar-filtros > .ts-wrapper {
+    /* !important: los satélites traen anchos inline pensados para la barra de arriba (min-width 12–16rem) */
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none;
+}
+
+/* Móvil: hueco bajo los filtros para poder centrarlos al abrir su desplegable */
+@media (max-width: 991.98px) {
+    .auralis-calendar-sidebar .auralis-calendar-sidebar-body {
+        padding-bottom: 50vh;
+    }
+}
+
+/* Móvil: el desplegable de Tom Select (anclado a body) por encima del offcanvas */
+body:has(#auralisCalendarSidebar.show) .ts-dropdown {
+    z-index: 1060;
+}
+
+/* Eventos en la rejilla según su permiso */
+.z-calendar-container .z-evento-ocupado {
+    cursor: default;
+    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0 6px, transparent 6px 12px);
+}
+
+/* Evento de solo lectura en el modal (permiso «ver»): sin Guardar ni Eliminar */
+#auralisNewEventModal[data-z-evento-solo-lectura] #btnSaveAuralisEvent,
+#auralisNewEventModal[data-z-evento-solo-lectura] #btnDeleteAuralisEvent {
+    display: none !important;
+}
+
+#auralisNewEventModal[data-z-evento-solo-lectura] .z-event-fieldset .ts-wrapper,
+#auralisNewEventModal[data-z-evento-solo-lectura] .z-event-fieldset label {
+    pointer-events: none;
+}
+
+/* Modales de calendario y compartir: mismos tokens que el modal de evento */
+#auralisCalendarioModal,
+#auralisCalendarioCompartirModal {
+    font-family: inherit;
+    font-size: var(--auralis-font-size-base, 1rem);
+    color: var(--bs-body-color, inherit);
+}
+
+#auralisCalendarioModal .modal-title,
+#auralisCalendarioCompartirModal .modal-title,
+#auralisCalendarioCompartirModal h6 {
+    font-size: var(--auralis-font-size-h6, var(--auralis-font-size-base, 1rem));
+}
+
+#auralisCalendarioModal .form-label,
+#auralisCalendarioCompartirModal .form-label,
+#auralisCalendarioCompartirModal .auralis-cal-ayuda {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.875);
+}
+
+#auralisCalendarioModal .auralis-event-modal-chrome,
+#auralisCalendarioCompartirModal .auralis-event-modal-chrome {
+    background-color: var(--v-bg-secondary, var(--bs-secondary-bg, transparent));
+    color: var(--bs-body-color, inherit);
+}
+
+#auralisCalendarioModal .auralis-event-modal-content,
+#auralisCalendarioCompartirModal .auralis-event-modal-content {
+    border-radius: var(--auralis-radius-btn, var(--bs-border-radius, 0.5rem));
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.auralis-cal-acceso {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.auralis-cal-acceso .auralis-cal-acceso-nombre {
+    flex: 1 1 10rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.auralis-cal-acceso .auralis-cal-acceso-permiso {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 9rem;
+}

@@ -1,0 +1,101 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @copyright 2026 MansiHost.com. Todos los derechos reservados.
+ # @license Licencia privada Auralis. Ver LICENSE.txt
+ # Uso sujeto a los términos de LICENSE.txt.
+ # @description Visor de árbol genérico AuralisArbol: contenedor, JSON de arranque y barra flotante. Los datos llegan por GET desde ArbolAuralis.
+ #
+ # Parámetros:
+ #   proveedor    (obligatorio) clave registrada en AuralisArbolRegistry, p. ej. 'zmrp-bom'
+ #   id           (obligatorio) clave del elemento raíz en el dominio del proveedor
+ #   modo         'explosion' (defecto) | 'implosion'
+ #   profundidad  niveles bajo la raíz, 0 = todos (defecto 0)
+ #   alto         alto del lienzo: número (px) o '60vh' / '32rem' (defecto 520)
+ #   mostrar_modo false oculta el selector Explosión/Implosión (defecto true)
+ #   titulo       nombre de los ficheros exportados y de la ventana de impresión (defecto el id)
+ #}
+{% set arbolUid = 'auralis-arbol-' ~ random(100000, 999999) %}
+{% set arbolModo = modo|default('explosion') == 'implosion' ? 'implosion' : 'explosion' %}
+{% set arbolProfundidad = profundidad|default(0) %}
+{% set arbolAlto = alto|default(520) %}
+{% if arbolAlto matches '/^\\d+$/' %}
+    {% set arbolAlto = arbolAlto ~ 'px' %}
+{% elseif not (arbolAlto matches '/^\\d+(\\.\\d+)?(px|vh|rem|em)$/') %}
+    {% set arbolAlto = '520px' %}
+{% endif %}
+{% set arbolConfig = {
+    url: asset('ArbolAuralis'),
+    proveedor: proveedor|default(''),
+    id: id|default('') ~ '',
+    modo: arbolModo,
+    profundidad: arbolProfundidad,
+    titulo: titulo|default(id|default('arbol')) ~ '',
+    textos: {
+        cargando: trans('auralis-arbol-cargando'),
+        vacio: trans('auralis-arbol-vacio'),
+        error: trans('auralis-arbol-error'),
+        truncado: trans('auralis-arbol-truncado'),
+        ventanaBloqueada: trans('auralis-arbol-ventana-bloqueada'),
+        masNiveles: trans('auralis-arbol-mas-niveles'),
+        contraer: trans('auralis-arbol-contraer'),
+        expandir: trans('auralis-arbol-expandir'),
+        abrir: trans('auralis-arbol-abrir'),
+        cerrar: trans('auralis-arbol-cerrar'),
+        cantidad: trans('auralis-arbol-cantidad'),
+        alerta: trans('auralis-arbol-alerta'),
+        pistaZoom: trans('auralis-arbol-pista-zoom')
+    }
+} %}
+<link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-arbol.css') }}?v=1.59-arbol2"/>
+<div class="auralis-arbol" id="{{ arbolUid }}" data-auralis-arbol style="--auralis-arbol-alto: {{ arbolAlto }};">
+    <script type="application/json" id="{{ arbolUid }}-config" class="auralis-arbol-config">{{ arbolConfig|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP') b-or constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES'))|raw }}</script>
+    <div class="auralis-arbol-barra" role="toolbar" aria-label="{{ trans('auralis-arbol-titulo') }}">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-secondary" data-za-accion="acercar" title="{{ trans('auralis-arbol-acercar') }}" aria-label="{{ trans('auralis-arbol-acercar') }}">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary" data-za-accion="alejar" title="{{ trans('auralis-arbol-alejar') }}" aria-label="{{ trans('auralis-arbol-alejar') }}">
+                <i class="fa-solid fa-minus" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary" data-za-accion="ajustar" title="{{ trans('auralis-arbol-ajustar') }}" aria-label="{{ trans('auralis-arbol-ajustar') }}">
+                <i class="fa-solid fa-compress" aria-hidden="true"></i>
+            </button>
+        </div>
+        {% if mostrar_modo ?? true %}
+            <div class="btn-group" role="group" aria-label="{{ trans('auralis-arbol-modo') }}">
+                <button type="button" class="btn btn-outline-secondary" data-za-accion="modo" data-za-valor="explosion" title="{{ trans('auralis-arbol-explosion') }}">
+                    <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+                    <span class="auralis-arbol-texto-boton">{{ trans('auralis-arbol-explosion') }}</span>
+                </button>
+                <button type="button" class="btn btn-outline-secondary" data-za-accion="modo" data-za-valor="implosion" title="{{ trans('auralis-arbol-implosion') }}">
+                    <i class="fa-solid fa-sitemap fa-flip-vertical" aria-hidden="true"></i>
+                    <span class="auralis-arbol-texto-boton">{{ trans('auralis-arbol-implosion') }}</span>
+                </button>
+            </div>
+        {% endif %}
+        <div class="btn-group" role="group" aria-label="{{ trans('auralis-arbol-profundidad') }}" title="{{ trans('auralis-arbol-profundidad') }}">
+            <button type="button" class="btn btn-outline-secondary" data-za-accion="profundidad" data-za-valor="1">1</button>
+            <button type="button" class="btn btn-outline-secondary" data-za-accion="profundidad" data-za-valor="2">2</button>
+            <button type="button" class="btn btn-outline-secondary" data-za-accion="profundidad" data-za-valor="0">{{ trans('auralis-arbol-profundidad-todo') }}</button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-secondary" data-za-accion="svg" title="{{ trans('auralis-arbol-exportar-svg') }}" aria-label="{{ trans('auralis-arbol-exportar-svg') }}">
+                <i class="fa-solid fa-download" aria-hidden="true"></i>
+                <span class="auralis-arbol-texto-boton">SVG</span>
+            </button>
+            <button type="button" class="btn btn-outline-secondary" data-za-accion="pdf" title="{{ trans('auralis-arbol-exportar-pdf') }}" aria-label="{{ trans('auralis-arbol-exportar-pdf') }}">
+                <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+                <span class="auralis-arbol-texto-boton">PDF</span>
+            </button>
+            <button type="button" class="btn btn-outline-secondary" data-za-accion="pantalla" title="{{ trans('auralis-arbol-pantalla-completa') }}" aria-label="{{ trans('auralis-arbol-pantalla-completa') }}">
+                <i class="fa-solid fa-expand" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+    <div class="auralis-arbol-lienzo"></div>
+    <div class="auralis-arbol-estado" role="status" aria-live="polite"></div>
+    <div class="auralis-arbol-aviso" role="alert" hidden></div>
+    <div class="auralis-arbol-detalle" hidden></div>
+</div>
+<script src="{{ asset('Dinamic/Assets/JS/auralis-arbol.js') }}?v=1.59-arbol2"></script>

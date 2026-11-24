@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Extiende la tabla gruposclientes con el campo de aviso interno Auralis.
+-->
+<table>
+    <column>
+        <name>aviso_auralis</name>
+        <type>text</type>
+        <null>YES</null>
+    </column>
+</table>

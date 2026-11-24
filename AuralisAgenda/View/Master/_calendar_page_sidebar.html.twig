@@ -1,0 +1,296 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Agenda full-page con lateral de calendarios tipo Google (Crear, mini-calendario, listas y filtros).
+ #              La incluye _calendar_page_shell cuando recibe sidebar: true. Las filas las pinta
+ #              auralis-calendar-sidebar.js a partir de sidebar_calendars (respuesta de calendarios-list).
+ #
+ # Contexto heredado del shell: page_title, page_subtitle, page_class, header_actions, header_filters,
+ #   sidebar_calendars {calendarios[], defecto, permitir_compartir, permitir_calendarios_extra, permisos[]}.
+ #   Sin sidebar_calendars (agendas de módulo: zTaller, zVeterinaria…) el lateral es solo de navegación:
+ #   Crear, mini-calendario, filtros y secciones de plugins; sin listas de calendarios ni sus modales.
+ #
+ # Enganches para otros plugins (tras «Otros calendarios», al final del lateral):
+ #   sidebar_sections  (HTML capturado, opcional) — secciones propias de la página que incluye el shell.
+ #   Extension/View/CalendarSidebar_Sections_NN.html.twig — cualquier plugin activo (getIncludeViews del Core).
+ #   Usar <section class="auralis-cal-seccion"> + .auralis-cal-seccion-titulo para heredar el estilo.
+ #   Filtros propios que deban viajar en calendar-events: window.AuralisCalendarParams (ver auralis-calendar.js).
+ #}
+{% set z_cal_datos = sidebar_calendars|default({}) %}
+{% set z_cal_con_listas = z_cal_datos is not empty %}
+{% set z_cal_puede_editar = (fsc.permissions is not defined) or (fsc.permissions.allowUpdate is not defined) or fsc.permissions.allowUpdate %}
+{% set z_cal_paleta = ['#4285f4', '#34a853', '#fbbc05', '#ea4335', '#ab47bc', '#00acc1', '#ff7043', '#78909c'] %}
+<div class="{{ page_class }} auralis-calendar-con-lateral container-fluid py-3" id="auralisCalendarPage">
+    <div class="auralis-calendar-page-heading d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-2 mb-3">
+        <div class="d-flex align-items-center gap-2 min-w-0">
+            <button type="button" class="btn btn-outline-secondary d-lg-none" data-bs-toggle="offcanvas"
+                    data-bs-target="#auralisCalendarSidebar" aria-controls="auralisCalendarSidebar"
+                    title="{{ trans('auralis-calendario-lateral')|e('html_attr') }}"
+                    aria-label="{{ trans('auralis-calendario-lateral')|e('html_attr') }}">
+                <i class="fa-solid fa-layer-group"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary d-none d-lg-inline-block" id="btnCalSidebarToggle"
+                    aria-controls="auralisCalendarSidebar" aria-expanded="true"
+                    title="{{ trans('auralis-calendario-lateral')|e('html_attr') }}"
+                    aria-label="{{ trans('auralis-calendario-lateral')|e('html_attr') }}">
+                <i class="fa-solid fa-layer-group"></i>
+            </button>
+            <div class="min-w-0">
+                <h1 class="h3 mb-1">
+                    <i class="fa-solid fa-calendar-days me-2 text-primary"></i>{{ page_title }}
+                </h1>
+                {% if page_subtitle is defined and page_subtitle %}
+                    <p class="text-muted small mb-0 auralis-calendar-page-subtitle">{{ page_subtitle }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% if header_actions is defined and header_actions %}
+            <div class="d-flex gap-2 flex-wrap auralis-calendar-page-actions">
+                {{ header_actions|raw }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="auralis-calendar-layout">
+        <aside class="auralis-calendar-sidebar offcanvas-lg offcanvas-start" tabindex="-1" id="auralisCalendarSidebar"
+               aria-labelledby="auralisCalendarSidebarLabel">
+            <div class="offcanvas-header d-lg-none">
+                <h5 class="offcanvas-title" id="auralisCalendarSidebarLabel">{{ z_cal_con_listas ? trans('auralis-calendarios') : page_title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#auralisCalendarSidebar"
+                        aria-label="{{ trans('close') }}"></button>
+            </div>
+            <div class="offcanvas-body auralis-calendar-sidebar-body">
+                {% if z_cal_puede_editar %}
+                    <button type="button" class="btn btn-primary auralis-cal-crear" id="btnCalSidebarCrear">
+                        <i class="fa-solid fa-plus me-2"></i>{{ trans('create') }}
+                    </button>
+                {% endif %}
+
+                <div class="auralis-minical" id="auralisMiniCal">
+                    <div class="auralis-minical-cabecera">
+                        <span class="auralis-minical-titulo" id="auralisMiniCalTitulo"></span>
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-link auralis-minical-nav" data-minical-mover="-1"
+                                    title="{{ trans('auralis-calendario-mes-anterior')|e('html_attr') }}"
+                                    aria-label="{{ trans('auralis-calendario-mes-anterior')|e('html_attr') }}">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <button type="button" class="btn btn-link auralis-minical-nav" data-minical-mover="1"
+                                    title="{{ trans('auralis-calendario-mes-siguiente')|e('html_attr') }}"
+                                    aria-label="{{ trans('auralis-calendario-mes-siguiente')|e('html_attr') }}">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="auralis-minical-rejilla" id="auralisMiniCalRejilla" role="grid"></div>
+                </div>
+
+                {# Filtros arriba (plegados, con contador): si hay uno activo se ve antes que las listas. #}
+                {% if header_filters is defined and header_filters %}
+                    <section class="auralis-cal-seccion auralis-cal-filtros">
+                        <button type="button" class="auralis-cal-seccion-cabecera auralis-cal-plegable collapsed"
+                                data-bs-toggle="collapse" data-bs-target="#auralisCalFiltros"
+                                aria-expanded="false" aria-controls="auralisCalFiltros">
+                            <span class="auralis-cal-seccion-titulo">
+                                {{ trans('filters') }}
+                                <span class="auralis-cal-filtros-contador d-none" id="auralisCalFiltrosContador"
+                                      data-texto="{{ trans('auralis-calendario-filtros-activos')|e('html_attr') }}"></span>
+                            </span>
+                            <i class="fa-solid fa-chevron-down auralis-cal-plegable-icono"></i>
+                        </button>
+                        <button type="button" class="btn btn-link auralis-cal-quitar-filtros d-none" id="btnCalQuitarFiltros">
+                            <i class="fa-solid fa-xmark me-1"></i>{{ trans('auralis-calendario-quitar-filtros') }}
+                        </button>
+                        <div class="collapse" id="auralisCalFiltros" data-zcal-plegable="filtros" data-zcal-plegada="1">
+                            <div class="auralis-calendar-sidebar-filtros d-flex flex-column gap-2 pt-2">
+                                {{ header_filters|raw }}
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+
+                {# Secciones plegables como en Google Calendar; el estado se recuerda (auralis-calendar-sidebar.js). #}
+                {% set z_cal_secciones = not z_cal_con_listas ? [] : [
+                    {'clave': 'propios', 'id': 'auralisCalSecPropios', 'titulo': trans('auralis-calendario-mis-calendarios'), 'oculta': false},
+                    {'clave': 'empresa', 'id': 'auralisCalSecEmpresa', 'titulo': trans('auralis-calendario-de-la-empresa'), 'oculta': true},
+                    {'clave': 'otros', 'id': 'auralisCalSecOtros', 'titulo': trans('auralis-calendario-otros'), 'oculta': true}
+                ] %}
+                {% for sec in z_cal_secciones %}
+                    <section class="auralis-cal-seccion{{ sec.oculta ? ' d-none' : '' }}" data-zcal-seccion="{{ sec.clave }}">
+                        <div role="heading" aria-level="2">
+                            <button type="button" class="auralis-cal-seccion-cabecera auralis-cal-plegable"
+                                    data-bs-toggle="collapse" data-bs-target="#{{ sec.id }}"
+                                    aria-expanded="true" aria-controls="{{ sec.id }}">
+                                <span class="auralis-cal-seccion-titulo">{{ sec.titulo }}</span>
+                                <i class="fa-solid fa-chevron-down auralis-cal-plegable-icono"></i>
+                            </button>
+                        </div>
+                        <div class="collapse show" id="{{ sec.id }}" data-zcal-plegable="{{ sec.clave }}">
+                            <ul class="list-unstyled mb-0 auralis-cal-lista" data-zcal-lista="{{ sec.clave }}"></ul>
+                            {% if sec.clave == 'empresa' %}
+                                {# Los comunes nacen desmarcados (1.77): el JS lo enseña si alguno está sin marcar. #}
+                                <p class="auralis-cal-vacio mb-0 d-none" data-zcal-ayuda="empresa">{{ trans('auralis-calendario-empresa-marcar') }}</p>
+                            {% endif %}
+                            {% if sec.clave == 'propios' and z_cal_datos.permitir_calendarios_extra|default(false) and z_cal_puede_editar %}
+                                <button type="button" class="btn btn-link auralis-cal-nuevo" id="btnCalNuevoCalendario">
+                                    <i class="fa-solid fa-plus me-1"></i>{{ trans('auralis-calendario-nuevo') }}
+                                </button>
+                            {% endif %}
+                        </div>
+                    </section>
+                {% endfor %}
+
+                {% if sidebar_sections is defined and sidebar_sections %}
+                    {{ sidebar_sections|raw }}
+                {% endif %}
+                {% for includeView in getIncludeViews('CalendarSidebar', 'Sections') %}
+                    {% include includeView['path'] %}
+                {% endfor %}
+            </div>
+        </aside>
+
+        <div class="auralis-calendar-main">
+            <div class="auralis-calendar-page-body">
+{% include 'Master/_calendar_toolbar.html.twig' with {header_filters: ''} %}
+
+                <div class="z-calendar-container" style="min-height: 420px;">
+                    {# Carga AJAX action=calendar-events (con calendarios[] del lateral) #}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if z_cal_con_listas %}
+{# Crear / ajustes de un calendario personal propio #}
+<div class="modal fade auralis-modal" id="auralisCalendarioModal" tabindex="-1" aria-labelledby="auralisCalendarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content auralis-event-modal-content">
+            <form id="formAuralisCalendario" autocomplete="off">
+                <input type="hidden" name="idcalendario" id="zCalId" value="">
+                <div class="modal-header py-2 px-3 border-bottom auralis-event-modal-chrome">
+                    <h5 class="modal-title fw-bold mb-0" id="auralisCalendarioModalLabel"
+                        data-titulo-nuevo="{{ trans('auralis-calendario-modal-nuevo')|e('html_attr') }}"
+                        data-titulo-editar="{{ trans('auralis-calendario-modal-ajustes')|e('html_attr') }}">
+                        {{ trans('auralis-calendario-modal-nuevo') }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ trans('close') }}"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="mb-2">
+                        <label class="form-label text-muted mb-0" for="zCalNombre">{{ trans('name') }}</label>
+                        <input type="text" class="form-control" id="zCalNombre" name="nombre" maxlength="100" required>
+                    </div>
+                    <div class="mb-2">
+                        <span class="form-label text-muted d-block mb-1">{{ trans('color') }}</span>
+                        <div class="d-flex gap-2 align-items-center flex-wrap auralis-cal-paleta" data-zcal-paleta="modal">
+                            <input type="hidden" name="color" id="zCalColor" value="{{ z_cal_paleta|first }}">
+                            {% for c in z_cal_paleta %}
+                                <button type="button" class="z-color-dot" data-color="{{ c }}" style="background-color: {{ c }}; --dot-color: {{ c }};"
+                                        title="{{ c }}" aria-label="{{ c }}"></button>
+                            {% endfor %}
+                            <label class="z-color-dot z-color-dot-custom auralis-cal-color-libre" title="{{ trans('calendar-event-color-custom')|e('html_attr') }}">
+                                <i class="fa-solid fa-palette"></i>
+                                <input type="color" class="auralis-cal-color-input" id="zCalColorLibre"
+                                       aria-label="{{ trans('calendar-event-color-custom')|e('html_attr') }}">
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label text-muted mb-0" for="zCalDescripcion">{{ trans('description') }}</label>
+                        <textarea class="form-control" id="zCalDescripcion" name="descripcion" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer py-2 px-3 border-top auralis-event-modal-chrome">
+                    <button type="submit" class="btn btn-primary px-3" id="btnGuardarAuralisCalendario">
+                        <i class="fa-solid fa-check me-1"></i>{{ trans('save') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Compartir un calendario personal propio con usuarios, grupos o toda la empresa #}
+<div class="modal fade auralis-modal" id="auralisCalendarioCompartirModal" tabindex="-1" aria-labelledby="auralisCalendarioCompartirModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content auralis-event-modal-content">
+            <div class="modal-header py-2 px-3 border-bottom auralis-event-modal-chrome">
+                <div class="me-2 min-w-0">
+                    <h5 class="modal-title fw-bold mb-0" id="auralisCalendarioCompartirModalLabel">{{ trans('auralis-calendario-compartir') }}</h5>
+                    <span class="text-muted small d-block text-truncate" id="zCalCompNombre"></span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ trans('close') }}"></button>
+            </div>
+            <div class="modal-body p-3">
+                <form id="formAuralisCalendarioAcceso" autocomplete="off" class="row g-2 align-items-end">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label text-muted mb-0" for="zCalCompUsuario">{{ trans('user') }}</label>
+                        <select id="zCalCompUsuario" class="form-select" placeholder="{{ trans('auralis-calendario-elige-usuario')|e('html_attr') }}"></select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label text-muted mb-0" for="zCalCompRol">{{ trans('group') }}</label>
+                        <select id="zCalCompRol" class="form-select" placeholder="{{ trans('auralis-calendario-elige-grupo')|e('html_attr') }}"></select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label text-muted mb-0" for="zCalCompPermiso">{{ trans('auralis-calendario-permiso') }}</label>
+                        <select id="zCalCompPermiso" class="form-select">
+                            {% for p in z_cal_datos.permisos|default(['ocupado', 'ver', 'editar']) %}
+                                <option value="{{ p }}"{% if p == 'ver' %} selected{% endif %}>{{ trans('auralis-calendario-permiso-' ~ p) }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6 d-grid">
+                        <button type="submit" class="btn btn-outline-primary" id="btnCalCompAnadir">
+                            <i class="fa-solid fa-user-plus me-1"></i>{{ trans('auralis-calendario-anadir-acceso') }}
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <p class="text-muted mb-0 auralis-cal-ayuda">{{ trans('auralis-calendario-acceso-help') }}</p>
+                        <p class="text-muted mb-0 mt-1 auralis-cal-ayuda" id="zCalCompAvisosAyuda">
+                            <i class="fa-solid fa-bell-slash me-1" aria-hidden="true"></i>{{ trans('auralis-calendario-compartir-avisos-help') }}
+                        </p>
+                    </div>
+                </form>
+                <h6 class="mt-3 mb-2">{{ trans('auralis-calendario-accesos') }}</h6>
+                <ul class="list-group auralis-cal-accesos" id="zCalCompLista"></ul>
+            </div>
+            <div class="modal-footer py-2 px-3 border-top auralis-event-modal-chrome">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ trans('close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+<script type="application/json" id="auralis-calendar-sidebar-data">{{ {
+    'datos': z_cal_datos,
+    'puedeEditar': z_cal_puede_editar,
+    'paleta': z_cal_paleta,
+    'urlGestion': 'EditAuralisCalendario',
+    'i18n': {
+        'opciones': trans('options'),
+        'soloEste': trans('auralis-calendario-solo-este'),
+        'color': trans('color'),
+        'colorLibre': trans('calendar-event-color-custom'),
+        'colorRestablecer': trans('auralis-calendario-color-restablecer'),
+        'compartir': trans('auralis-calendario-compartir'),
+        'ajustes': trans('settings'),
+        'borrar': trans('auralis-calendario-borrar'),
+        'confirmarBorrado': trans('auralis-calendario-confirmar-borrado'),
+        'gestionar': trans('auralis-calendario-gestionar'),
+        'paginaModulo': trans('auralis-calendario-modulo-pagina'),
+        'ninguno': trans('auralis-calendario-ninguno'),
+        'todaEmpresa': trans('auralis-calendario-toda-empresa'),
+        'sinAccesos': trans('auralis-calendario-sin-accesos'),
+        'quitar': trans('remove'),
+        'usuario': trans('user'),
+        'grupo': trans('group'),
+        'permisoOcupado': trans('auralis-calendario-permiso-ocupado'),
+        'permisoVer': trans('auralis-calendario-permiso-ver'),
+        'permisoEditar': trans('auralis-calendario-permiso-editar'),
+        'errorGuardar': trans('auralis-calendario-error-guardar'),
+        'errorBorrar': trans('auralis-calendario-error-borrar')
+    }
+}|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP') b-or constant('JSON_HEX_APOS') b-or constant('JSON_HEX_QUOT'))|raw }}</script>

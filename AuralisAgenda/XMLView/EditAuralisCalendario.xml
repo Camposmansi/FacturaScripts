@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Ficha de un calendario común o de módulo: código, nombre, color, empresa, activo y descripción.
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12" valign="center">
+            <column name="id" display="none" order="90">
+                <widget type="text" fieldname="idcalendario" readonly="true"/>
+            </column>
+            <column name="code" numcolumns="2" order="100" display="none" description="auralis-calendario-codigo-help">
+                <widget type="text" fieldname="codigo" maxlength="30" icon="fa-solid fa-hashtag"/>
+            </column>
+            <column name="name" numcolumns="3" order="110">
+                <widget type="text" fieldname="nombre" required="true" maxlength="100" icon="fa-solid fa-font"/>
+            </column>
+            <column name="color" numcolumns="2" order="120">
+                <widget type="color" fieldname="color" required="true"/>
+            </column>
+            <column name="type" numcolumns="2" order="130">
+                <widget type="select" fieldname="tipo" translate="true" readonly="true">
+                    <values title="auralis-calendario-tipo-comun">comun</values>
+                    <values title="auralis-calendario-tipo-modulo">modulo</values>
+                    <values title="auralis-calendario-tipo-personal">personal</values>
+                </widget>
+            </column>
+            <column name="company" numcolumns="3" order="140" description="auralis-calendario-empresa-help">
+                <widget type="select" fieldname="idempresa">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"/>
+                </widget>
+            </column>
+            <column name="active" numcolumns="2" order="150">
+                <widget type="checkbox" fieldname="activo"/>
+            </column>
+            <column name="description" numcolumns="12" order="160">
+                <widget type="textarea" fieldname="descripcion"/>
+            </column>
+        </group>
+        <group name="modulo" numcolumns="12">
+            <column name="auralis-calendario-modulo-info" numcolumns="12" order="200">
+                <widget type="info" alert="info" icon="fa-solid fa-circle-info" text="auralis-calendario-modulo-visibilidad"/>
+            </column>
+            <column name="auralis-calendario-modulo-pagina" numcolumns="12" order="210">
+                <widget type="text" fieldname="pagina_modulo" readonly="true" icon="fa-solid fa-file"/>
+            </column>
+        </group>
+    </columns>
+</view>

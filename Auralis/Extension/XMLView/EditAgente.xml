@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Añade el selector de tipo de agente Auralis en la ficha de agente.
+ */
+-->
+<view>
+    <columns>
+        <group name="auralis-clasificacion" title="auralis-clasificacion" numcolumns="12" icon="fa-solid fa-id-badge">
+            <column name="auralis-tipo-agente" numcolumns="6" order="1000">
+                <widget type="select" fieldname="idtipo_agente">
+                    <values source="auralis_tipos_agentes" fieldcode="idtipo" fieldtitle="nombre"/>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

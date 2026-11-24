@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Ficha central de notificación programada de calendario.
+ */
+-->
+<view>
+    <columns>
+        <group name="datos" numcolumns="12" title="calendar-notif-programada" icon="fa-solid fa-bell">
+            <column name="code" numcolumns="2" order="100">
+                <widget type="text" fieldname="id" readonly="true"/>
+            </column>
+            <column name="auralis-calendar-event" numcolumns="2" order="110">
+                <widget type="text" fieldname="idevent" readonly="true"/>
+            </column>
+            <column name="calendar-notif-plantilla" numcolumns="4" order="120">
+                <widget type="text" fieldname="notification_name" readonly="true"/>
+            </column>
+            <column name="calendar-notif-programada-para" numcolumns="4" order="125">
+                <widget type="datetime" fieldname="scheduled_at" readonly="true"/>
+            </column>
+            <column name="calendar-notif-antelacion" numcolumns="2" order="130">
+                <widget type="number" fieldname="offset_value" readonly="true"/>
+            </column>
+            <column name="calendar-notif-unidad" numcolumns="2" order="140">
+                <widget type="select" fieldname="offset_unit" readonly="true" translate="true">
+                    <values title="calendar-notif-minutes">minutes</values>
+                    <values title="calendar-notif-hours">hours</values>
+                    <values title="calendar-notif-days">days</values>
+                    <values title="calendar-notif-weeks">weeks</values>
+                </widget>
+            </column>
+            <column name="calendar-notif-enviada" numcolumns="2" order="150" display="center">
+                <widget type="checkbox" fieldname="sent" readonly="true"/>
+            </column>
+            <column name="calendar-notif-enviada-el" numcolumns="4" order="160">
+                <widget type="datetime" fieldname="sent_at" readonly="true"/>
+            </column>
+            <column name="origen_tipo" display="none" order="900">
+                <widget type="text" fieldname="origen_tipo" readonly="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

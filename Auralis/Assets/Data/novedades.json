@@ -1,0 +1,543 @@
+{
+    "entries": [
+        {
+            "plugin": "Auralis",
+            "version": "2.17",
+            "date": "2026-11-23",
+            "title": "Auralis y Agenda ya pueden instalarse por separado",
+            "summary": "El diseño empresarial y el calendario se distribuyen como dos plugins autónomos, sin dependencias obligatorias y conservando los datos existentes.",
+            "badges": [{"type": "feature"}, {"type": "improvement"}],
+            "items": [
+                {"label": "Auralis más ligero", "text": "El plugin principal conserva dashboard, acceso, PDF, menús, gestoría, tableros y novedades, sin cargar modelos ni tareas del calendario."},
+                {"label": "AuralisAgenda independiente", "text": "La Agenda mantiene calendarios personales y compartidos, salas, participantes, recordatorios, correo, notificaciones, push y PWA sin requerir Auralis."},
+                {"label": "Integración opcional", "text": "Desde Administrador → Auralis → Calendario puedes mostrar una vista semanal de la Agenda en el dashboard de Auralis. La opción viene desactivada."},
+                {"label": "Datos conservados", "text": "Se reutilizan las tablas existentes para que eventos, accesos, estados, salas y recordatorios no se pierdan al separar los plugins."}
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "2.16",
+            "date": "2026-11-22",
+            "title": "Acceso renovado, PDF configurable y adjuntos con vista previa",
+            "summary": "Auralis renueva el acceso y las facturas PDF, amplía los controles de privacidad del documento y permite revisar los adjuntos antes de enviar un correo.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                },
+                {
+                    "type": "tip"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Portal Auralis",
+                    "text": "El acceso utiliza un fondo a pantalla completa y una tarjeta central adaptable. Si no eliges un logotipo principal, se muestra automáticamente la marca rectangular de Auralis."
+                },
+                {
+                    "label": "Identidad visual con SVG",
+                    "text": "Los logotipos, fondos, elementos decorativos e iconos admiten SVG validado, además de los formatos de imagen habituales."
+                },
+                {
+                    "label": "Pie con enlace seguro",
+                    "text": "El texto del pie admite {year} y enlaces HTTP o HTTPS. El resto del HTML se neutraliza para evitar contenido ejecutable."
+                },
+                {
+                    "label": "Accesos rápidos independientes",
+                    "text": "En Diseño → Ordenación del menú puedes mostrar u ocultar por separado Búsqueda, Inicio, Calendario, Notificaciones, Ayuda y Usuario."
+                },
+                {
+                    "label": "Ayuda directa",
+                    "text": "El botón de ayuda abre ahora la explicación de funcionamiento de Auralis dentro de Ajustes generales."
+                },
+                {
+                    "label": "Facturas PDF realmente Auralis",
+                    "text": "Al aplicar el estilo PDF, el documento usa la identidad de Auralis cuando la empresa no tiene logotipo propio y permite ajustar el logo, la empresa, el espacio de la cabecera, el tipo de documento y si todo el bloque final —totales, recibos y envío— aparece tras los artículos o alineado al pie."
+                },
+                {
+                    "label": "PDF igualado a la vista previa",
+                    "text": "La jerarquía del título, el tamaño del cuerpo, las tablas, la regla azul y la alineación de fecha y forma de pago reproducen ahora las proporciones mostradas en Diseño → PDF."
+                },
+                {
+                    "label": "Forma de pago opcional",
+                    "text": "En Diseño → PDF → Datos que se ocultan puedes retirar la forma de pago de la cabecera sin eliminar la fecha ni la tabla de recibos."
+                },
+                {
+                    "label": "Adjuntos revisables antes de enviar",
+                    "text": "En Diseño → Nombres de PDF puedes activar enlaces seguros sobre los adjuntos del formulario de correo para abrirlos en otra pestaña y comprobarlos antes del envío."
+                },
+                {
+                    "label": "Consejo: conserva una salida",
+                    "text": "Si ocultas el botón Usuario, asegúrate de mantener otra forma de acceder a tu perfil o vuelve a activarlo desde Ordenación del menú."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "2.0",
+            "date": "2026-10-31",
+            "title": "Calendarios del equipo, tablero y PDF a tu estilo",
+            "summary": "Comparte calendarios, mueve presupuestos y pedidos en un tablero, da estilo a los PDF y recibe avisos en el móvil con más seguridad. También puedes usar Auralis en neerlandés.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                },
+                {
+                    "type": "tip"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Tablero de presupuestos y pedidos",
+                    "text": "En presupuestos y pedidos de cliente y de proveedor cada estado es una columna. Cambias el estado arrastrando la tarjeta o con «Mover a…». Los pasos que crean otro documento se hacen desde la ficha. Actívalo en Ajustes → Listados."
+                },
+                {
+                    "label": "Calendarios con el equipo",
+                    "text": "Cada usuario tiene su calendario, la empresa los suyos y puedes compartirlos con permiso de solo ocupado, ver o editar. En el buscador de asistentes puedes invitar a un grupo entero."
+                },
+                {
+                    "label": "PDF con tu estilo y tu nombre",
+                    "text": "En Diseño → PDF eliges colores, tipografía y qué datos ocultar, con una vista previa. En Nombres de PDF decides cómo se llama el archivo al descargarlo o enviarlo por email."
+                },
+                {
+                    "label": "Avisos en el móvil",
+                    "text": "Si un aviso no llega a la primera, se vuelve a intentar. Desde Agenda → Ajustes puedes enviar una prueba, subir el icono de la app y ver si tus dispositivos están listos."
+                },
+                {
+                    "label": "Imágenes y acceso más seguros",
+                    "text": "Al subir el logotipo, las imágenes del login o el icono de la app solo se aceptan archivos de imagen reales. El enlace de recuperación de contraseña usa la URL de tu sitio."
+                },
+                {
+                    "label": "Roles Agenda, Gestoría y Administración",
+                    "text": "Se crean al actualizar si no estaban, con sus permisos de partida. No se asignan a nadie."
+                },
+                {
+                    "label": "Consejo: actívalo cuando te convenga",
+                    "text": "Los tableros ya vienen encendidos; el estilo PDF y los nombres de PDF, apagados. Puedes cambiarlos en Ajustes → Listados y en Diseño. «Exportar documentos» (Informes → Auralis) hace falta concederlo a mano en los roles."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.68",
+            "date": "2026-10-25",
+            "title": "Avisos que se notan, cobros a la vista y agenda según rol",
+            "summary": "Insistencia y campana sin agenda, % cobrado y pagado, agenda según permiso, pie con año y avisos más legibles.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                },
+                {
+                    "type": "tip"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Avisos insistentes",
+                    "text": "Si un aviso es insistente, el sonido se repite y el título de la pestaña parpadea hasta que lo pospones o queda resuelto. Al resolverse, la ventana desaparece sola."
+                },
+                {
+                    "label": "Campana sin agenda",
+                    "text": "Si otro módulo te deja un aviso, lo ves en Actividad aunque no uses la agenda. En el móvil el mensaje es genérico; el detalle se abre dentro del programa."
+                },
+                {
+                    "label": "Cobrado y pagado en el listado",
+                    "text": "En facturas de cliente ves el % cobrado junto al total, calculado con los recibos ya pagados: si cobras en varios recibos, ves cuánto llevas. En facturas de proveedor, el % pagado. Verde: cobrada entera; ámbar: en parte; rojo: nada. También en las rectificativas (importes negativos)."
+                },
+                {
+                    "label": "Agenda según el rol",
+                    "text": "Quien solo puede ver la agenda abre la cita bloqueada, sin Guardar ni Eliminar. El botón de documento de venta aparece según el permiso de esa pantalla y solo en citas ya guardadas."
+                },
+                {
+                    "label": "Pie del login",
+                    "text": "En el pie del login puedes usar {year} (se actualiza solo). Se modifica en Administrador → Auralis → Diseño → Pantalla Login."
+                },
+                {
+                    "label": "Avisos más legibles",
+                    "text": "Los mensajes de aviso (amarillo) y las etiquetas de estado se leen mejor: el texto ya no se confunde con el fondo. En Admin → Auralis → Diseño → Colores de avisos y estados eliges el color; el texto sobre fondo suave se oscurece solo."
+                },
+                {
+                    "label": "Consejo: roles de agenda",
+                    "text": "Los permisos se configuran en Administrador → Roles → Páginas del rol. Crear y editar son un único permiso: «actualizar»."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.51",
+            "date": "2026-10-15",
+            "title": "Barra centrada, tildes en novedades y cita más clara",
+            "summary": "El buscador del menú vertical vuelve al centro de la barra. Las novedades muestran tildes bien. Siguen hora de fin, documento vinculado, lupa y agenda más segura.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                },
+                {
+                    "type": "legal"
+                },
+                {
+                    "type": "tip"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Buscador centrado en menú vertical",
+                    "text": "En PC, el buscador de la barra superior queda en el centro geométrico entre el título y los iconos (el contenido sigue a la derecha del menú lateral)."
+                },
+                {
+                    "label": "Novedades con tildes correctas",
+                    "text": "Los textos de la campana y del historial de novedades ya no muestran caracteres raros en palabras con acentos."
+                },
+                {
+                    "label": "Hora de fin y repetición a la vista",
+                    "text": "Al abrir una cita, la hora de fin se calcula sola con el inicio y la duración. «Todo el día» y «Se repite» despliegan fecha de fin y las opciones de repetición."
+                },
+                {
+                    "label": "Mes: ver todas las citas del día",
+                    "text": "Si un día tiene muchas citas, el enlace «+N Más…» abre la lista completa de ese día para elegir o crear otra."
+                },
+                {
+                    "label": "Documento vinculado a la cita",
+                    "text": "Desde una cita guardada abres presupuesto, pedido, albarán o factura ya rellenado. Cuando lo guardas, el botón del centro se pone verde relleno (con check) y abre ese mismo documento."
+                },
+                {
+                    "label": "Lupa en barra y móvil",
+                    "text": "La lupa abre el buscador al momento con sugerencias; en móvil queda centrado con fondo oscurecido. Ctrl+K, Cmd+K o / lo abren desde el teclado."
+                },
+                {
+                    "label": "Filtro por asistente e icono del vertical",
+                    "text": "Filtra citas por persona o cliente. Si usas un plugin vertical (por ejemplo Veterinaria), su configuración puede hacer que el icono de calendario abra esa agenda."
+                },
+                {
+                    "label": "Agenda más segura",
+                    "text": "Borrar una cita exige permiso de eliminar. Mi calendario solo abre citas de esa agenda; los enlaces de la campana van más controlados."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.44",
+            "date": "2026-10-05",
+            "title": "Colores de avisos a tu gusto y listados que coinciden",
+            "summary": "Elige los colores de correcto, error y aviso en Diseño; las filas de los listados usan el mismo tono. También: avisos perdidos, punto de novedades y más espacio en el menú.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Colores de avisos y estados",
+                    "text": "En Admin → Auralis → Diseño abre «Colores de avisos y estados» y elige los tonos de correcto, error, aviso e información. Sirven con cualquier tema."
+                },
+                {
+                    "label": "Listados del mismo color",
+                    "text": "Las filas de color de Contactos y demás listados se tiñen con esos mismos colores (suaves, para leer bien el texto)."
+                },
+                {
+                    "label": "Volver a fábrica",
+                    "text": "Si te pasas con los tonos, el botón «Volver a los colores de fábrica» restaura los valores originales."
+                },
+                {
+                    "label": "Avisos que no se pierden",
+                    "text": "Si no estabas delante cuando tocaba el recordatorio, al volver lo ves en Actividad (sin llenarte la pantalla de popups)."
+                },
+                {
+                    "label": "Punto de novedades",
+                    "text": "Si solo hay novedades sin leer, ves un punto rojo pequeño en la campana; si hay citas, la burbuja con el número como siempre."
+                },
+                {
+                    "label": "Consejo: un solo sitio",
+                    "text": "No hace falta un panel aparte para las tablas: el mismo color de «Aviso» pinta botones, mensajes y filas del listado."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.41",
+            "date": "2026-09-29",
+            "title": "Campana de avisos, tu agenda y citas que se entienden",
+            "summary": "Recordatorios en pantalla, calendario personal, varias citas a la misma hora y novedades claras de todos tus plugins Auralis.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                },
+                {
+                    "type": "tip"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Campana en la barra",
+                    "text": "Avisos de citas con Posponer o Descartar, y pestaña Novedades con el histórico de mejoras."
+                },
+                {
+                    "label": "Mi calendario",
+                    "text": "Icono de agenda: solo ves lo que creaste o te asignaron; invita a compañeros si hace falta."
+                },
+                {
+                    "label": "Citas que se solapan",
+                    "text": "Si coinciden en hora, se reparten en columnas como en Google Calendar."
+                },
+                {
+                    "label": "Hub de agenda",
+                    "text": "Salas, tipos de cita con duración estimada y estados con insignias en Admin → Auralis → Agenda."
+                },
+                {
+                    "label": "Avisos en el móvil (Beta)",
+                    "text": "Instala el ERP como app (PWA) y recibe recordatorios con el navegador cerrado (en fase Beta, requiere HTTPS)."
+                },
+                {
+                    "label": "Color a tu gusto",
+                    "text": "Además de los colores rápidos, elige cualquier tono con la paleta dinámica."
+                },
+                {
+                    "label": "Modal «+X más» adaptativo",
+                    "text": "Desglose diario en ventana compacta según el contexto: citas con hora y botón Añadir, o recibos con flechas de cobro/pago y salto a factura."
+                },
+                {
+                    "label": "Consejo: Posponer o descartar",
+                    "text": "Si estás con un cliente, pospone 5–60 min o descarta cuando ya atendiste la cita; no hace falta abandonar la factura."
+                },
+                {
+                    "label": "Consejo: Ver todas las novedades",
+                    "text": "En la pestaña Novedades, el enlace del pie abre el histórico completo."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.39",
+            "date": "2026-09-15",
+            "title": "Agenda en un solo sitio: salas, tipos y estados",
+            "summary": "Tipos de cita, estados del ciclo y salas de la agenda juntos en Admin → Auralis → Agenda.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Hub de agenda",
+                    "text": "Ajustes de rejilla, salas, tipos de evento y estados en una sola pantalla."
+                },
+                {
+                    "label": "Tipos con duración y color",
+                    "text": "Define motivos de cita con color y duración sugerida; el modal los rellena al elegir."
+                },
+                {
+                    "label": "Estados del ciclo",
+                    "text": "Pendiente, confirmado, atendido… con insignias en la rejilla sin perder el color de la cita."
+                },
+                {
+                    "label": "Sede o almacén",
+                    "text": "Asocia citas a un almacén y filtra la agenda cuando trabajas en varias sedes."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.38",
+            "date": "2026-09-11",
+            "title": "Descuadres de recibos a la vista en Tesorería",
+            "summary": "El Cuadro de Mando avisa si el total de una factura no cuadra con sus recibos, con lista ordenable y acceso directo a corregir.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Alerta en Tesorería",
+                    "text": "Banner cuando hay facturas de venta o compra con diferencia entre total y suma de recibos."
+                },
+                {
+                    "label": "Ver facturas",
+                    "text": "Modal con pestañas Ventas/Compras, orden por importe o fecha, y enlace a la factura."
+                },
+                {
+                    "label": "Sin falsos positivos",
+                    "text": "Las parejas factura + rectificativa que se anulan solas y no tienen recibos no aparecen."
+                },
+                {
+                    "label": "Menú y cabeceras más limpios",
+                    "text": "Resaltado del menú vertical sin desbordes y avisos de documento alineados bajo el Total."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.36",
+            "date": "2026-09-09",
+            "title": "Tareas programadas estables en el servidor",
+            "summary": "El mantenimiento automático y la auditoría de accesos ya no fallan cuando el Cron se ejecuta sin pantalla (consola del servidor).",
+            "badges": [
+                {
+                    "type": "improvement"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Cron sin interrupciones",
+                    "text": "Las tareas programadas del hosting terminan correctamente aunque no haya petición web."
+                },
+                {
+                    "label": "Auditoría de accesos",
+                    "text": "El registro de login no rompe el apagado de procesos en segundo plano."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.35",
+            "date": "2026-09-08",
+            "title": "Menús de tercer nivel ordenables y tesorería con un clic",
+            "summary": "Arrastra páginas dentro de submenús, compacta la barra al ordenar y abre vencimientos desde la alerta de liquidez.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Ordenar submenús",
+                    "text": "En Diseño → Ordenación del Menú, reorganiza páginas de tercer nivel con arrastrar y soltar."
+                },
+                {
+                    "label": "Vista compacta al ordenar",
+                    "text": "La primera columna se reduce a iconos para aprovechar el ancho de pantalla."
+                },
+                {
+                    "label": "Ver vencimientos",
+                    "text": "Desde la alerta de cashflow del Cuadro de Mando abres de golpe los pagos próximos."
+                },
+                {
+                    "label": "Aspecto unificado",
+                    "text": "Botones, bordes e insignias siguen el tema Bootstrap 5 activo en todo el ERP."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.34",
+            "date": "2026-09-04",
+            "title": "Ciclo de cobro y pago, más temas y más seguridad",
+            "summary": "Seis indicadores de tesorería, rankings por cliente/proveedor, siete paletas nuevas y blindaje en el acceso.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                }
+            ],
+            "items": [
+                {
+                    "label": "KPIs de Tesorería",
+                    "text": "Plazo medio de cobro y pago, mora, ratios cobrado/pagado y evolución frente al año."
+                },
+                {
+                    "label": "Rankings",
+                    "text": "Quién concentra más demora en cobros o pagos pendientes, de 5 en 5."
+                },
+                {
+                    "label": "7 temas corporativos",
+                    "text": "Kinetic, Nord, Legacy, Zafiro, Terra, Zen y Nexus (lateral claro u oscuro)."
+                },
+                {
+                    "label": "Acceso más seguro",
+                    "text": "Recuperación de clave cifrada, límite de intentos por IP y usuarios fijados a su empresa."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.32",
+            "date": "2026-09-03",
+            "title": "Administrador más limpio, temas nuevos y buscador de menú",
+            "summary": "Pantallas nativas agrupadas en General, cinco paletas más y búsqueda rápida en menú vertical.",
+            "badges": [
+                {
+                    "type": "feature"
+                },
+                {
+                    "type": "improvement"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Submenú General",
+                    "text": "Acerca de, Plugins, Usuarios, Logs… juntos bajo Administrador (Core 2026.5+)."
+                },
+                {
+                    "label": "5 paletas nuevas",
+                    "text": "Crimson, Prestige, Blaze, Serenity y Cyber, además de las esenciales."
+                },
+                {
+                    "label": "Buscador del menú",
+                    "text": "En menú vertical, encuentra pantallas por nombre con sugerencias e icono."
+                },
+                {
+                    "label": "Auditoría de login",
+                    "text": "Entradas, bloqueos y recuperación de clave consultables en Administrador → Logs."
+                }
+            ]
+        },
+        {
+            "plugin": "Auralis",
+            "version": "1.30",
+            "date": "2026-08-27",
+            "title": "Auralis: cuadro de mando, temas y seguridad en tu ERP",
+            "summary": "Cuadro de mando con tesorería, menú lateral o superior, avisos en documentos y login corporativo con 2FA.",
+            "badges": [
+                {
+                    "type": "feature"
+                }
+            ],
+            "items": [
+                {
+                    "label": "Cuadro de mando",
+                    "text": "Ventas, compras, margen, IVA/IRPF y alertas de cobros o pagos desde un solo panel."
+                },
+                {
+                    "label": "Diseño a tu medida",
+                    "text": "Menú lateral o superior, temas claro/oscuro y orden de menús con arrastrar y soltar."
+                },
+                {
+                    "label": "Avisos en documentos",
+                    "text": "Notas emergentes en facturas, albaranes y pedidos según cliente, proveedor o producto."
+                },
+                {
+                    "label": "Acceso seguro",
+                    "text": "Login corporativo, verificación en dos pasos y recuperación de clave por correo."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Extensión de tabla agentes con tipo de agente centralizado en Auralis.
+ */
+-->
+<table>
+    <column>
+        <name>idtipo_agente</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <constraint>
+        <name>ca_agentes_auralis_tipos_agentes</name>
+        <type>FOREIGN KEY (idtipo_agente) REFERENCES auralis_tipos_agentes (idtipo) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <index>
+        <name>agentes_idtipo_agente_idx</name>
+        <columns>idtipo_agente</columns>
+    </index>
+</table>

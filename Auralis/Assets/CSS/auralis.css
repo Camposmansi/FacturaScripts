@@ -1,0 +1,3609 @@
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Hoja de estilos premium del tema Auralis con variables de color e interactividad
+ */
+
+:root {
+    /* 1. Colores corporativos base (Auralis Emerald por defecto) */
+    --v-primary: #10B981;
+    --v-primary-rgb: 16, 185, 129;
+    --v-primary-hover: #0D9488;
+    --v-secondary: #475569;
+    --v-bg-light: #F8FAFC;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #0F172A;
+    --v-bg-dark-rgb: 15, 23, 42;
+    --v-text: #475569;
+    --v-heading-color: #0F172A;
+    --v-text-muted: #94A3B8;
+    --v-accent: #0D9488;
+    --v-dark-accent: #2dd4bf;
+    --v-dark-accent-rgb: 45, 212, 191;
+    --v-icon-standard: #64748B;
+    --v-icon-emerald: #10B981;
+    --v-icon-security: #B08D57;
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(16, 185, 129, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+
+    /* Bordes y tamaños dinámicos */
+    --auralis-radius-card: 12px;
+    --auralis-radius-btn: 8px;
+    --auralis-radius-input: 6px;
+
+    /* Bootstrap Expose & Semantic Tokens */
+    --bs-primary: var(--v-primary);
+    --bs-primary-rgb: var(--v-primary-rgb);
+    --bs-secondary: var(--v-secondary);
+    --bs-secondary-rgb: 71, 85, 105;
+    --bs-body-bg: #FFFFFF;
+    --bs-secondary-bg: var(--v-bg-secondary);
+    --bs-tertiary-bg: var(--v-bg-secondary);
+    --bs-body-color: var(--v-text);
+    --bs-heading-color: var(--v-heading-color);
+    --bs-link-color: var(--v-primary);
+    --bs-link-color-rgb: var(--v-primary-rgb);
+    --bs-link-hover-color: var(--v-primary-hover);
+    --bs-border-color: #E2E8F0;
+    --bs-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+    --bs-border-radius: var(--auralis-radius-input, 6px);
+    --bs-border-radius-sm: calc(var(--auralis-radius-input, 6px) * 0.75);
+    --bs-border-radius-lg: calc(var(--auralis-radius-input, 6px) * 1.25);
+    --bs-btn-border-radius: var(--auralis-radius-btn, 8px);
+    --bs-btn-border-radius-sm: calc(var(--auralis-radius-btn, 8px) * 0.75);
+    --bs-btn-border-radius-lg: calc(var(--auralis-radius-btn, 8px) * 1.25);
+    --bs-focus-ring-color: rgba(var(--bs-primary-rgb), 0.25);
+    --bs-primary-bg-subtle: rgba(var(--bs-primary-rgb), 0.12);
+    --bs-primary-border-subtle: rgba(var(--bs-primary-rgb), 0.25);
+    --bs-primary-text-emphasis: var(--v-primary-hover, var(--v-primary));
+    --bs-secondary-bg-subtle: rgba(108, 117, 125, 0.12);
+    --bs-secondary-border-subtle: rgba(108, 117, 125, 0.25);
+    --bs-secondary-text-emphasis: var(--v-secondary, #475569);
+    --bs-table-hover-bg: rgba(var(--bs-primary-rgb), 0.035);
+    --bs-table-active-bg: rgba(var(--bs-primary-rgb), 0.07);
+
+    /* Componentes FacturaScripts: Tarjetas blancas impolutas y paneles secundarios tintados */
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #FFFFFF;
+    --theme-sidebar-text: var(--v-secondary);
+    --theme-sidebar-brand-text: var(--v-heading-color);
+    --theme-input-focus-border: var(--v-primary);
+    --theme-dropdown-hover-bg: rgba(16, 185, 129, 0.08);
+}
+
+body.auralis-theme-auralis,
+.auralis-theme-auralis {
+    --v-primary: #10B981;
+    --v-primary-rgb: 16, 185, 129;
+    --v-primary-hover: #0D9488;
+    --v-accent: #0D9488;
+    --v-bg-dark: #0F172A;
+    --v-bg-dark-rgb: 15, 23, 42;
+    --bs-primary: #10B981;
+    --bs-primary-rgb: 16, 185, 129;
+    --bs-link-color: #10B981;
+    --bs-link-color-rgb: 16, 185, 129;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --theme-card-bg: #FFFFFF;
+    --theme-input-focus-border: #10B981;
+    --theme-dropdown-hover-bg: rgba(16, 185, 129, 0.08);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(16, 185, 129, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+}
+
+body.auralis-theme-default,
+.auralis-theme-default {
+    --v-primary: #0d6efd;
+    --v-primary-rgb: 13, 110, 253;
+    --v-primary-hover: #0b5ed7;
+    --v-secondary: #6c757d;
+    --v-bg-light: #f8f9fa;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #212529;
+    --v-bg-dark-rgb: 33, 37, 41;
+    --v-text: #212529;
+    --v-heading-color: #212529;
+    --v-text-muted: #6c757d;
+    --v-accent: #0d6efd;
+    --v-dark-accent: #6ea8fe;
+    --v-dark-accent-rgb: 110, 168, 254;
+    --bs-primary: #0d6efd;
+    --bs-primary-rgb: 13, 110, 253;
+    --bs-link-color: #0d6efd;
+    --bs-link-color-rgb: 13, 110, 253;
+    --theme-card-bg: #FFFFFF;
+    --theme-input-focus-border: #86b7fe;
+    --theme-dropdown-hover-bg: rgba(13, 110, 253, 0.08);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(13, 110, 253, 0.85) 0%, rgba(33, 37, 41, 0.95) 100%);
+}
+
+body.auralis-theme-auralis_dark,
+.auralis-theme-auralis_dark {
+    --v-primary: #10B981;
+    --v-primary-rgb: 16, 185, 129;
+    --v-primary-hover: #0D9488;
+    --v-secondary: #94A3B8;
+    --v-bg-light: #F8FAFC;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #020617;
+    --v-bg-dark-rgb: 2, 6, 23;
+    --v-text: #475569;
+    --v-heading-color: #0F172A;
+    --v-text-muted: #64748B;
+    --v-accent: #2DD4BF;
+    --v-dark-accent: #2dd4bf;
+    --v-dark-accent-rgb: 45, 212, 191;
+    --bs-primary: #10B981;
+    --bs-primary-rgb: 16, 185, 129;
+    --bs-link-color: #10B981;
+    --bs-link-color-rgb: 16, 185, 129;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #0F172A;
+    --theme-sidebar-text: #FFFFFF;
+    --theme-sidebar-brand-text: #FFFFFF;
+    --theme-dropdown-hover-bg: rgba(45, 212, 191, 0.12);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(16, 185, 129, 0.85) 0%, rgba(2, 6, 23, 0.95) 100%);
+}
+
+body.auralis-theme-prestige,
+.auralis-theme-prestige {
+    --v-primary: #B08D57;
+    --v-primary-rgb: 176, 141, 87;
+    --v-primary-hover: #967444;
+    --v-secondary: #94A3B8;
+    --v-bg-light: #F8FAFC;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #12100B;
+    --v-bg-dark-rgb: 18, 16, 11;
+    --v-text: #475569;
+    --v-heading-color: #0F172A;
+    --v-text-muted: #64748B;
+    --v-accent: #D4AF37;
+    --v-dark-accent: #E5C378;
+    --v-dark-accent-rgb: 229, 195, 120;
+    --bs-primary: #B08D57;
+    --bs-primary-rgb: 176, 141, 87;
+    --bs-link-color: #B08D57;
+    --bs-link-color-rgb: 176, 141, 87;
+    --bs-link-hover-color: #967444;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #12100B;
+    --theme-sidebar-text: #FFFFFF;
+    --theme-sidebar-brand-text: #FFFFFF;
+    --theme-input-focus-border: #B08D57;
+    --theme-dropdown-hover-bg: rgba(176, 141, 87, 0.12);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(176, 141, 87, 0.90) 0%, rgba(18, 16, 11, 0.98) 100%);
+}
+
+body.auralis-theme-cyber,
+.auralis-theme-cyber {
+    --v-primary: #8B5CF6;
+    --v-primary-rgb: 139, 92, 246;
+    --v-primary-hover: #7C3AED;
+    --v-secondary: #94A3B8;
+    --v-bg-light: #F8FAFC;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #0F0C1B;
+    --v-bg-dark-rgb: 15, 12, 27;
+    --v-text: #475569;
+    --v-heading-color: #0F172A;
+    --v-text-muted: #64748B;
+    --v-accent: #EC4899;
+    --v-accent-rgb: 236, 72, 153;
+    --v-dark-accent: #EC4899;
+    --v-dark-accent-rgb: 236, 72, 153;
+    --bs-primary: #8B5CF6;
+    --bs-primary-rgb: 139, 92, 246;
+    --bs-link-color: #8B5CF6;
+    --bs-link-color-rgb: 139, 92, 246;
+    --bs-link-hover-color: #7C3AED;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #0F0C1B;
+    --theme-sidebar-text: #FFFFFF;
+    --theme-sidebar-brand-text: #FFFFFF;
+    --theme-input-focus-border: #8B5CF6;
+    --theme-dropdown-hover-bg: rgba(139, 92, 246, 0.12);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(139, 92, 246, 0.90) 0%, rgba(15, 12, 27, 0.98) 100%);
+}
+
+body.auralis-theme-crimson,
+.auralis-theme-crimson {
+    --v-primary: #E11D48;
+    --v-primary-rgb: 225, 29, 72;
+    --v-primary-hover: #BE123C;
+    --v-secondary: #94A3B8;
+    --v-bg-light: #FAFAFA;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #334155;
+    --v-bg-dark-rgb: 51, 65, 85;
+    --v-text: #475569;
+    --v-heading-color: #0F172A;
+    --v-text-muted: #64748B;
+    --v-accent: #E11D48;
+    --v-accent-rgb: 225, 29, 72;
+    --v-dark-accent: #FB7185;
+    --v-dark-accent-rgb: 251, 113, 133;
+    --bs-primary: #E11D48;
+    --bs-primary-rgb: 225, 29, 72;
+    --bs-link-color: #E11D48;
+    --bs-link-color-rgb: 225, 29, 72;
+    --bs-link-hover-color: #BE123C;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #334155;
+    --theme-sidebar-text: #FFFFFF;
+    --theme-sidebar-brand-text: #FFFFFF;
+    --theme-input-focus-border: #E11D48;
+    --theme-dropdown-hover-bg: rgba(225, 29, 72, 0.12);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(225, 29, 72, 0.90) 0%, rgba(51, 65, 85, 0.98) 100%);
+}
+
+body.auralis-theme-serenity,
+.auralis-theme-serenity {
+    --v-primary: #2DD4BF;
+    --v-primary-rgb: 45, 212, 191;
+    --v-primary-hover: #14B8A6;
+    --v-secondary: #475569;
+    --v-bg-light: #F0FDFA;
+    --v-bg-secondary: color-mix(in srgb, #2DD4BF 6%, #F0FDFA);
+    --v-bg-dark: #134E4A;
+    --v-bg-dark-rgb: 19, 78, 74;
+    --v-text: #134E4A;
+    --v-heading-color: #134E4A;
+    --v-text-muted: #64748B;
+    --v-accent: #2DD4BF;
+    --v-dark-accent: #2DD4BF;
+    --v-dark-accent-rgb: 45, 212, 191;
+    --bs-primary: #14B8A6;
+    --bs-primary-rgb: 20, 184, 166;
+    --bs-link-color: #0F766E;
+    --bs-link-color-rgb: 15, 118, 110;
+    --bs-link-hover-color: #115E59;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #134E4A;
+    --theme-sidebar-text: #F0FDFA;
+    --theme-sidebar-brand-text: #FFFFFF;
+    --theme-input-focus-border: #2DD4BF;
+    --theme-dropdown-hover-bg: rgba(45, 212, 191, 0.12);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(45, 212, 191, 0.90) 0%, rgba(19, 78, 74, 0.98) 100%);
+}
+
+body.auralis-theme-blaze,
+.auralis-theme-blaze {
+    --v-primary: #FF5F1F;
+    --v-primary-rgb: 255, 95, 31;
+    --v-primary-hover: #E04E12;
+    --v-secondary: #94A3B8;
+    --v-bg-light: #FAFAFA;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #000000;
+    --v-bg-dark-rgb: 0, 0, 0;
+    --v-text: #475569;
+    --v-heading-color: #0F172A;
+    --v-text-muted: #64748B;
+    --v-accent: #FF5F1F;
+    --v-accent-rgb: 255, 95, 31;
+    --v-dark-accent: #FF7A45;
+    --v-dark-accent-rgb: 255, 122, 69;
+    --bs-primary: #FF5F1F;
+    --bs-primary-rgb: 255, 95, 31;
+    --bs-link-color: #FF5F1F;
+    --bs-link-color-rgb: 255, 95, 31;
+    --bs-link-hover-color: #E04E12;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #000000;
+    --theme-sidebar-text: #FFFFFF;
+    --theme-sidebar-brand-text: #FFFFFF;
+    --theme-input-focus-border: #FF5F1F;
+    --theme-dropdown-hover-bg: rgba(255, 95, 31, 0.12);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(255, 95, 31, 0.90) 0%, rgba(0, 0, 0, 0.98) 100%);
+}
+
+body.auralis-theme-nexus,
+.auralis-theme-nexus {
+    --v-primary: #4F46E5;
+    --v-primary-rgb: 79, 70, 229;
+    --v-primary-hover: #4338CA;
+    --v-secondary: #94A3B8;
+    --v-bg-light: #F8FAFC;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #0F172A;
+    --v-bg-dark-rgb: 15, 23, 42;
+    --v-text: #475569;
+    --v-heading-color: #0F172A;
+    --v-text-muted: #64748B;
+    --v-accent: #06B6D4;
+    --v-accent-rgb: 6, 182, 212;
+    --v-dark-accent: #22D3EE;
+    --v-dark-accent-rgb: 34, 211, 238;
+    --bs-primary: #4F46E5;
+    --bs-primary-rgb: 79, 70, 229;
+    --bs-link-color: #4F46E5;
+    --bs-link-color-rgb: 79, 70, 229;
+    --bs-link-hover-color: #4338CA;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #0F172A;
+    --theme-sidebar-text: #FFFFFF;
+    --theme-sidebar-brand-text: #FFFFFF;
+    --theme-input-focus-border: #4F46E5;
+    --theme-dropdown-hover-bg: rgba(79, 70, 229, 0.12);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(79, 70, 229, 0.90) 0%, rgba(15, 23, 42, 0.98) 100%);
+}
+
+body.auralis-theme-zen,
+.auralis-theme-zen {
+    --v-primary: #52796F;
+    --v-primary-rgb: 82, 121, 111;
+    --v-primary-hover: #3F6259;
+    --v-secondary: #2F3E46;
+    --v-bg-light: #F8F9FA;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #2F3E46;
+    --v-bg-dark-rgb: 47, 62, 70;
+    --v-text: #2F3E46;
+    --v-heading-color: #2F3E46;
+    --v-text-muted: #64748B;
+    --v-accent: #84A98C;
+    --v-dark-accent: #84A98C;
+    --v-dark-accent-rgb: 132, 169, 140;
+    --bs-primary: #52796F;
+    --bs-primary-rgb: 82, 121, 111;
+    --bs-link-color: #52796F;
+    --bs-link-color-rgb: 82, 121, 111;
+    --bs-link-hover-color: #3F6259;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #FFFFFF;
+    --theme-sidebar-text: #2F3E46;
+    --theme-sidebar-brand-text: #2F3E46;
+    --theme-input-focus-border: #52796F;
+    --theme-dropdown-hover-bg: rgba(82, 121, 111, 0.12);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(82, 121, 111, 0.90) 0%, rgba(47, 62, 70, 0.98) 100%);
+}
+
+body.auralis-theme-zafiro,
+.auralis-theme-zafiro {
+    --v-primary: #1E3A8A;
+    --v-primary-rgb: 30, 58, 138;
+    --v-primary-hover: #172554;
+    --v-secondary: #475569;
+    --v-bg-light: #F8FAFC;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #0F172A;
+    --v-bg-dark-rgb: 15, 23, 42;
+    --v-text: #334155;
+    --v-heading-color: #0F172A;
+    --v-text-muted: #64748B;
+    --v-accent: #2563EB;
+    --v-accent-rgb: 37, 99, 235;
+    --v-dark-accent: #60A5FA;
+    --v-dark-accent-rgb: 96, 165, 250;
+    --bs-primary: #1E3A8A;
+    --bs-primary-rgb: 30, 58, 138;
+    --bs-link-color: #1E3A8A;
+    --bs-link-color-rgb: 30, 58, 138;
+    --bs-link-hover-color: #172554;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #FFFFFF;
+    --theme-sidebar-text: #475569;
+    --theme-sidebar-brand-text: #0F172A;
+    --theme-input-focus-border: #1E3A8A;
+    --theme-dropdown-hover-bg: rgba(30, 58, 138, 0.08);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(30, 58, 138, 0.90) 0%, rgba(15, 23, 42, 0.98) 100%);
+}
+
+body.auralis-theme-nord,
+.auralis-theme-nord {
+    --v-primary: #475569;
+    --v-primary-rgb: 71, 85, 105;
+    --v-primary-hover: #334155;
+    --v-secondary: #64748B;
+    --v-bg-light: #F8FAFC;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #1E293B;
+    --v-bg-dark-rgb: 30, 41, 59;
+    --v-text: #334155;
+    --v-heading-color: #0F172A;
+    --v-text-muted: #94A3B8;
+    --v-accent: #64748B;
+    --v-accent-rgb: 100, 116, 139;
+    --v-dark-accent: #94A3B8;
+    --v-dark-accent-rgb: 148, 163, 184;
+    --bs-primary: #475569;
+    --bs-primary-rgb: 71, 85, 105;
+    --bs-link-color: #475569;
+    --bs-link-color-rgb: 71, 85, 105;
+    --bs-link-hover-color: #334155;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #FFFFFF;
+    --theme-sidebar-text: #475569;
+    --theme-sidebar-brand-text: #0F172A;
+    --theme-input-focus-border: #475569;
+    --theme-dropdown-hover-bg: rgba(71, 85, 105, 0.08);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(71, 85, 105, 0.90) 0%, rgba(30, 41, 59, 0.98) 100%);
+}
+
+body.auralis-theme-terra,
+.auralis-theme-terra {
+    --v-primary: #B45309;
+    --v-primary-rgb: 180, 83, 9;
+    --v-primary-hover: #92400E;
+    --v-secondary: #78350F;
+    --v-bg-light: #FFFCF9;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #FFFBEB);
+    --v-bg-dark: #431407;
+    --v-bg-dark-rgb: 67, 20, 7;
+    --v-text: #431407;
+    --v-heading-color: #431407;
+    --v-text-muted: #92400E;
+    --v-accent: #D97706;
+    --v-accent-rgb: 217, 119, 6;
+    --v-dark-accent: #F59E0B;
+    --v-dark-accent-rgb: 245, 158, 11;
+    --bs-primary: #B45309;
+    --bs-primary-rgb: 180, 83, 9;
+    --bs-link-color: #B45309;
+    --bs-link-color-rgb: 180, 83, 9;
+    --bs-link-hover-color: #92400E;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #FEF9EE;
+    --theme-sidebar-text: #431407;
+    --theme-sidebar-brand-text: #431407;
+    --theme-input-focus-border: #B45309;
+    --theme-dropdown-hover-bg: rgba(180, 83, 9, 0.08);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(180, 83, 9, 0.90) 0%, rgba(67, 20, 7, 0.98) 100%);
+}
+
+body.auralis-theme-pergamino,
+.auralis-theme-pergamino {
+    --v-primary: #2C3E50;
+    --v-primary-rgb: 44, 62, 80;
+    --v-primary-hover: #1A252F;
+    --v-secondary: #7F8C8D;
+    --v-bg-light: #FDFBF7;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #1A252F;
+    --v-bg-dark-rgb: 26, 37, 47;
+    --v-text: #2C3E50;
+    --v-heading-color: #2C3E50;
+    --v-text-muted: #7F8C8D;
+    --v-accent: #7F8C8D;
+    --v-accent-rgb: 127, 140, 141;
+    --v-dark-accent: #34495E;
+    --v-dark-accent-rgb: 52, 73, 94;
+    --bs-primary: #2C3E50;
+    --bs-primary-rgb: 44, 62, 80;
+    --bs-link-color: #2C3E50;
+    --bs-link-color-rgb: 44, 62, 80;
+    --bs-link-hover-color: #1A252F;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #FDFBF7;
+    --theme-sidebar-text: #2C3E50;
+    --theme-sidebar-brand-text: #2C3E50;
+    --theme-input-focus-border: #2C3E50;
+    --theme-dropdown-hover-bg: rgba(44, 62, 80, 0.08);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(44, 62, 80, 0.90) 0%, rgba(26, 37, 47, 0.98) 100%);
+}
+
+body.auralis-theme-kinetic,
+.auralis-theme-kinetic {
+    --v-primary: #F97316;
+    --v-primary-rgb: 249, 115, 22;
+    --v-primary-hover: #EA580C;
+    --v-secondary: #334155;
+    --v-bg-light: #F8FAFC;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 3.5%, #F1F5F9);
+    --v-bg-dark: #1E293B;
+    --v-bg-dark-rgb: 30, 41, 59;
+    --v-text: #334155;
+    --v-heading-color: #0F172A;
+    --v-text-muted: #64748B;
+    --v-accent: #3B82F6;
+    --v-accent-rgb: 59, 130, 246;
+    --v-dark-accent: #60A5FA;
+    --v-dark-accent-rgb: 96, 165, 250;
+    --bs-primary: #F97316;
+    --bs-primary-rgb: 249, 115, 22;
+    --bs-link-color: #F97316;
+    --bs-link-color-rgb: 249, 115, 22;
+    --bs-link-hover-color: #EA580C;
+    --theme-card-bg: #FFFFFF;
+    --theme-sidebar-bg: #FFFFFF;
+    --theme-sidebar-text: #334155;
+    --theme-sidebar-brand-text: #0F172A;
+    --theme-input-focus-border: #F97316;
+    --theme-dropdown-hover-bg: rgba(249, 115, 22, 0.08);
+    --auralis-overlay-gradient: linear-gradient(135deg, rgba(249, 115, 22, 0.90) 0%, rgba(30, 41, 59, 0.98) 100%);
+}
+
+
+/*
+ * Lienzo estándar de FacturaScripts: body y listados en blanco.
+ * Solo .bg-light.pt-3 (pestañas) lleva el tintado. PROHIBIDO min-height
+ * en ese div y PROHIBIDO pintar body o .tab-content con --v-bg-secondary:
+ * el listado vive fuera y se ve un fondo distinto (Proyectos, Clientes, Logs).
+ */
+div.bg-light.pt-3,
+.nav-tabs-wrapper {
+    background-color: var(--v-bg-secondary) !important;
+}
+
+.tab-content,
+.tab-pane,
+.card,
+.card-body,
+.table-responsive {
+    background-color: var(--bs-body-bg, #FFFFFF) !important;
+}
+
+/* Bloquear forzado de modo oscuro de navegador/sistema y garantizar esquema claro en el contenido */
+:root,
+body,
+html {
+    color-scheme: light !important;
+}
+
+.dark-mode,
+[data-bs-theme="dark"] {
+    color-scheme: light !important;
+    --bs-body-bg: #1E293B !important;
+    --bs-body-color: #F8FAFC !important;
+    --v-bg-secondary: color-mix(in srgb, var(--v-primary) 10%, #0F172A) !important;
+    --bs-tertiary-bg: var(--v-bg-secondary) !important;
+    --bs-secondary-bg: var(--v-bg-secondary) !important;
+    --theme-card-bg: #0F172A !important;
+    --theme-sidebar-bg: #0F172A !important;
+    --theme-sidebar-text: #FFFFFF !important;
+    --theme-sidebar-brand-text: #FFFFFF !important;
+    --theme-dropdown-hover-bg: rgba(45, 212, 191, 0.12) !important;
+}
+
+/* 3. Micro-diseños de Interactividad Premium */
+
+/* Efecto de foco en inputs de formulario */
+.form-control,
+.form-select {
+    border-radius: var(--auralis-radius-input) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-input-focus-border) !important;
+    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.15) !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Redondeado moderno y sombras premium en tarjetas.
+ * Sin overflow:hidden: los ListView (Colores/Imprimir) viven en .card y el
+ * dropdown absolute se recortaría. Clip solo en widgets decorativos propios. */
+.card {
+    background-color: var(--theme-card-bg) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: var(--auralis-radius-card) !important;
+    overflow: visible;
+    box-shadow: var(--bs-box-shadow) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Unificar bordes redondeados y transiciones en todos los botones */
+.btn {
+    border-radius: var(--auralis-radius-btn) !important;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Barra superior Edit/Panel: separación al wrapear botones (Core no pone gap-y) */
+.container-fluid.d-print-none > .row > .col.pb-2 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.25rem;
+    row-gap: 0.35rem;
+}
+
+.container-fluid.d-print-none > .row > .col.pb-2 > nav[aria-label="breadcrumb"] {
+    flex: 0 0 100%;
+}
+
+/* Pie EditView: .col / .col.text-center de row-actions (Core) tampoco tiene gap-y al wrap */
+.card-footer .row.g-2 > div.col,
+form .card-footer .row.g-2 > div.col {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0.25rem;
+    row-gap: 0.35rem;
+}
+
+/* btn-group: empalme clásico sin redondeo en uniones internas */
+.btn-group > .btn:not(:first-child),
+.btn-group > .btn-group:not(:first-child) > .btn {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn.dropdown-toggle-split:first-child,
+.btn-group > .btn-group:not(:last-child) > .btn {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .btn-group:last-child:not(:first-child) > .btn {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.btn-group > .btn:only-child,
+.btn-group > .btn-group:only-child > .btn {
+    border-radius: var(--auralis-radius-btn) !important;
+}
+
+/* btn-group-vertical: empalme sin redondeo en uniones internas */
+.btn-group-vertical > .btn:not(:first-child),
+.btn-group-vertical > .btn-group:not(:first-child) > .btn {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.btn-group-vertical > .btn:not(:last-child),
+.btn-group-vertical > .btn-group:not(:last-child) > .btn {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.btn-group-vertical > .btn:only-child,
+.btn-group-vertical > .btn-group:only-child > .btn {
+    border-radius: var(--auralis-radius-btn) !important;
+}
+
+/* input-group: empalme clásico sin redondeo en uniones internas */
+.input-group > .form-control:not(:first-child),
+.input-group > .form-select:not(:first-child),
+.input-group > .input-group-text:not(:first-child),
+.input-group > .btn:not(:first-child),
+.input-group > .btn-group:not(:first-child) > .btn {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.input-group > .form-control:not(:last-child),
+.input-group > .form-select:not(:last-child),
+.input-group > .input-group-text:not(:last-child),
+.input-group > .btn:not(:last-child):not(.dropdown-toggle),
+.input-group > .btn.dropdown-toggle-split:first-child,
+.input-group > .btn-group:not(:last-child) > .btn {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.input-group > .form-control:first-child:not(:last-child),
+.input-group > .form-select:first-child:not(:last-child),
+.input-group > .input-group-text:first-child:not(:last-child) {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.input-group > .form-control:last-child:not(:first-child),
+.input-group > .form-select:last-child:not(:first-child),
+.input-group > .input-group-text:last-child:not(:first-child),
+.input-group > .btn:last-child:not(:first-child),
+.input-group > .btn-group:last-child:not(:first-child) > .btn {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.input-group > .form-control:only-child,
+.input-group > .form-select:only-child,
+.input-group > .input-group-text:only-child {
+    border-radius: var(--auralis-radius-input) !important;
+}
+
+.input-group > .btn:only-child,
+.input-group > .btn-group:only-child > .btn {
+    border-radius: var(--auralis-radius-btn) !important;
+}
+
+/* Botón primario interactivo */
+.btn-primary {
+    background-color: var(--v-primary) !important;
+    border-color: var(--v-primary) !important;
+    color: #FFFFFF !important;
+    font-weight: 500;
+    border-radius: var(--auralis-radius-btn) !important;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--v-primary-hover) !important;
+    border-color: var(--v-primary-hover) !important;
+}
+
+body.auralis-theme-cyber .btn-primary,
+body.auralis-theme-crimson .btn-primary,
+body.auralis-theme-blaze .btn-primary,
+body.auralis-theme-nexus .btn-primary,
+body.auralis-theme-zen .btn-primary,
+body.auralis-theme-zafiro .btn-primary,
+body.auralis-theme-nord .btn-primary,
+body.auralis-theme-terra .btn-primary,
+body.auralis-theme-pergamino .btn-primary,
+body.auralis-theme-kinetic .btn-primary {
+    background-color: var(--v-primary) !important;
+    border-color: var(--v-primary) !important;
+    color: #FFFFFF !important;
+    font-weight: 600;
+}
+
+body.auralis-theme-cyber .btn-primary:hover,
+body.auralis-theme-cyber .btn-primary:focus,
+body.auralis-theme-cyber .btn-primary:active,
+body.auralis-theme-crimson .btn-primary:hover,
+body.auralis-theme-crimson .btn-primary:focus,
+body.auralis-theme-crimson .btn-primary:active,
+body.auralis-theme-blaze .btn-primary:hover,
+body.auralis-theme-blaze .btn-primary:focus,
+body.auralis-theme-blaze .btn-primary:active,
+body.auralis-theme-nexus .btn-primary:hover,
+body.auralis-theme-nexus .btn-primary:focus,
+body.auralis-theme-nexus .btn-primary:active,
+body.auralis-theme-zen .btn-primary:hover,
+body.auralis-theme-zen .btn-primary:focus,
+body.auralis-theme-zen .btn-primary:active,
+body.auralis-theme-zafiro .btn-primary:hover,
+body.auralis-theme-zafiro .btn-primary:focus,
+body.auralis-theme-zafiro .btn-primary:active,
+body.auralis-theme-nord .btn-primary:hover,
+body.auralis-theme-nord .btn-primary:focus,
+body.auralis-theme-nord .btn-primary:active,
+body.auralis-theme-terra .btn-primary:hover,
+body.auralis-theme-terra .btn-primary:focus,
+body.auralis-theme-terra .btn-primary:active,
+body.auralis-theme-pergamino .btn-primary:hover,
+body.auralis-theme-pergamino .btn-primary:focus,
+body.auralis-theme-pergamino .btn-primary:active,
+body.auralis-theme-kinetic .btn-primary:hover,
+body.auralis-theme-kinetic .btn-primary:focus,
+body.auralis-theme-kinetic .btn-primary:active {
+    background-color: var(--v-primary-hover) !important;
+    border-color: var(--v-primary-hover) !important;
+    color: #FFFFFF !important;
+}
+
+body.auralis-theme-cyber .form-control:focus,
+body.auralis-theme-cyber .form-select:focus {
+    border-color: #8B5CF6 !important;
+    box-shadow: 0 0 0 0.25rem rgba(139, 92, 246, 0.25) !important;
+}
+
+body.auralis-theme-crimson .form-control:focus,
+body.auralis-theme-crimson .form-select:focus {
+    border-color: #E11D48 !important;
+    box-shadow: 0 0 0 0.25rem rgba(225, 29, 72, 0.25) !important;
+}
+
+body.auralis-theme-blaze .form-control:focus,
+body.auralis-theme-blaze .form-select:focus {
+    border-color: #FF5F1F !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 95, 31, 0.25) !important;
+}
+
+body.auralis-theme-nexus .form-control:focus,
+body.auralis-theme-nexus .form-select:focus {
+    border-color: #4F46E5 !important;
+    box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25) !important;
+}
+
+body.auralis-theme-zen .form-control:focus,
+body.auralis-theme-zen .form-select:focus {
+    border-color: #52796F !important;
+    box-shadow: 0 0 0 0.25rem rgba(82, 121, 111, 0.25) !important;
+}
+
+body.auralis-theme-zafiro .form-control:focus,
+body.auralis-theme-zafiro .form-select:focus {
+    border-color: #1E3A8A !important;
+    box-shadow: 0 0 0 0.25rem rgba(30, 58, 138, 0.25) !important;
+}
+
+body.auralis-theme-nord .form-control:focus,
+body.auralis-theme-nord .form-select:focus {
+    border-color: #475569 !important;
+    box-shadow: 0 0 0 0.25rem rgba(71, 85, 105, 0.25) !important;
+}
+
+body.auralis-theme-terra .form-control:focus,
+body.auralis-theme-terra .form-select:focus {
+    border-color: #B45309 !important;
+    box-shadow: 0 0 0 0.25rem rgba(180, 83, 9, 0.25) !important;
+}
+
+body.auralis-theme-pergamino .form-control:focus,
+body.auralis-theme-pergamino .form-select:focus {
+    border-color: #2C3E50 !important;
+    box-shadow: 0 0 0 0.25rem rgba(44, 62, 80, 0.25) !important;
+}
+
+body.auralis-theme-kinetic .form-control:focus,
+body.auralis-theme-kinetic .form-select:focus {
+    border-color: #F97316 !important;
+    box-shadow: 0 0 0 0.25rem rgba(249, 115, 22, 0.25) !important;
+}
+
+/* Botón de acento personalizado (usa la clase secundaria o de acento en el ERP) */
+.btn-accent {
+    background-color: var(--v-accent) !important;
+    border-color: var(--v-accent) !important;
+    color: #FFFFFF !important;
+    border-radius: var(--auralis-radius-btn) !important;
+}
+
+.btn-accent:hover {
+    background-color: var(--v-primary-hover) !important;
+    border-color: var(--v-primary-hover) !important;
+}
+
+/* Botón outline-primary reactivo al color corporativo del tema */
+.btn-outline-primary {
+    --bs-btn-color: var(--v-primary);
+    --bs-btn-border-color: var(--v-primary);
+    --bs-btn-hover-bg: var(--v-primary);
+    --bs-btn-hover-border-color: var(--v-primary);
+    --bs-btn-active-bg: var(--v-primary-hover, var(--v-primary));
+    --bs-btn-active-border-color: var(--v-primary-hover, var(--v-primary));
+    color: var(--v-primary) !important;
+    border-color: var(--v-primary) !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    background-color: var(--v-primary) !important;
+    border-color: var(--v-primary) !important;
+    color: #FFFFFF !important;
+}
+
+/* Botón outline-secondary reactivo */
+.btn-outline-secondary {
+    --bs-btn-color: var(--v-secondary);
+    --bs-btn-border-color: var(--v-secondary);
+    --bs-btn-hover-bg: var(--v-secondary);
+    --bs-btn-hover-border-color: var(--v-secondary);
+    --bs-btn-active-bg: var(--v-secondary);
+    --bs-btn-active-border-color: var(--v-secondary);
+}
+
+/* Utilidades semánticas sutiles Bootstrap 5 armonizadas con el tema activo */
+.bg-primary-subtle {
+    background-color: var(--bs-primary-bg-subtle, rgba(var(--bs-primary-rgb), 0.12)) !important;
+}
+
+.border-primary-subtle {
+    border-color: var(--bs-primary-border-subtle, rgba(var(--bs-primary-rgb), 0.25)) !important;
+}
+
+.text-primary-emphasis {
+    color: var(--bs-primary-text-emphasis, var(--v-primary-hover, var(--v-primary))) !important;
+}
+
+.bg-secondary-subtle {
+    background-color: var(--bs-secondary-bg-subtle, rgba(108, 117, 125, 0.12)) !important;
+}
+
+.border-secondary-subtle {
+    border-color: var(--bs-secondary-border-subtle, rgba(108, 117, 125, 0.25)) !important;
+}
+
+.text-secondary-emphasis {
+    color: var(--bs-secondary-text-emphasis, var(--v-secondary, #475569)) !important;
+}
+
+/* Tablas con hover reactivo al primario corporativo */
+.table-hover > tbody > tr:hover > * {
+    --bs-table-accent-bg: var(--bs-table-hover-bg, rgba(var(--bs-primary-rgb), 0.035));
+}
+
+/* Badges y destacados con el color de acento */
+.badge-accent,
+.badge.bg-accent,
+.badge.bg-secondary,
+#sidebar .badge,
+.navbar .badge,
+.navbar-custom .badge,
+.z-badge-accent {
+    background-color: var(--v-accent) !important;
+    color: #ffffff !important;
+}
+
+.navbar-brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px;
+}
+
+/* Estilización de la barra de navegación del Core de FacturaScripts */
+body.auralis-theme-auralis .navbar:not(.navbar-custom),
+body.auralis-theme-auralis_dark .navbar:not(.navbar-custom),
+body.auralis-theme-prestige .navbar:not(.navbar-custom),
+body.auralis-theme-cyber .navbar:not(.navbar-custom),
+body.auralis-theme-crimson .navbar:not(.navbar-custom),
+body.auralis-theme-blaze .navbar:not(.navbar-custom),
+body.auralis-theme-serenity .navbar:not(.navbar-custom),
+body.auralis-theme-nexus .navbar:not(.navbar-custom),
+body.auralis-theme-zen .navbar:not(.navbar-custom),
+body.auralis-theme-zafiro .navbar:not(.navbar-custom),
+body.auralis-theme-nord .navbar:not(.navbar-custom),
+body.auralis-theme-terra .navbar:not(.navbar-custom),
+body.auralis-theme-pergamino .navbar:not(.navbar-custom),
+body.auralis-theme-kinetic .navbar:not(.navbar-custom) {
+    background-color: var(--theme-sidebar-bg) !important;
+    border-bottom: 1px solid var(--bs-border-color) !important;
+    box-shadow: var(--bs-box-shadow-sm) !important;
+}
+
+body.auralis-theme-auralis .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-auralis .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-prestige .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-prestige .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-cyber .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-cyber .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-crimson .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-crimson .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-blaze .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-blaze .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-serenity .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-serenity .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-nexus .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-nexus .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-zen .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-zen .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-zafiro .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-zafiro .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-nord .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-nord .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-terra .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-terra .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-pergamino .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-pergamino .navbar:not(.navbar-custom) .navbar-brand span,
+body.auralis-theme-kinetic .navbar:not(.navbar-custom) .navbar-brand,
+body.auralis-theme-kinetic .navbar:not(.navbar-custom) .navbar-brand span {
+    color: var(--theme-sidebar-brand-text) !important;
+}
+
+/* Los logos de empresa se muestran siempre con sus colores originales.
+ * No aplicamos filter alguno: el cliente puede subir un logo con su propia paleta.
+ * El modo oscuro nativo de Bootstrap/FS ya gestiona la inversión si fuera necesaria. */
+
+body.auralis-theme-auralis .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-prestige .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-cyber .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-crimson .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-blaze .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-serenity .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-nexus .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-zen .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-zafiro .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-nord .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-terra .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-pergamino .navbar:not(.navbar-custom) .nav-link,
+body.auralis-theme-kinetic .navbar:not(.navbar-custom) .nav-link {
+    color: var(--theme-sidebar-text) !important;
+    font-weight: 500;
+}
+
+body.auralis-theme-auralis .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-auralis .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-prestige .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-prestige .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-cyber .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-cyber .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-crimson .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-crimson .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-blaze .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-blaze .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-serenity .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-serenity .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-nexus .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-nexus .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-zen .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-zen .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-zafiro .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-zafiro .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-nord .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-nord .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-terra .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-terra .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-pergamino .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-pergamino .navbar:not(.navbar-custom) .nav-link.active,
+body.auralis-theme-kinetic .navbar:not(.navbar-custom) .nav-link:hover,
+body.auralis-theme-kinetic .navbar:not(.navbar-custom) .nav-link.active {
+    color: var(--v-primary) !important;
+}
+
+/* En modo oscuro, el texto del brand debe ser claro y el logo blanco */
+.dark-mode .navbar .navbar-brand,
+.dark-mode .navbar .navbar-brand span,
+[data-bs-theme="dark"] .navbar .navbar-brand,
+[data-bs-theme="dark"] .navbar .navbar-brand span {
+    color: #F8FAFC !important;
+}
+
+.dark-mode .navbar .navbar-brand img,
+[data-bs-theme="dark"] .navbar .navbar-brand img {
+    filter: none !important;
+}
+
+/* Toggler — visible sobre fondo claro (nuestro tema usa navbar blanca, no navbar-dark) */
+.navbar-toggler {
+    border: 1.5px solid var(--v-primary) !important;
+    padding: 0.35rem 0.65rem !important;
+    border-radius: 6px !important;
+    background-color: transparent !important;
+    color: var(--v-primary) !important;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25) !important;
+    outline: none;
+}
+
+/* Icono hamburguesa: líneas oscuras para fondo claro (nuestro tema Auralis) */
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2310B981' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+    width: 1.3em;
+    height: 1.3em;
+}
+
+.dark-mode .navbar-toggler,
+[data-bs-theme="dark"] .navbar-toggler {
+    border-color: var(--v-dark-accent) !important;
+}
+
+.dark-mode .navbar-toggler .navbar-toggler-icon,
+[data-bs-theme="dark"] .navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%232DD4BF' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* ==========================================================================
+   Submenús y desplegables en modo horizontal (Escritorio / PC)
+   ========================================================================== */
+@media (min-width: 992px) {
+    .navbar:not(.navbar-custom) .auralis-chevron {
+        display: none !important;
+    }
+
+    /* Temas oscuros / personalizados: fondo del menú desplegable a juego con la barra de navegación */
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-menu {
+        background-color: var(--theme-sidebar-bg) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: var(--auralis-radius-card, 8px) !important;
+        box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.35), 0 8px 10px -6px rgba(0, 0, 0, 0.25) !important;
+        padding: 0.5rem 0.35rem !important;
+    }
+
+    /* Submenú anidado (segundo nivel y posteriores) */
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-submenu > .dropdown-menu,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-submenu > .dropdown-menu,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-submenu > .dropdown-menu,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-submenu > .dropdown-menu,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-submenu > .dropdown-menu,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-submenu > .dropdown-menu,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-submenu > .dropdown-menu,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-submenu > .dropdown-menu {
+        background-color: var(--theme-sidebar-bg) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* Elementos dentro del desplegable en temas oscuros / barra coloreada */
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-item {
+        color: var(--theme-sidebar-text, #FFFFFF) !important;
+        font-size: var(--auralis-font-size-base, 1rem) !important;
+        font-weight: 500 !important;
+        padding: 0.5rem 0.85rem !important;
+        border-radius: var(--auralis-radius-btn, 6px) !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.65rem !important;
+        transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease !important;
+    }
+
+    /* Iconos dentro de los ítems del menú desplegable */
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-item i {
+        width: 1.25rem !important;
+        text-align: center !important;
+        opacity: 0.85 !important;
+        color: inherit !important;
+    }
+
+    /* Efecto hover / activo en elementos del submenú */
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-submenu:hover > a {
+        background-color: rgba(255, 255, 255, 0.08) !important;
+        color: var(--v-primary) !important;
+    }
+
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-item:hover i {
+        opacity: 1 !important;
+        color: var(--v-primary) !important;
+    }
+
+    /* Chevron de submenú en temas oscuros / barra coloreada (hereda currentColor) */
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-submenu > a::after {
+        border-color: transparent !important;
+        border-right-color: currentColor !important;
+        border-bottom-color: currentColor !important;
+        opacity: 0.55;
+    }
+
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after {
+        opacity: 1;
+    }
+
+    /* Divisores de submenú */
+    body.auralis-theme-auralis_dark .navbar:not(.navbar-custom) .dropdown-divider,
+    body.auralis-theme-prestige .navbar:not(.navbar-custom) .dropdown-divider,
+    body.auralis-theme-cyber .navbar:not(.navbar-custom) .dropdown-divider,
+    body.auralis-theme-crimson .navbar:not(.navbar-custom) .dropdown-divider,
+    body.auralis-theme-blaze .navbar:not(.navbar-custom) .dropdown-divider,
+    body.auralis-theme-serenity .navbar:not(.navbar-custom) .dropdown-divider,
+    body.auralis-theme-nexus .navbar:not(.navbar-custom) .dropdown-divider,
+    body.auralis-theme-custom .navbar:not(.navbar-custom) .dropdown-divider {
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        margin: 0.35rem 0.25rem !important;
+    }
+
+    /* Tema Claro: Estilo estilizado del submenú sobre blanco / crema */
+    body.auralis-theme-auralis .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-zen .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-zafiro .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-nord .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-terra .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-pergamino .navbar:not(.navbar-custom) .dropdown-menu,
+    body.auralis-theme-kinetic .navbar:not(.navbar-custom) .dropdown-menu {
+        background-color: var(--theme-sidebar-bg, #FFFFFF) !important;
+        border: 1px solid var(--bs-border-color) !important;
+        border-radius: var(--auralis-radius-card, 8px) !important;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04) !important;
+        padding: 0.5rem 0.35rem !important;
+    }
+
+    body.auralis-theme-auralis .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-zen .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-zafiro .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-nord .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-terra .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-pergamino .navbar:not(.navbar-custom) .dropdown-item,
+    body.auralis-theme-kinetic .navbar:not(.navbar-custom) .dropdown-item {
+        color: var(--theme-sidebar-text, #475569) !important;
+        font-size: var(--auralis-font-size-base, 1rem) !important;
+        font-weight: 500 !important;
+        padding: 0.5rem 0.85rem !important;
+        border-radius: var(--auralis-radius-btn, 6px) !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.65rem !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
+    }
+
+    body.auralis-theme-auralis .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-zen .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-zafiro .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-nord .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-terra .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-pergamino .navbar:not(.navbar-custom) .dropdown-item i,
+    body.auralis-theme-kinetic .navbar:not(.navbar-custom) .dropdown-item i {
+        width: 1.25rem !important;
+        text-align: center !important;
+        color: #64748B !important;
+    }
+
+    body.auralis-theme-auralis .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-auralis .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-auralis .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-auralis .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-zen .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-zen .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-zen .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-zen .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-zafiro .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-zafiro .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-zafiro .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-zafiro .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-nord .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-nord .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-nord .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-nord .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-terra .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-terra .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-terra .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-terra .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-pergamino .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-pergamino .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-pergamino .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-pergamino .navbar:not(.navbar-custom) .dropdown-submenu:hover > a,
+    body.auralis-theme-kinetic .navbar:not(.navbar-custom) .dropdown-item:hover,
+    body.auralis-theme-kinetic .navbar:not(.navbar-custom) .dropdown-item:focus,
+    body.auralis-theme-kinetic .navbar:not(.navbar-custom) .dropdown-item.active,
+    body.auralis-theme-kinetic .navbar:not(.navbar-custom) .dropdown-submenu:hover > a {
+        background-color: var(--theme-dropdown-hover-bg, rgba(var(--v-primary-rgb, 30, 58, 138), 0.08)) !important;
+        color: var(--v-primary) !important;
+    }
+
+    body.auralis-theme-auralis .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-zen .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-zafiro .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-nord .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-terra .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-pergamino .navbar:not(.navbar-custom) .dropdown-item:hover i,
+    body.auralis-theme-kinetic .navbar:not(.navbar-custom) .dropdown-item:hover i {
+        color: var(--v-primary) !important;
+    }
+
+    /* Chevron de submenú en tema claro */
+    body.auralis-theme-auralis .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-zen .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-zafiro .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-nord .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-terra .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-pergamino .navbar:not(.navbar-custom) .dropdown-submenu > a::after,
+    body.auralis-theme-kinetic .navbar:not(.navbar-custom) .dropdown-submenu > a::after {
+        border-color: transparent !important;
+        border-right-color: currentColor !important;
+        border-bottom-color: currentColor !important;
+        opacity: 0.45;
+    }
+
+    body.auralis-theme-auralis .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-zen .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-zafiro .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-nord .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-terra .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-pergamino .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    body.auralis-theme-kinetic .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after {
+        opacity: 1;
+    }
+
+    /* Submenú anidado (Administrador > General, Auralis, etc.): flyout a la derecha */
+    .navbar:not(.navbar-custom) .dropdown-menu {
+        overflow: visible !important;
+    }
+
+    .navbar:not(.navbar-custom) .dropdown-submenu {
+        position: relative;
+    }
+
+    /* Espacio a la derecha para el chevron (textos largos no lo solapan) */
+    .navbar:not(.navbar-custom) .dropdown-submenu > a {
+        padding-right: 1.65rem !important;
+    }
+
+    /*
+     * Chevron moderno: sustituye el triángulo legacy del Core
+     * (.dropdown-submenu > a::after con float + border-left).
+     * Compatible con display:flex de los .dropdown-item de Auralis.
+     */
+    .navbar:not(.navbar-custom) .dropdown-submenu > a::after {
+        content: "" !important;
+        display: block !important;
+        float: none !important;
+        width: 0.42rem !important;
+        height: 0.42rem !important;
+        margin: 0 0 0 auto !important;
+        padding: 0 !important;
+        border-style: solid !important;
+        border-width: 0 2px 2px 0 !important;
+        border-color: transparent !important;
+        border-right-color: currentColor !important;
+        border-bottom-color: currentColor !important;
+        border-left-width: 0 !important;
+        border-left-color: transparent !important;
+        transform: rotate(-45deg);
+        opacity: 0.55;
+        flex-shrink: 0;
+        align-self: center;
+        transition: opacity 0.15s ease, border-color 0.15s ease;
+    }
+
+    .navbar:not(.navbar-custom) .dropdown-submenu:hover > a::after,
+    .navbar:not(.navbar-custom) .dropdown-submenu:focus-within > a::after {
+        opacity: 1;
+    }
+
+    .navbar:not(.navbar-custom) .dropdown-submenu > .dropdown-menu {
+        display: none;
+        position: absolute !important;
+        top: 0;
+        left: 100%;
+        margin-top: 0 !important;
+        margin-left: 2px;
+        min-width: 220px;
+        z-index: 1060;
+    }
+
+    .navbar:not(.navbar-custom) .dropdown-submenu:hover > .dropdown-menu,
+    .navbar:not(.navbar-custom) .dropdown-submenu:focus-within > .dropdown-menu {
+        display: block !important;
+    }
+}
+
+/* Estilos del menú desplegado en móvil — protegido con .navbar-expand-lg */
+@media (max-width: 991.98px) {
+
+    /* --- FIX: Forzar nombres completos del menú (el Core recorta a 2 letras con d-md-none) --- */
+    .navbar-expand-lg .navbar-collapse .fs-menu-item .d-md-none {
+        display: none !important;
+    }
+
+    .navbar-expand-lg .navbar-collapse .fs-menu-item .d-none.d-md-inline-block {
+        display: inline !important;
+    }
+
+    /* --- Panel desplegable: overlay fullscreen diferenciado de la barra --- */
+    .navbar-expand-lg .navbar-collapse {
+        background-color: var(--theme-sidebar-bg) !important;
+        position: fixed;
+        top: 56px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 1rem 0;
+        border-top: 3px solid var(--v-primary) !important;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.12) !important;
+        z-index: 1029;
+        overflow-y: auto;
+    }
+
+    .dark-mode .navbar-expand-lg .navbar-collapse,
+    [data-bs-theme="dark"] .navbar-expand-lg .navbar-collapse {
+        background-color: var(--theme-card-bg) !important;
+    }
+
+    .navbar-expand-lg .navbar-collapse .navbar-nav {
+        flex-direction: column !important;
+        width: 100%;
+        padding: 0 0.75rem;
+    }
+
+    .navbar-expand-lg .navbar-collapse .navbar-nav .nav-item {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    /* --- Estilo acordeón al estilo RichiTheme: ítems de menú principales --- */
+    .navbar-expand-lg .navbar-collapse .fs-menu-item>a.nav-link {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem !important;
+        border-radius: 8px;
+        color: var(--theme-sidebar-text) !important;
+        font-size: var(--auralis-font-size-base, 1rem);
+        font-weight: 500;
+        transition: background-color 0.15s ease, color 0.15s ease;
+        text-decoration: none;
+    }
+
+    .navbar-expand-lg .navbar-collapse .fs-menu-item>a.nav-link:hover {
+        background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.08) !important;
+        color: var(--v-primary) !important;
+    }
+
+    body.auralis-theme-auralis_dark .navbar-expand-lg .navbar-collapse .fs-menu-item>a.nav-link:hover,
+    body.auralis-theme-prestige .navbar-expand-lg .navbar-collapse .fs-menu-item>a.nav-link:hover,
+    body.auralis-theme-cyber .navbar-expand-lg .navbar-collapse .fs-menu-item>a.nav-link:hover,
+    body.auralis-theme-crimson .navbar-expand-lg .navbar-collapse .fs-menu-item>a.nav-link:hover,
+    body.auralis-theme-serenity .navbar-expand-lg .navbar-collapse .fs-menu-item>a.nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Ítem activo */
+    .navbar-expand-lg .navbar-collapse .fs-menu-item.auralis-open>a.nav-link {
+        background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.1) !important;
+        color: var(--v-primary) !important;
+    }
+
+    body.auralis-theme-auralis_dark .navbar-expand-lg .navbar-collapse .fs-menu-item.auralis-open>a.nav-link,
+    body.auralis-theme-prestige .navbar-expand-lg .navbar-collapse .fs-menu-item.auralis-open>a.nav-link,
+    body.auralis-theme-cyber .navbar-expand-lg .navbar-collapse .fs-menu-item.auralis-open>a.nav-link,
+    body.auralis-theme-crimson .navbar-expand-lg .navbar-collapse .fs-menu-item.auralis-open>a.nav-link,
+    body.auralis-theme-serenity .navbar-expand-lg .navbar-collapse .fs-menu-item.auralis-open>a.nav-link {
+        background-color: rgba(255, 255, 255, 0.08) !important;
+        color: #FFFFFF !important;
+    }
+
+    /* --- Chevron animado (se inserta por JS) --- */
+    .auralis-chevron {
+        display: inline-flex;
+        align-items: center;
+        margin-left: auto;
+        padding-left: 0.5rem;
+        color: var(--theme-sidebar-text);
+        transition: transform 0.25s ease, color 0.15s ease;
+        flex-shrink: 0;
+    }
+
+    .auralis-chevron svg {
+        width: 10px;
+        height: 10px;
+    }
+
+    .fs-menu-item.auralis-open .auralis-chevron {
+        transform: rotate(90deg);
+        color: var(--v-primary);
+    }
+
+    /* Ocultar el caret de Bootstrap dropdown en móvil */
+    .navbar-expand-lg .navbar-collapse .dropdown-toggle::after {
+        display: none !important;
+    }
+
+    /* --- Submenú inline (acordeón) --- */
+    .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu {
+        display: none;
+        position: static !important;
+        float: none !important;
+        width: 100% !important;
+        margin: 0 !important;
+        border: none !important;
+        border-left: 2px solid rgba(var(--v-primary-rgb, 16, 185, 129), 0.25) !important;
+        border-radius: 0 0 8px 8px !important;
+        box-shadow: none !important;
+        background-color: transparent !important;
+        padding: 0.25rem 0 0.5rem 0.75rem !important;
+        animation: auralisSlideDown 0.2s ease;
+    }
+
+    @keyframes auralisSlideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .navbar-expand-lg .navbar-collapse .fs-menu-item.auralis-open .dropdown-menu {
+        display: block !important;
+    }
+
+    /* Items del submenú */
+    .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item {
+        padding: 0.55rem 0.75rem !important;
+        border-radius: 6px !important;
+        color: var(--theme-sidebar-text) !important;
+        font-size: var(--auralis-font-size-base, 1rem);
+        transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item:hover,
+    .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item.active {
+        background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.08) !important;
+        color: var(--v-primary) !important;
+    }
+
+    body.auralis-theme-auralis_dark .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item:hover,
+    body.auralis-theme-auralis_dark .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item.active,
+    body.auralis-theme-prestige .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item:hover,
+    body.auralis-theme-prestige .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item.active,
+    body.auralis-theme-cyber .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item:hover,
+    body.auralis-theme-cyber .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item.active,
+    body.auralis-theme-crimson .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item:hover,
+    body.auralis-theme-crimson .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item.active,
+    body.auralis-theme-serenity .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item:hover,
+    body.auralis-theme-serenity .navbar-expand-lg .navbar-collapse .fs-menu-item .dropdown-menu .dropdown-item.active {
+        background-color: rgba(255, 255, 255, 0.08) !important;
+        color: #FFFFFF !important;
+    }
+
+    /* --- Iconos de acceso rápido: fila horizontal centrada al pie del panel --- */
+    .navbar-expand-lg .navbar-collapse .navbar-nav.flex-row {
+        flex-direction: row !important;
+        justify-content: center !important;
+        border-top: 1px solid var(--bs-border-color);
+        padding: 1rem 0.75rem !important;
+        margin-top: auto;
+        gap: 2rem;
+    }
+
+    .navbar-expand-lg .navbar-collapse .navbar-nav.flex-row .nav-item {
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    .navbar-expand-lg .navbar-collapse .navbar-nav.flex-row .nav-link {
+        font-size: 1.1rem;
+        color: var(--theme-sidebar-text) !important;
+    }
+
+    .navbar-expand-lg .navbar-collapse .navbar-nav.flex-row .nav-link:hover {
+        color: var(--v-primary) !important;
+        background-color: transparent !important;
+    }
+
+    body.auralis-theme-auralis_dark .navbar-expand-lg .navbar-collapse .navbar-nav.flex-row .nav-link:hover,
+    body.auralis-theme-prestige .navbar-expand-lg .navbar-collapse .navbar-nav.flex-row .nav-link:hover,
+    body.auralis-theme-cyber .navbar-expand-lg .navbar-collapse .navbar-nav.flex-row .nav-link:hover,
+    body.auralis-theme-crimson .navbar-expand-lg .navbar-collapse .navbar-nav.flex-row .nav-link:hover,
+    body.auralis-theme-serenity .navbar-expand-lg .navbar-collapse .navbar-nav.flex-row .nav-link:hover {
+        color: #FFFFFF !important;
+        background-color: transparent !important;
+    }
+}
+
+/* Adaptación del menú lateral colapsable de Auralis */
+
+.navbar-custom {
+    background-color: var(--theme-sidebar-bg) !important;
+    border-bottom: 1px solid var(--bs-border-color) !important;
+    box-shadow: var(--bs-box-shadow-sm) !important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.navbar-custom .nav-link,
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-brand span,
+.navbar-custom .navbar-text {
+    color: var(--theme-sidebar-brand-text) !important;
+}
+
+.navbar-custom .navbar-text i {
+    color: var(--theme-sidebar-text) !important;
+}
+
+.navbar-custom .nav-link:hover {
+    color: var(--v-primary) !important;
+}
+
+body.auralis-theme-auralis_dark .navbar-custom .nav-link:hover,
+body.auralis-theme-prestige .navbar-custom .nav-link:hover,
+body.auralis-theme-cyber .navbar-custom .nav-link:hover,
+body.auralis-theme-crimson .navbar-custom .nav-link:hover,
+body.auralis-theme-blaze .navbar-custom .nav-link:hover,
+body.auralis-theme-serenity .navbar-custom .nav-link:hover {
+    color: #FFFFFF !important;
+}
+
+.navbar-custom .dropdown-toggle::after {
+    display: none;
+}
+
+
+#sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--bs-primary-rgb), 0.2);
+    border-radius: 4px;
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.4);
+}
+
+.sidebar-header {
+    border-bottom: 1px solid var(--bs-border-color);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.04) 0%, rgba(var(--bs-primary-rgb), 0.01) 100%);
+}
+
+.sidebar-header a {
+    color: var(--theme-sidebar-brand-text) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+}
+
+.sidebar-header img {
+    border: none !important;
+    padding: 0 !important;
+    background-color: transparent !important;
+    max-width: 100%;
+}
+
+.sidebar-header p {
+    margin-bottom: 0;
+    font-weight: 500;
+    color: var(--theme-sidebar-text) !important;
+    opacity: 0.8;
+}
+
+#sidebar ul {
+    padding: 0.5rem 0.5rem;
+    list-style: none;
+    margin-bottom: 0;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Flex (.nav.flex-column): sin min-width:0 los li no encogen y la píldora del submenú se sale */
+#sidebar .nav-item,
+#sidebar ul li {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#sidebar ul ul {
+    border-left: 2px solid rgba(var(--bs-primary-rgb), 0.2);
+    margin-left: 0.75rem;
+    padding-left: 0.25rem;
+    max-width: calc(100% - 0.75rem);
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+.dark-mode #sidebar ul ul {
+    background-color: rgba(255, 255, 255, 0.01);
+}
+
+#sidebar ul ul a {
+    font-size: var(--auralis-font-size-base, 1rem) !important;
+    padding-left: 1.1rem !important;
+}
+
+#sidebar ul ul a:hover {
+    padding-left: 1.25rem !important;
+}
+
+/* Caret del submenú dentro del sidebar: flex sin desbordar */
+#sidebar .dropdown-toggle {
+    display: flex !important;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+#sidebar .dropdown-toggle::after {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* Estado activo para el Sidebar Claro (Auralis Claro) */
+body.auralis-theme-auralis #sidebar ul li.active {
+    background-color: transparent !important;
+    border-left: 4px solid var(--v-primary) !important;
+}
+
+body.auralis-theme-auralis #sidebar ul li.active>a {
+    background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.12) !important;
+    color: var(--v-primary) !important;
+    font-weight: 600 !important;
+    border-radius: var(--auralis-radius-btn);
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
+}
+
+/* Estado activo para el Sidebar Minimalista Zen (Píldora Verde Salvia y texto blanco) */
+body.auralis-theme-zen #sidebar ul li.active {
+    background-color: transparent !important;
+    border-left: none !important;
+}
+
+body.auralis-theme-zen #sidebar ul li.active>a,
+body.auralis-theme-zen #sidebar .sidebar-menu-item-active {
+    background-color: var(--v-primary) !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    border-radius: var(--auralis-radius-btn, 8px) !important;
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
+}
+
+body.auralis-theme-zen #sidebar ul li.active a i,
+body.auralis-theme-zen #sidebar .sidebar-menu-item-active i {
+    color: #FFFFFF !important;
+}
+
+body.auralis-theme-zen #sidebar ul li a:hover {
+    background-color: rgba(var(--v-primary-rgb, 82, 121, 111), 0.08) !important;
+    color: var(--v-primary) !important;
+}
+
+/* Estado activo para el Sidebar Zafiro (Cápsula Azul Institucional y texto blanco, fondo blanco impoluto) */
+body.auralis-theme-zafiro #sidebar,
+body.auralis-theme-zafiro .sidebar-wrapper {
+    background-color: #FFFFFF !important;
+    border-right: 1px solid #E2E8F0 !important;
+}
+
+body.auralis-theme-zafiro #sidebar ul li.active {
+    background-color: transparent !important;
+    border-left: none !important;
+}
+
+body.auralis-theme-zafiro #sidebar ul li.active>a,
+body.auralis-theme-zafiro #sidebar .sidebar-menu-item-active {
+    background-color: var(--v-primary) !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    border-radius: var(--auralis-radius-btn, 8px) !important;
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25) !important;
+}
+
+body.auralis-theme-zafiro #sidebar ul li.active a i,
+body.auralis-theme-zafiro #sidebar .sidebar-menu-item-active i {
+    color: #FFFFFF !important;
+}
+
+body.auralis-theme-zafiro #sidebar ul li a {
+    color: #475569 !important;
+}
+
+body.auralis-theme-zafiro #sidebar ul li a:hover {
+    background-color: rgba(30, 58, 138, 0.08) !important;
+    color: var(--v-primary) !important;
+    border-radius: var(--auralis-radius-btn, 8px);
+    margin-top: 0.05rem;
+    margin-bottom: 0.05rem;
+}
+
+/* Estado activo para el Sidebar Nord / Acero Nórdico (Píldora Acero Forjado y texto blanco, fondo blanco impoluto) */
+body.auralis-theme-nord #sidebar,
+body.auralis-theme-nord .sidebar-wrapper {
+    background-color: #FFFFFF !important;
+    border-right: 1px solid #E2E8F0 !important;
+}
+
+body.auralis-theme-nord #sidebar ul li.active {
+    background-color: transparent !important;
+    border-left: none !important;
+}
+
+body.auralis-theme-nord #sidebar ul li.active>a,
+body.auralis-theme-nord #sidebar .sidebar-menu-item-active {
+    background-color: var(--v-primary) !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    border-radius: var(--auralis-radius-btn, 8px) !important;
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
+    box-shadow: 0 4px 12px rgba(71, 85, 105, 0.25) !important;
+}
+
+body.auralis-theme-nord #sidebar ul li.active a i,
+body.auralis-theme-nord #sidebar .sidebar-menu-item-active i {
+    color: #FFFFFF !important;
+}
+
+body.auralis-theme-nord #sidebar ul li a {
+    color: #475569 !important;
+}
+
+body.auralis-theme-nord #sidebar ul li a:hover {
+    background-color: rgba(71, 85, 105, 0.08) !important;
+    color: var(--v-primary) !important;
+    border-radius: var(--auralis-radius-btn, 8px);
+    margin-top: 0.05rem;
+    margin-bottom: 0.05rem;
+}
+
+/* Estado activo para el Sidebar Terra (Cápsula Terracota y texto blanco, fondo crema cálido) */
+body.auralis-theme-terra #sidebar,
+body.auralis-theme-terra .sidebar-wrapper {
+    background-color: var(--theme-sidebar-bg) !important;
+    border-right: 1px solid rgba(180, 83, 9, 0.15) !important;
+}
+
+body.auralis-theme-terra #sidebar ul li.active {
+    background-color: transparent !important;
+    border-left: none !important;
+}
+
+body.auralis-theme-terra #sidebar ul li.active>a,
+body.auralis-theme-terra #sidebar .sidebar-menu-item-active {
+    background-color: var(--v-primary) !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    border-radius: var(--auralis-radius-btn, 8px) !important;
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
+    box-shadow: 0 4px 12px rgba(180, 83, 9, 0.25) !important;
+}
+
+body.auralis-theme-terra #sidebar ul li.active a i,
+body.auralis-theme-terra #sidebar .sidebar-menu-item-active i {
+    color: #FFFFFF !important;
+}
+
+body.auralis-theme-terra #sidebar ul li a {
+    color: var(--theme-sidebar-text) !important;
+}
+
+body.auralis-theme-terra #sidebar ul li a:hover {
+    background-color: rgba(180, 83, 9, 0.08) !important;
+    color: var(--v-primary) !important;
+    border-radius: var(--auralis-radius-btn, 8px);
+    margin-top: 0.05rem;
+    margin-bottom: 0.05rem;
+}
+
+/* Estado activo para el Sidebar Legacy (Cápsula Azul Tinta y texto blanco, fondo Papel Marfil) */
+body.auralis-theme-pergamino #sidebar,
+body.auralis-theme-pergamino .sidebar-wrapper {
+    background-color: var(--theme-sidebar-bg) !important;
+    border-right: 1px solid rgba(127, 140, 141, 0.2) !important;
+}
+
+body.auralis-theme-pergamino #sidebar ul li.active {
+    background-color: transparent !important;
+    border-left: none !important;
+}
+
+body.auralis-theme-pergamino #sidebar ul li.active>a,
+body.auralis-theme-pergamino #sidebar .sidebar-menu-item-active {
+    background-color: var(--v-primary) !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    border-radius: var(--auralis-radius-btn, 8px) !important;
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.25) !important;
+}
+
+body.auralis-theme-pergamino #sidebar ul li.active a i,
+body.auralis-theme-pergamino #sidebar .sidebar-menu-item-active i {
+    color: #FFFFFF !important;
+}
+
+body.auralis-theme-pergamino #sidebar ul li a {
+    color: var(--theme-sidebar-text) !important;
+}
+
+body.auralis-theme-pergamino #sidebar ul li a:hover {
+    background-color: rgba(44, 62, 80, 0.08) !important;
+    color: var(--v-primary) !important;
+    border-radius: var(--auralis-radius-btn, 8px);
+    margin-top: 0.05rem;
+    margin-bottom: 0.05rem;
+}
+
+/* Estado activo para el Sidebar Kinetic (Cápsula Naranja Acción y texto blanco, fondo blanco impoluto) */
+body.auralis-theme-kinetic #sidebar,
+body.auralis-theme-kinetic .sidebar-wrapper {
+    background-color: #FFFFFF !important;
+    border-right: 1px solid #E2E8F0 !important;
+}
+
+body.auralis-theme-kinetic #sidebar ul li.active {
+    background-color: transparent !important;
+    border-left: none !important;
+}
+
+body.auralis-theme-kinetic #sidebar ul li.active>a,
+body.auralis-theme-kinetic #sidebar .sidebar-menu-item-active {
+    background-color: var(--v-primary) !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    border-radius: var(--auralis-radius-btn, 8px) !important;
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.30) !important;
+}
+
+body.auralis-theme-kinetic #sidebar ul li.active a i,
+body.auralis-theme-kinetic #sidebar .sidebar-menu-item-active i {
+    color: #FFFFFF !important;
+}
+
+body.auralis-theme-kinetic #sidebar ul li a {
+    color: #334155 !important;
+}
+
+body.auralis-theme-kinetic #sidebar ul li a:hover {
+    background-color: rgba(249, 115, 22, 0.08) !important;
+    color: var(--v-primary) !important;
+    border-radius: var(--auralis-radius-btn, 8px);
+    margin-top: 0.05rem;
+    margin-bottom: 0.05rem;
+}
+
+/* Estado activo para el Sidebar Oscuro (Auralis Oscuro, Prestige, Cyber, Serenity y Blaze) */
+body.auralis-theme-auralis_dark #sidebar ul li.active,
+body.auralis-theme-prestige #sidebar ul li.active,
+body.auralis-theme-cyber #sidebar ul li.active,
+body.auralis-theme-serenity #sidebar ul li.active,
+body.auralis-theme-blaze #sidebar ul li.active,
+body.auralis-theme-nexus #sidebar ul li.active {
+    background-color: transparent !important;
+    border-left: 4px solid var(--v-primary) !important;
+}
+
+body.auralis-theme-auralis_dark #sidebar ul li.active>a,
+body.auralis-theme-prestige #sidebar ul li.active>a,
+body.auralis-theme-cyber #sidebar ul li.active>a,
+body.auralis-theme-serenity #sidebar ul li.active>a,
+body.auralis-theme-blaze #sidebar ul li.active>a,
+body.auralis-theme-nexus #sidebar ul li.active>a {
+    background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.12) !important;
+    color: var(--v-primary) !important;
+    font-weight: 600 !important;
+    border-radius: var(--auralis-radius-btn);
+    margin-top: 0.15rem;
+    margin-bottom: 0.15rem;
+}
+
+#sidebar ul li.active li {
+    border-left-width: 0px !important;
+    background-color: transparent !important;
+}
+
+#sidebar ul li a {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.65rem 1rem;
+    color: var(--theme-sidebar-text) !important;
+    font-size: var(--auralis-font-size-base, 1rem);
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    word-wrap: break-word;
+}
+
+/* Píldora hover/activo: el inset lo da el padding del ul (sin margin horizontal) */
+#sidebar ul li a:hover,
+#sidebar ul li.active > a,
+#sidebar .sidebar-menu-item-active {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+
+#sidebar ul li a:hover {
+    background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.08) !important;
+    color: var(--v-primary) !important;
+    padding-left: 1.15rem;
+    border-radius: var(--auralis-radius-btn);
+    margin-top: 0.05rem;
+    margin-bottom: 0.05rem;
+}
+
+body.auralis-theme-auralis_dark #sidebar ul li a:hover,
+body.auralis-theme-prestige #sidebar ul li a:hover,
+body.auralis-theme-cyber #sidebar ul li a:hover,
+body.auralis-theme-serenity #sidebar ul li a:hover,
+body.auralis-theme-blaze #sidebar ul li a:hover,
+body.auralis-theme-nexus #sidebar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: var(--v-primary) !important;
+    border-radius: var(--auralis-radius-btn);
+    margin-top: 0.05rem;
+    margin-bottom: 0.05rem;
+}
+
+.dark-mode #sidebar ul li a:hover {
+    background-color: rgba(var(--v-dark-accent-rgb), 0.04) !important;
+    color: var(--v-dark-accent) !important;
+}
+
+/* Elemento del submenú activo (enlace final) */
+#sidebar .sidebar-menu-item-active {
+    background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.12) !important;
+    color: var(--v-primary) !important;
+    font-weight: 600;
+    border-radius: var(--auralis-radius-btn);
+    margin-top: 0.05rem;
+    margin-bottom: 0.05rem;
+}
+
+body.auralis-theme-auralis_dark #sidebar .sidebar-menu-item-active,
+body.auralis-theme-prestige #sidebar .sidebar-menu-item-active,
+body.auralis-theme-cyber #sidebar .sidebar-menu-item-active,
+body.auralis-theme-serenity #sidebar .sidebar-menu-item-active,
+body.auralis-theme-blaze #sidebar .sidebar-menu-item-active,
+body.auralis-theme-nexus #sidebar .sidebar-menu-item-active {
+    background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.15) !important;
+    color: var(--v-primary) !important;
+    font-weight: 600;
+    border-radius: var(--auralis-radius-btn);
+    margin-top: 0.05rem;
+    margin-bottom: 0.05rem;
+}
+
+.dark-mode #sidebar .sidebar-menu-item-active {
+    background-color: var(--v-dark-accent) !important;
+    color: #000000 !important;
+}
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden !important;
+    overflow-y: auto;
+    z-index: 2001;
+    background-color: var(--theme-sidebar-bg) !important;
+    border-right: none !important;
+    color: var(--theme-sidebar-text) !important;
+    box-shadow: 4px 0px 20px rgba(0, 0, 0, 0.05) !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 2000;
+    background-color: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease;
+}
+
+/*
+ * Modales Bootstrap por encima del sidebar (z-index 2001).
+ * Sin esto el menú vertical queda nítido e interactivo sobre el backdrop (~1050).
+ */
+body.auralis-vertical-menu .modal-backdrop {
+    z-index: 2100 !important;
+    margin-left: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    left: 0 !important;
+}
+
+body.auralis-vertical-menu .modal {
+    z-index: 2110 !important;
+}
+
+/*
+ * Librerías de desplegable flotante (Select2, Flatpickr, jQuery UI Autocomplete, TomSelect)
+ * que el browser renderiza como hijo directo de <body>.
+ * Al elevar los modales a 2110, estos flotantes quedarían enterrados por debajo.
+ * Se elevan a 2150 para que siempre sean visibles e interactivos dentro de modales.
+ * Solo aplica en modo menú vertical; en horizontal no hay cambio de z-index en modales.
+ */
+body.auralis-vertical-menu .select2-container--open,
+body.auralis-vertical-menu .select2-dropdown {
+    z-index: 2150 !important;
+}
+
+body.auralis-vertical-menu .flatpickr-calendar {
+    z-index: 2150 !important;
+}
+
+body.auralis-vertical-menu .ui-autocomplete {
+    z-index: 2150 !important;
+}
+
+body.auralis-vertical-menu .ts-dropdown {
+    z-index: 2150 !important;
+}
+
+/* Ajustes de Wrapper general para menú vertical */
+body.auralis-vertical-menu {
+    padding-top: 0 !important;
+}
+
+/* Adaptación responsiva del Sidebar delegada a la plantilla Twig dinámica */
+
+/* Barra superior en modo vertical (navbar-custom) con el color secundario sólido del menú */
+body.auralis-vertical-menu .navbar-custom {
+    background-color: var(--theme-sidebar-bg) !important;
+    border-bottom: 1px solid var(--bs-border-color) !important;
+    box-shadow: var(--bs-box-shadow-sm) !important;
+    padding-left: 0 !important;
+    /* Totalmente pegado a la izquierda */
+    padding-right: 1rem !important;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.auralis-vertical-menu .navbar-custom .nav-link,
+body.auralis-vertical-menu .navbar-custom .navbar-brand,
+body.auralis-vertical-menu .navbar-custom .navbar-brand span,
+body.auralis-vertical-menu .navbar-custom .navbar-text,
+body.auralis-vertical-menu .navbar-custom .navbar-text i {
+    color: var(--theme-sidebar-brand-text) !important;
+}
+
+/* Layout centrado: 1fr | minmax | 1fr = centro geométrico + ancho usable del pill (no auto/intrinsic) */
+body.auralis-vertical-menu .navbar-custom .container-fluid.auralis-navbar-grid,
+.auralis-navbar-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 450px) minmax(0, 1fr) !important;
+    align-items: center !important;
+    width: 100% !important;
+    column-gap: 0.5rem !important;
+}
+
+.auralis-navbar-grid>ul:first-child {
+    justify-self: start !important;
+    min-width: 0;
+    margin-right: 0 !important;
+    overflow: hidden;
+    flex-wrap: nowrap;
+}
+
+.auralis-navbar-grid>ul:first-child>li {
+    flex-shrink: 0;
+}
+
+.auralis-navbar-grid>ul:first-child>li.auralis-navbar-breadcrumb {
+    min-width: 0;
+    flex: 0 1 auto;
+    overflow: hidden;
+}
+
+.auralis-navbar-grid>ul:first-child .navbar-text {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.auralis-navbar-grid>#auralisVerticalSearchForm,
+.auralis-vertical-search-form {
+    justify-self: stretch !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+}
+
+.auralis-navbar-grid>ul:last-child {
+    justify-self: end !important;
+    margin-left: 0 !important;
+    flex-shrink: 0;
+}
+
+/* Portátil / desktop estrecho: pill más corto, sigue centrado */
+@media (max-width: 1399.98px) {
+    body.auralis-vertical-menu .navbar-custom .container-fluid.auralis-navbar-grid,
+    .auralis-navbar-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(240px, 320px) minmax(0, 1fr) !important;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    body.auralis-vertical-menu .navbar-custom .container-fluid.auralis-navbar-grid,
+    .auralis-navbar-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(200px, 260px) minmax(0, 1fr) !important;
+    }
+}
+
+/* Estilos de submenú dropdown centralizados */
+.dropdown-menu,
+.navbar .dropdown-menu {
+    background-color: #FFFFFF !important;
+    border: 1px solid var(--bs-border-color, #E2E8F0) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+    border-radius: var(--auralis-radius-card, 8px) !important;
+    padding: 0.5rem !important;
+    margin-top: 0.25rem !important;
+}
+
+.dropdown-menu .dropdown-item,
+.navbar .dropdown-item {
+    color: #334155 !important;
+    background-color: transparent !important;
+    border-radius: var(--auralis-radius-btn, 6px) !important;
+    padding: 0.5rem 1rem !important;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item.active,
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item.active {
+    background-color: var(--theme-dropdown-hover-bg, rgba(16, 185, 129, 0.08)) !important;
+    color: var(--v-primary, #10B981) !important;
+}
+
+/* Modo oscuro para submenús */
+.dark-mode .dropdown-menu,
+[data-bs-theme="dark"] .dropdown-menu,
+body.auralis-theme-auralis_dark .dropdown-menu,
+body.auralis-theme-prestige .dropdown-menu,
+body.auralis-theme-cyber .dropdown-menu,
+body.auralis-theme-serenity .dropdown-menu,
+body.auralis-theme-blaze .dropdown-menu,
+body.auralis-theme-nexus .dropdown-menu {
+    background-color: #1E293B !important;
+    border-color: #334155 !important;
+}
+
+.dark-mode .dropdown-menu .dropdown-item,
+[data-bs-theme="dark"] .dropdown-menu .dropdown-item,
+body.auralis-theme-auralis_dark .dropdown-menu .dropdown-item,
+body.auralis-theme-prestige .dropdown-menu .dropdown-item,
+body.auralis-theme-cyber .dropdown-menu .dropdown-item,
+body.auralis-theme-serenity .dropdown-menu .dropdown-item,
+body.auralis-theme-blaze .dropdown-menu .dropdown-item,
+body.auralis-theme-nexus .dropdown-menu .dropdown-item {
+    color: #F1F5F9 !important;
+}
+
+.dark-mode .dropdown-menu .dropdown-item:hover,
+[data-bs-theme="dark"] .dropdown-menu .dropdown-item:hover,
+body.auralis-theme-auralis_dark .dropdown-menu .dropdown-item:hover,
+body.auralis-theme-prestige .dropdown-menu .dropdown-item:hover,
+body.auralis-theme-cyber .dropdown-menu .dropdown-item:hover,
+body.auralis-theme-serenity .dropdown-menu .dropdown-item:hover,
+body.auralis-theme-blaze .dropdown-menu .dropdown-item:hover,
+body.auralis-theme-nexus .dropdown-menu .dropdown-item:hover {
+    background-color: var(--theme-dropdown-hover-bg, rgba(79, 70, 229, 0.12)) !important;
+    color: var(--v-primary, #4F46E5) !important;
+}
+
+
+
+/* --- 4. Reglas Estrictas de Jerarquía de Color y Fuentes --- */
+
+body,
+body.auralis-theme-auralis,
+body.auralis-theme-auralis_dark,
+body.auralis-theme-prestige,
+body.auralis-theme-cyber,
+body.auralis-theme-serenity,
+body.auralis-theme-blaze,
+body.auralis-theme-nexus,
+body.auralis-theme-zen,
+body.auralis-theme-zafiro,
+body.auralis-theme-nord,
+body.auralis-theme-terra,
+body.auralis-theme-pergamino,
+body.auralis-theme-kinetic,
+body.auralis-theme-custom,
+body.auralis-theme-default {
+    background-color: var(--bs-body-bg, #FFFFFF) !important;
+    color: var(--v-secondary) !important;
+}
+
+/* Únicamente el contenedor de cabecera de opciones lleva el tinte 3.5% */
+div.bg-light.pt-3,
+.nav-tabs-wrapper {
+    background-color: var(--v-bg-secondary) !important;
+}
+
+/* Encabezados */
+body.auralis-theme-auralis h1,
+body.auralis-theme-auralis .h1,
+body.auralis-theme-auralis h2,
+body.auralis-theme-auralis .h2,
+body.auralis-theme-auralis h3,
+body.auralis-theme-auralis .h3,
+body.auralis-theme-auralis_dark h1,
+body.auralis-theme-auralis_dark .h1,
+body.auralis-theme-auralis_dark h2,
+body.auralis-theme-auralis_dark .h2,
+body.auralis-theme-auralis_dark h3,
+body.auralis-theme-auralis_dark .h3,
+body.auralis-theme-prestige h1,
+body.auralis-theme-prestige .h1,
+body.auralis-theme-prestige h2,
+body.auralis-theme-prestige .h2,
+body.auralis-theme-prestige h3,
+body.auralis-theme-prestige .h3,
+body.auralis-theme-cyber h1,
+body.auralis-theme-cyber .h1,
+body.auralis-theme-cyber h2,
+body.auralis-theme-cyber .h2,
+body.auralis-theme-cyber h3,
+body.auralis-theme-cyber .h3,
+body.auralis-theme-serenity h1,
+body.auralis-theme-serenity .h1,
+body.auralis-theme-serenity h2,
+body.auralis-theme-serenity .h2,
+body.auralis-theme-serenity h3,
+body.auralis-theme-serenity .h3,
+body.auralis-theme-blaze h1,
+body.auralis-theme-blaze .h1,
+body.auralis-theme-blaze h2,
+body.auralis-theme-blaze .h2,
+body.auralis-theme-blaze h3,
+body.auralis-theme-blaze .h3,
+body.auralis-theme-nexus h1,
+body.auralis-theme-nexus .h1,
+body.auralis-theme-nexus h2,
+body.auralis-theme-nexus .h2,
+body.auralis-theme-nexus h3,
+body.auralis-theme-nexus .h3,
+body.auralis-theme-zen h1,
+body.auralis-theme-zen .h1,
+body.auralis-theme-zen h2,
+body.auralis-theme-zen .h2,
+body.auralis-theme-zen h3,
+body.auralis-theme-zen .h3,
+body.auralis-theme-zafiro h1,
+body.auralis-theme-zafiro .h1,
+body.auralis-theme-zafiro h2,
+body.auralis-theme-zafiro .h2,
+body.auralis-theme-zafiro h3,
+body.auralis-theme-zafiro .h3,
+body.auralis-theme-nord h1,
+body.auralis-theme-nord .h1,
+body.auralis-theme-nord h2,
+body.auralis-theme-nord .h2,
+body.auralis-theme-nord h3,
+body.auralis-theme-nord .h3,
+body.auralis-theme-terra h1,
+body.auralis-theme-terra .h1,
+body.auralis-theme-terra h2,
+body.auralis-theme-terra .h2,
+body.auralis-theme-terra h3,
+body.auralis-theme-terra .h3,
+body.auralis-theme-pergamino h1,
+body.auralis-theme-pergamino .h1,
+body.auralis-theme-pergamino h2,
+body.auralis-theme-pergamino .h2,
+body.auralis-theme-pergamino h3,
+body.auralis-theme-pergamino .h3,
+body.auralis-theme-kinetic h1,
+body.auralis-theme-kinetic .h1,
+body.auralis-theme-kinetic h2,
+body.auralis-theme-kinetic .h2,
+body.auralis-theme-kinetic h3,
+body.auralis-theme-kinetic .h3 {
+    color: var(--v-heading-color) !important;
+    font-weight: 700 !important;
+}
+
+body.auralis-theme-auralis h4,
+body.auralis-theme-auralis .h4,
+body.auralis-theme-auralis h5,
+body.auralis-theme-auralis .h5,
+body.auralis-theme-auralis h6,
+body.auralis-theme-auralis .h6,
+body.auralis-theme-auralis_dark h4,
+body.auralis-theme-auralis_dark .h4,
+body.auralis-theme-auralis_dark h5,
+body.auralis-theme-auralis_dark .h5,
+body.auralis-theme-auralis_dark h6,
+body.auralis-theme-auralis_dark .h6,
+body.auralis-theme-prestige h4,
+body.auralis-theme-prestige .h4,
+body.auralis-theme-prestige h5,
+body.auralis-theme-prestige .h5,
+body.auralis-theme-prestige h6,
+body.auralis-theme-prestige .h6,
+body.auralis-theme-cyber h4,
+body.auralis-theme-cyber .h4,
+body.auralis-theme-cyber h5,
+body.auralis-theme-cyber .h5,
+body.auralis-theme-cyber h6,
+body.auralis-theme-cyber .h6,
+body.auralis-theme-serenity h4,
+body.auralis-theme-serenity .h4,
+body.auralis-theme-serenity h5,
+body.auralis-theme-serenity .h5,
+body.auralis-theme-serenity h6,
+body.auralis-theme-serenity .h6,
+body.auralis-theme-blaze h4,
+body.auralis-theme-blaze .h4,
+body.auralis-theme-blaze h5,
+body.auralis-theme-blaze .h5,
+body.auralis-theme-blaze h6,
+body.auralis-theme-blaze .h6,
+body.auralis-theme-nexus h4,
+body.auralis-theme-nexus .h4,
+body.auralis-theme-nexus h5,
+body.auralis-theme-nexus .h5,
+body.auralis-theme-nexus h6,
+body.auralis-theme-nexus .h6,
+body.auralis-theme-zen h4,
+body.auralis-theme-zen .h4,
+body.auralis-theme-zen h5,
+body.auralis-theme-zen .h5,
+body.auralis-theme-zen h6,
+body.auralis-theme-zen .h6,
+body.auralis-theme-zafiro h4,
+body.auralis-theme-zafiro .h4,
+body.auralis-theme-zafiro h5,
+body.auralis-theme-zafiro .h5,
+body.auralis-theme-zafiro h6,
+body.auralis-theme-zafiro .h6,
+body.auralis-theme-nord h4,
+body.auralis-theme-nord .h4,
+body.auralis-theme-nord h5,
+body.auralis-theme-nord .h5,
+body.auralis-theme-nord h6,
+body.auralis-theme-nord .h6,
+body.auralis-theme-terra h4,
+body.auralis-theme-terra .h4,
+body.auralis-theme-terra h5,
+body.auralis-theme-terra .h5,
+body.auralis-theme-terra h6,
+body.auralis-theme-terra .h6,
+body.auralis-theme-pergamino h4,
+body.auralis-theme-pergamino .h4,
+body.auralis-theme-pergamino h5,
+body.auralis-theme-pergamino .h5,
+body.auralis-theme-pergamino h6,
+body.auralis-theme-pergamino .h6,
+body.auralis-theme-kinetic h4,
+body.auralis-theme-kinetic .h4,
+body.auralis-theme-kinetic h5,
+body.auralis-theme-kinetic .h5,
+body.auralis-theme-kinetic h6,
+body.auralis-theme-kinetic .h6 {
+    color: var(--v-secondary) !important;
+    font-weight: 600 !important;
+}
+
+/* Config agenda: tipografía = tokens ConfigAuralis (base + h5/h6; sin rem/px fijos) */
+.auralis-calendar-config-block {
+    font-size: var(--auralis-font-size-base, 1rem);
+}
+
+.auralis-calendar-config-title {
+    font-size: var(--auralis-font-size-h5, var(--auralis-font-size-base, 1rem));
+    line-height: 1.3;
+}
+
+.auralis-calendar-config-label {
+    font-size: var(--auralis-font-size-h6, calc(var(--auralis-font-size-base, 1rem) * 0.875));
+}
+
+.auralis-calendar-config-help {
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.875);
+    line-height: 1.4;
+}
+
+.auralis-calendar-config-accordion-btn {
+    font-size: var(--auralis-font-size-h5, var(--auralis-font-size-base, 1rem)) !important;
+    font-weight: 600;
+    color: var(--bs-body-color, #0f172a) !important;
+    background-color: var(--bs-body-bg, #fff) !important;
+    box-shadow: none !important;
+}
+
+.auralis-calendar-config-accordion-btn:not(.collapsed) {
+    color: var(--bs-body-color, #0f172a) !important;
+    background-color: var(--bs-tertiary-bg, #f8fafc) !important;
+}
+
+.auralis-calendar-config-accordion-btn .fa-solid,
+.auralis-calendar-config-accordion-btn .fa-brands {
+    color: var(--v-primary, var(--bs-primary, #10b981));
+}
+
+.auralis-calendar-pwa-icon {
+    background-color: rgba(var(--bs-primary-rgb, 16, 185, 129), 0.04);
+}
+
+.auralis-push-step-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: calc(var(--auralis-font-size-base, 1rem) * 0.95);
+}
+
+/* Aviso SMTP calendario: bloque plano integrado en el footer del formulario */
+.auralis-calendar-email-info {
+    background-color: rgba(var(--bs-primary-rgb), 0.04);
+}
+
+/* Botones neutros (secondary, light, default) y de contorno con legibilidad y contraste garantizados */
+.btn-secondary,
+.btn-light,
+.btn-default {
+    background-color: #E2E8F0 !important;
+    border-color: #CBD5E1 !important;
+    color: #1E293B !important;
+    font-weight: 500;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active,
+.btn-light:hover,
+.btn-light:focus,
+.btn-light:active,
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active {
+    background-color: #CBD5E1 !important;
+    border-color: #94A3B8 !important;
+    color: #0F172A !important;
+}
+
+.btn-outline-secondary,
+.btn-outline-light {
+    background-color: #FFFFFF !important;
+    border-color: #CBD5E1 !important;
+    color: #475569 !important;
+    font-weight: 500;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active,
+.btn-outline-light:hover,
+.btn-outline-light:focus,
+.btn-outline-light:active {
+    background-color: #E2E8F0 !important;
+    border-color: #94A3B8 !important;
+    color: #0F172A !important;
+}
+
+/* btn-check:checked (EditPageOption, Wizard, etc.): el !important base
+   anula el estado marcado nativo de Bootstrap; hay que redefinirlo aquí. */
+.btn-check:checked + .btn-outline-secondary,
+.btn-check:active + .btn-outline-secondary,
+.btn-check:checked + .btn-outline-light,
+.btn-check:active + .btn-outline-light {
+    background-color: var(--v-primary, #10B981) !important;
+    border-color: var(--v-primary, #10B981) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-check:checked:focus + .btn-outline-secondary,
+.btn-check:checked:focus + .btn-outline-light {
+    box-shadow: 0 0 0 0.2rem rgba(var(--v-primary-rgb, 16, 185, 129), 0.35) !important;
+}
+
+.dark-mode .btn-secondary,
+.dark-mode .btn-light,
+.dark-mode .btn-default,
+[data-bs-theme="dark"] .btn-secondary,
+[data-bs-theme="dark"] .btn-light,
+[data-bs-theme="dark"] .btn-default,
+body.auralis-theme-auralis_dark .btn-secondary,
+body.auralis-theme-auralis_dark .btn-light,
+body.auralis-theme-auralis_dark .btn-default,
+body.auralis-theme-prestige .btn-secondary,
+body.auralis-theme-prestige .btn-light,
+body.auralis-theme-prestige .btn-default,
+body.auralis-theme-cyber .btn-secondary,
+body.auralis-theme-cyber .btn-light,
+body.auralis-theme-cyber .btn-default,
+body.auralis-theme-serenity .btn-secondary,
+body.auralis-theme-serenity .btn-light,
+body.auralis-theme-serenity .btn-default,
+body.auralis-theme-blaze .btn-secondary,
+body.auralis-theme-blaze .btn-light,
+body.auralis-theme-blaze .btn-default,
+body.auralis-theme-nexus .btn-secondary,
+body.auralis-theme-nexus .btn-light,
+body.auralis-theme-nexus .btn-default {
+    background-color: #334155 !important;
+    border-color: #475569 !important;
+    color: #F8FAFC !important;
+}
+
+.dark-mode .btn-secondary:hover,
+.dark-mode .btn-light:hover,
+.dark-mode .btn-default:hover,
+[data-bs-theme="dark"] .btn-secondary:hover,
+[data-bs-theme="dark"] .btn-light:hover,
+[data-bs-theme="dark"] .btn-default:hover,
+body.auralis-theme-auralis_dark .btn-secondary:hover,
+body.auralis-theme-auralis_dark .btn-light:hover,
+body.auralis-theme-auralis_dark .btn-default:hover,
+body.auralis-theme-prestige .btn-secondary:hover,
+body.auralis-theme-prestige .btn-light:hover,
+body.auralis-theme-prestige .btn-default:hover,
+body.auralis-theme-cyber .btn-secondary:hover,
+body.auralis-theme-cyber .btn-light:hover,
+body.auralis-theme-cyber .btn-default:hover,
+body.auralis-theme-serenity .btn-secondary:hover,
+body.auralis-theme-serenity .btn-light:hover,
+body.auralis-theme-serenity .btn-default:hover,
+body.auralis-theme-blaze .btn-secondary:hover,
+body.auralis-theme-blaze .btn-light:hover,
+body.auralis-theme-blaze .btn-default:hover,
+body.auralis-theme-nexus .btn-secondary:hover,
+body.auralis-theme-nexus .btn-light:hover,
+body.auralis-theme-nexus .btn-default:hover {
+    background-color: #475569 !important;
+    border-color: #64748B !important;
+    color: #FFFFFF !important;
+}
+
+.dark-mode .btn-outline-secondary,
+.dark-mode .btn-outline-light,
+[data-bs-theme="dark"] .btn-outline-secondary,
+[data-bs-theme="dark"] .btn-outline-light,
+body.auralis-theme-auralis_dark .btn-outline-secondary,
+body.auralis-theme-auralis_dark .btn-outline-light,
+body.auralis-theme-prestige .btn-outline-secondary,
+body.auralis-theme-prestige .btn-outline-light,
+body.auralis-theme-cyber .btn-outline-secondary,
+body.auralis-theme-cyber .btn-outline-light,
+body.auralis-theme-serenity .btn-outline-secondary,
+body.auralis-theme-serenity .btn-outline-light,
+body.auralis-theme-blaze .btn-outline-secondary,
+body.auralis-theme-blaze .btn-outline-light,
+body.auralis-theme-nexus .btn-outline-secondary,
+body.auralis-theme-nexus .btn-outline-light {
+    background-color: #1E293B !important;
+    border-color: #475569 !important;
+    color: #E2E8F0 !important;
+}
+
+.dark-mode .btn-outline-secondary:hover,
+.dark-mode .btn-outline-light:hover,
+[data-bs-theme="dark"] .btn-outline-secondary:hover,
+[data-bs-theme="dark"] .btn-outline-light:hover,
+body.auralis-theme-auralis_dark .btn-outline-secondary:hover,
+body.auralis-theme-auralis_dark .btn-outline-light:hover,
+body.auralis-theme-prestige .btn-outline-secondary:hover,
+body.auralis-theme-prestige .btn-outline-light:hover,
+body.auralis-theme-cyber .btn-outline-secondary:hover,
+body.auralis-theme-cyber .btn-outline-light:hover,
+body.auralis-theme-serenity .btn-outline-secondary:hover,
+body.auralis-theme-serenity .btn-outline-light:hover,
+body.auralis-theme-blaze .btn-outline-secondary:hover,
+body.auralis-theme-blaze .btn-outline-light:hover,
+body.auralis-theme-nexus .btn-outline-secondary:hover,
+body.auralis-theme-nexus .btn-outline-light:hover {
+    background-color: #334155 !important;
+    border-color: #64748B !important;
+    color: #FFFFFF !important;
+}
+
+.dark-mode .btn-check:checked + .btn-outline-secondary,
+.dark-mode .btn-check:active + .btn-outline-secondary,
+.dark-mode .btn-check:checked + .btn-outline-light,
+.dark-mode .btn-check:active + .btn-outline-light,
+[data-bs-theme="dark"] .btn-check:checked + .btn-outline-secondary,
+[data-bs-theme="dark"] .btn-check:active + .btn-outline-secondary,
+[data-bs-theme="dark"] .btn-check:checked + .btn-outline-light,
+[data-bs-theme="dark"] .btn-check:active + .btn-outline-light,
+body.auralis-theme-auralis_dark .btn-check:checked + .btn-outline-secondary,
+body.auralis-theme-auralis_dark .btn-check:active + .btn-outline-secondary,
+body.auralis-theme-auralis_dark .btn-check:checked + .btn-outline-light,
+body.auralis-theme-auralis_dark .btn-check:active + .btn-outline-light,
+body.auralis-theme-prestige .btn-check:checked + .btn-outline-secondary,
+body.auralis-theme-prestige .btn-check:active + .btn-outline-secondary,
+body.auralis-theme-prestige .btn-check:checked + .btn-outline-light,
+body.auralis-theme-prestige .btn-check:active + .btn-outline-light,
+body.auralis-theme-cyber .btn-check:checked + .btn-outline-secondary,
+body.auralis-theme-cyber .btn-check:active + .btn-outline-secondary,
+body.auralis-theme-cyber .btn-check:checked + .btn-outline-light,
+body.auralis-theme-cyber .btn-check:active + .btn-outline-light,
+body.auralis-theme-serenity .btn-check:checked + .btn-outline-secondary,
+body.auralis-theme-serenity .btn-check:active + .btn-outline-secondary,
+body.auralis-theme-serenity .btn-check:checked + .btn-outline-light,
+body.auralis-theme-serenity .btn-check:active + .btn-outline-light,
+body.auralis-theme-blaze .btn-check:checked + .btn-outline-secondary,
+body.auralis-theme-blaze .btn-check:active + .btn-outline-secondary,
+body.auralis-theme-blaze .btn-check:checked + .btn-outline-light,
+body.auralis-theme-blaze .btn-check:active + .btn-outline-light,
+body.auralis-theme-nexus .btn-check:checked + .btn-outline-secondary,
+body.auralis-theme-nexus .btn-check:active + .btn-outline-secondary,
+body.auralis-theme-nexus .btn-check:checked + .btn-outline-light,
+body.auralis-theme-nexus .btn-check:active + .btn-outline-light {
+    background-color: var(--v-primary, #10B981) !important;
+    border-color: var(--v-primary, #10B981) !important;
+    color: #FFFFFF !important;
+}
+
+
+
+/* Tarjetas sobre bloques oscuros (por ejemplo, el sidebar oscuro) */
+body.auralis-theme-auralis_dark #sidebar .card,
+body.auralis-theme-prestige #sidebar .card,
+body.auralis-theme-cyber #sidebar .card,
+body.auralis-theme-serenity #sidebar .card,
+body.auralis-theme-blaze #sidebar .card,
+body.auralis-theme-nexus #sidebar .card,
+.auralis-dark-block .card,
+.bg-dark .card {
+    background-color: #1E293B !important;
+    border-color: #334155 !important;
+    color: #F8FAFC !important;
+    box-shadow: none !important;
+}
+
+/* Iconos y Decoraciones */
+.nav-link i,
+#sidebar ul li a i {
+    color: var(--v-icon-standard) !important;
+}
+
+.nav-link:hover i,
+.nav-link.active i,
+#sidebar ul li a:hover i {
+    color: var(--v-primary) !important;
+}
+
+body.auralis-theme-auralis_dark #sidebar ul li.active a i,
+body.auralis-theme-prestige #sidebar ul li.active a i,
+body.auralis-theme-cyber #sidebar ul li.active a i,
+body.auralis-theme-serenity #sidebar ul li.active a i,
+body.auralis-theme-blaze #sidebar ul li.active a i,
+body.auralis-theme-nexus #sidebar ul li.active a i {
+    color: #FFFFFF !important;
+}
+
+/* Clases de utilidad para iconos corporativos */
+.icon-standard,
+i.standard {
+    color: #64748B !important;
+}
+
+.icon-brand,
+i.brand,
+i.highlighted {
+    color: #10B981 !important;
+    /* Verde Esmeralda para marca/destacados */
+}
+
+.icon-security,
+i.security,
+i.certification {
+    color: #B08D57 !important;
+    /* Bronce Envejecido para seguridad/certificación */
+}
+
+/* ==========================================================================
+   5. DISEÑO DE NAVEGACIÓN MÓVIL Y TABLET PREMIUM (2026)
+   ========================================================================== */
+
+/* Cabecera móvil fija */
+.mobile-top-header {
+    height: 56px !important;
+    background-color: var(--theme-sidebar-bg) !important;
+    border-bottom: 1px solid var(--bs-border-color) !important;
+    box-shadow: var(--bs-box-shadow-sm) !important;
+    z-index: 1020 !important;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    margin-left: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+.mobile-top-header .nav-link {
+    color: var(--theme-sidebar-text) !important;
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+.mobile-top-header .nav-link i {
+    color: var(--v-icon-standard) !important;
+    transition: color 0.15s ease;
+}
+
+.mobile-top-header .nav-link:hover i,
+.mobile-top-header .nav-link.active i,
+.mobile-top-header .nav-link:focus i {
+    color: var(--v-primary) !important;
+}
+
+/* Barra de navegación inferior móvil fija */
+.mobile-bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background-color: var(--theme-sidebar-bg) !important;
+    border-top: 1px solid var(--bs-border-color) !important;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05) !important;
+    z-index: 1030 !important;
+    /* Por encima del contenido, por debajo de sidebar overlay */
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    height: calc(56px + env(safe-area-inset-bottom)) !important;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-left: 0 !important;
+    max-width: 100% !important;
+}
+
+.mobile-bottom-nav-item {
+    flex: 1;
+    text-align: center;
+    color: var(--theme-sidebar-text);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    transition: color 0.15s ease-in-out;
+}
+
+.mobile-bottom-nav-item i {
+    font-size: 1.25rem !important;
+    color: var(--v-icon-standard);
+    transition: color 0.15s ease-in-out;
+}
+
+.mobile-bottom-nav-item:hover i,
+.mobile-bottom-nav-item.active i {
+    color: var(--v-primary);
+}
+
+/* Soporte de color destacado para tema oscuro en barra inferior */
+.dark-mode .mobile-bottom-nav-item.active i,
+[data-bs-theme="dark"] .mobile-bottom-nav-item.active i,
+body.auralis-theme-auralis_dark .mobile-bottom-nav-item.active i,
+body.auralis-theme-prestige .mobile-bottom-nav-item.active i,
+body.auralis-theme-cyber .mobile-bottom-nav-item.active i,
+body.auralis-theme-serenity .mobile-bottom-nav-item.active i,
+body.auralis-theme-blaze .mobile-bottom-nav-item.active i,
+body.auralis-theme-nexus .mobile-bottom-nav-item.active i {
+    color: var(--v-dark-accent) !important;
+}
+
+/* Soporte de alto contraste para Tema Predeterminado (Default) en Móvil */
+.auralis-theme-default .mobile-top-header {
+    background-color: var(--v-primary) !important;
+}
+
+.auralis-theme-default .mobile-top-header,
+.auralis-theme-default .mobile-top-header .mobile-top-title,
+.auralis-theme-default .mobile-top-header .navbar-text,
+.auralis-theme-default .mobile-top-header span,
+.auralis-theme-default .mobile-top-header>.container-fluid>a,
+.auralis-theme-default .mobile-top-header>.container-fluid>ul>li>a,
+.auralis-theme-default .mobile-top-header i {
+    color: #ffffff !important;
+}
+
+/* Forzar color de texto legible en los elementos del desplegable del menú de usuario en móvil */
+.mobile-top-header .dropdown-menu .dropdown-item,
+.auralis-theme-default .mobile-top-header .dropdown-menu .dropdown-item {
+    color: #334155 !important;
+}
+
+.mobile-top-header .dropdown-menu .dropdown-item:hover,
+.auralis-theme-default .mobile-top-header .dropdown-menu .dropdown-item:hover {
+    color: var(--v-primary, #10B981) !important;
+}
+
+.auralis-theme-default .mobile-bottom-nav {
+    background-color: var(--v-primary) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.auralis-theme-default .mobile-bottom-nav .mobile-bottom-nav-item,
+.auralis-theme-default .mobile-bottom-nav .mobile-bottom-nav-item i,
+.auralis-theme-default .mobile-bottom-nav .mobile-bottom-nav-item span,
+.auralis-theme-default .mobile-bottom-nav-item,
+.auralis-theme-default .mobile-bottom-nav-item i,
+.auralis-theme-default .mobile-bottom-nav-item.active i {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* ----------------------------------------------------
+ * Buscador expandible (menú horizontal desktop)
+ * ---------------------------------------------------- */
+.auralis-search-expand {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 2.5rem;
+}
+
+.auralis-search-expand .auralis-search-expand-trigger {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: var(--bs-nav-link-padding-y, 0.5rem) var(--bs-nav-link-padding-x, 0.5rem);
+    line-height: 1;
+    z-index: 2;
+}
+
+.auralis-search-expand .auralis-search-expand-panel {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    max-width: 0;
+    opacity: 0;
+    overflow: visible;
+    pointer-events: none;
+    transition: max-width 0.28s cubic-bezier(0.4, 0, 0.2, 1), width 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+    z-index: 1;
+}
+
+.auralis-search-expand.is-expanded .auralis-search-expand-trigger {
+    display: none;
+}
+
+/* Al expandir: el input entra en el flujo y se ocultan el resto de iconos (evita desborde) */
+.navbar-nav:has(> #auralisHorizontalSearchRoot.is-expanded) > li:not(#auralisHorizontalSearchRoot) {
+    display: none !important;
+}
+
+.auralis-search-expand.is-expanded {
+    flex: 1 1 auto;
+    min-width: 280px;
+    max-width: 480px;
+    justify-content: stretch;
+}
+
+.auralis-search-expand.is-expanded .auralis-search-expand-panel {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.auralis-search-expand .auralis-search-results-dropdown {
+    min-width: 100%;
+    right: 0;
+    left: auto;
+}
+
+/* ----------------------------------------------------
+ * Menú «Más» (menú horizontal desktop)
+ * Las reglas de encogido solo aplican con .auralis-menu-mas-activo, que pone
+ * auralis-menu-mas.js: sin el script la barra se ve como antes, sin ocultar nada.
+ * README § «Menú «Más» en la barra horizontal».
+ * ---------------------------------------------------- */
+.auralis-topbar-horizontal.auralis-menu-mas-activo .navbar-collapse {
+    flex: 1 1 0%;
+    min-width: 0;
+}
+
+.auralis-topbar-horizontal.auralis-menu-mas-activo .auralis-menu-principal {
+    flex-wrap: nowrap;
+    min-width: 0;
+}
+
+/* Los iconos (MenuIcon* y los que añadan otros plugins) no se encogen nunca */
+.auralis-topbar-horizontal.auralis-menu-mas-activo .navbar-collapse > .navbar-nav.ms-auto {
+    flex-shrink: 0;
+}
+
+.auralis-topbar-horizontal .auralis-menu-mas-oculto {
+    display: none !important;
+}
+
+/* Nombre de la empresa recortado con puntos suspensivos (el completo va en el title) */
+@media (min-width: 576px) {
+    .auralis-topbar-horizontal .navbar-brand {
+        display: inline-flex !important;
+        align-items: center;
+        flex: 0 1 auto;
+        min-width: 0;
+    }
+}
+
+.auralis-topbar-horizontal .auralis-topbar-empresa {
+    max-width: 14rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* «Más» está pegado a los iconos: sus submenús se abren hacia la izquierda */
+.auralis-topbar-horizontal .auralis-menu-mas .dropdown-submenu > .dropdown-menu {
+    left: auto !important;
+    right: 100%;
+    margin-left: 0;
+    margin-right: 2px;
+}
+
+.auralis-topbar-horizontal .auralis-menu-mas .dropdown-submenu > a::after {
+    transform: rotate(135deg);
+}
+
+/* En táctil no hay hover: el toque abre el submenú (auralis-menu-mas.js) */
+.auralis-topbar-horizontal .auralis-menu-mas .dropdown-submenu.auralis-menu-mas-abierto > .dropdown-menu {
+    display: block !important;
+}
+
+/* ----------------------------------------------------
+ * Modal de búsqueda móvil/tablet (command palette)
+ * Márgenes simétricos L/R + safe-area; sin desborde a la derecha.
+ * ---------------------------------------------------- */
+.auralis-mobile-search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1060;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
+    padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+    padding-bottom: 0.75rem;
+    padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+    background: rgba(15, 23, 42, 0.48);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.auralis-mobile-search-overlay.d-none {
+    display: none !important;
+}
+
+.auralis-mobile-search-dialog {
+    width: 100%;
+    max-width: min(560px, 100%);
+    min-width: 0;
+    flex: 0 1 auto;
+    max-height: min(70dvh, calc(100dvh - 1.5rem));
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.35);
+    overflow: hidden;
+    animation: auralisDropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 575.98px) {
+    .auralis-mobile-search-overlay {
+        padding-top: max(0.65rem, env(safe-area-inset-top, 0px));
+        padding-right: max(0.65rem, env(safe-area-inset-right, 0px));
+        padding-bottom: 0.65rem;
+        padding-left: max(0.65rem, env(safe-area-inset-left, 0px));
+    }
+
+    .auralis-mobile-search-dialog {
+        border-radius: 14px;
+        max-height: min(65dvh, calc(100dvh - 1.3rem));
+    }
+}
+
+.dark-mode .auralis-mobile-search-dialog,
+[data-bs-theme="dark"] .auralis-mobile-search-dialog {
+    background: #0f172a;
+    border-color: #1e293b;
+    box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.65);
+}
+
+.auralis-mobile-search-form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: inherit;
+}
+
+.auralis-mobile-search-dialog .auralis-search-input-container {
+    width: auto;
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 0.65rem 0.65rem 0.35rem;
+    flex-shrink: 0;
+    border-radius: 14px;
+}
+
+.auralis-mobile-search-dialog .auralis-search-input {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.auralis-mobile-search-dialog .auralis-search-submit-btn,
+.auralis-mobile-search-dialog .auralis-mobile-search-close {
+    flex-shrink: 0;
+}
+
+.auralis-mobile-search-results.auralis-search-results-dropdown {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    max-height: none;
+    margin: 0 0.35rem 0.5rem;
+    width: auto;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: none;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    animation: none;
+    padding: 0.15rem 0.25rem 0.4rem;
+    box-sizing: border-box;
+}
+
+.auralis-mobile-search-results .auralis-search-item {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.auralis-mobile-search-results .auralis-search-item-left {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.auralis-mobile-search-results .auralis-search-item-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.auralis-mobile-search-results .auralis-search-item-badge {
+    flex-shrink: 1;
+    max-width: 42%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.auralis-mobile-search-close {
+    border: none;
+    background: transparent;
+    color: #64748b;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    cursor: pointer;
+    margin-left: 0.15rem;
+}
+
+.auralis-mobile-search-close:hover {
+    background: rgba(148, 163, 184, 0.2);
+    color: #0f172a;
+}
+
+.dark-mode .auralis-mobile-search-close:hover,
+[data-bs-theme="dark"] .auralis-mobile-search-close:hover {
+    color: #f8fafc;
+}
+
+body.auralis-search-modal-open {
+    overflow: hidden !important;
+}
+
+.mobile-bottom-nav-item {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+}
+
+/* ----------------------------------------------------
+ * Estilos para el Buscador Superior Interactivo (Modo Vertical PC)
+ * ---------------------------------------------------- */
+.auralis-search-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: rgba(241, 245, 249, 0.8);
+    border: 1px solid rgba(203, 213, 225, 0.7);
+    border-radius: 20px;
+    padding: 0.25rem 0.5rem 0.25rem 2.25rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark-mode .auralis-search-input-container,
+[data-bs-theme="dark"] .auralis-search-input-container {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(51, 65, 85, 0.8);
+}
+
+.auralis-search-input-container:hover {
+    background: #ffffff;
+    border-color: rgba(148, 163, 184, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.dark-mode .auralis-search-input-container:hover,
+[data-bs-theme="dark"] .auralis-search-input-container:hover {
+    background: #0f172a;
+    border-color: #475569;
+}
+
+.auralis-search-input-container:focus-within {
+    background: #ffffff;
+    border-color: var(--v-primary, #0d6efd);
+    box-shadow: 0 0 0 3px rgba(var(--v-primary-rgb, 13, 110, 253), 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .auralis-search-input-container:focus-within,
+[data-bs-theme="dark"] .auralis-search-input-container:focus-within {
+    background: #0f172a;
+    border-color: var(--v-primary, #0d6efd);
+}
+
+.auralis-search-icon {
+    position: absolute;
+    left: 0.85rem;
+    color: #64748b;
+    font-size: 0.85rem;
+    pointer-events: none;
+    transition: color 0.2s ease;
+}
+
+.auralis-search-input-container:focus-within .auralis-search-icon {
+    color: var(--v-primary, #0d6efd);
+}
+
+.auralis-search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.875rem;
+    color: #0f172a;
+    padding: 0.2rem 0.25rem;
+    box-shadow: none !important;
+}
+
+.dark-mode .auralis-search-input,
+[data-bs-theme="dark"] .auralis-search-input {
+    color: #f8fafc;
+}
+
+.auralis-search-input::placeholder {
+    color: #94a3b8;
+    font-size: 0.825rem;
+}
+
+.auralis-search-submit-btn {
+    border: none;
+    background: rgba(var(--v-primary-rgb, 13, 110, 253), 0.1);
+    color: var(--v-primary, #0d6efd);
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.725rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.auralis-search-submit-btn:hover {
+    background: var(--v-primary, #0d6efd);
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.auralis-search-results-dropdown {
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 14px;
+    box-shadow: 0 16px 32px -6px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 0.4rem;
+    animation: auralisDropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark-mode .auralis-search-results-dropdown,
+[data-bs-theme="dark"] .auralis-search-results-dropdown {
+    background: #0f172a;
+    border-color: #1e293b;
+    box-shadow: 0 16px 32px -6px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes auralisDropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.auralis-search-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.55rem 0.85rem;
+    margin-bottom: 2px;
+    border-radius: 10px;
+    color: #334155;
+    text-decoration: none !important;
+    transition: all 0.15s ease;
+}
+
+.dark-mode .auralis-search-item,
+[data-bs-theme="dark"] .auralis-search-item {
+    color: #cbd5e1;
+}
+
+.auralis-search-item:hover,
+.auralis-search-item.active {
+    background: rgba(var(--v-primary-rgb, 13, 110, 253), 0.08) !important;
+    color: var(--v-primary, #0d6efd) !important;
+    transform: translateX(3px);
+}
+
+.auralis-search-item-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.auralis-search-item-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(var(--v-primary-rgb, 13, 110, 253), 0.08);
+    color: var(--v-primary, #0d6efd);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.825rem;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+}
+
+.auralis-search-item:hover .auralis-search-item-icon,
+.auralis-search-item.active .auralis-search-item-icon {
+    background: var(--v-primary, #0d6efd);
+    color: #ffffff;
+}
+
+.auralis-search-item-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.dark-mode .auralis-search-item-title,
+[data-bs-theme="dark"] .auralis-search-item-title {
+    color: #f1f5f9;
+}
+
+.auralis-search-item:hover .auralis-search-item-title,
+.auralis-search-item.active .auralis-search-item-title {
+    color: var(--v-primary, #0d6efd);
+    font-weight: 600;
+}
+
+.auralis-search-item-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    background: rgba(226, 232, 240, 0.8);
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.dark-mode .auralis-search-item-badge,
+[data-bs-theme="dark"] .auralis-search-item-badge {
+    background: #1e293b;
+    color: #94a3b8;
+}
+
+.auralis-search-item:hover .auralis-search-item-badge,
+.auralis-search-item.active .auralis-search-item-badge {
+    background: rgba(var(--v-primary-rgb, 13, 110, 253), 0.15);
+    color: var(--v-primary, #0d6efd);
+}
+
+/* ----------------------------------------------------
+ * Buscador del sidebar: anular herencia de .sidebar-header a
+ * (uppercase + font-weight 700) y igualar tipografía al buscador superior.
+ * NO modificar estilos globales .auralis-search-* (barra superior).
+ * ---------------------------------------------------- */
+#sidebar .auralis-search-item {
+    font-weight: 500 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    color: #334155 !important;
+    text-align: left;
+}
+
+#sidebar .auralis-search-item-left {
+    text-align: left;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+#sidebar .auralis-search-item-title {
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    color: #1e293b !important;
+    text-align: left;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#sidebar .auralis-search-item:hover .auralis-search-item-title,
+#sidebar .auralis-search-item.active .auralis-search-item-title {
+    color: var(--v-primary, #0d6efd) !important;
+    font-weight: 600 !important;
+}
+
+#sidebar .auralis-search-item-badge {
+    font-size: 0.7rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    flex-shrink: 0;
+}
+
+#sidebar .auralis-search-input {
+    font-size: 0.875rem;
+}
+
+#sidebar .auralis-search-input::placeholder {
+    font-size: 0.825rem;
+}
+
+/* ----------------------------------------------------
+ * Reglas de Consistencia para Tema Personalizado (Primary color hover & selected)
+ * ---------------------------------------------------- */
+/* Menú horizontal (nivel 1): solo ilumina el texto del color primario, sin fondo ni sombreado */
+body.auralis-theme-custom .navbar:not(.navbar-custom) .navbar-nav>.nav-item>.nav-link:hover,
+body.auralis-theme-custom .navbar:not(.navbar-custom) .navbar-nav>.nav-item>.nav-link.active {
+    background-color: transparent !important;
+    color: var(--v-primary) !important;
+}
+
+/* Menú lateral vertical: hover y activo usan el color primario con transparencia */
+body.auralis-theme-custom #sidebar ul li.active>a,
+body.auralis-theme-custom #sidebar .nav-link.active,
+body.auralis-theme-custom #sidebar .sidebar-menu-item-active {
+    color: var(--v-primary) !important;
+    background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.12) !important;
+    font-weight: 600 !important;
+}
+
+body.auralis-theme-custom #sidebar .nav-link:hover,
+body.auralis-theme-custom #sidebar ul li a:hover,
+body.auralis-theme-custom .dropdown-item:hover {
+    color: var(--v-primary) !important;
+    background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.12) !important;
+}
+
+body.auralis-theme-custom .dropdown-item.active {
+    background-color: var(--v-primary) !important;
+    color: #ffffff !important;
+}
+
+/* ====================================================
+ * Unificación de Jerarquía de Fondos para Todos los Temas
+ * ====================================================
+ * - Fondo global (html, body) y listados: blanco del Core (--bs-body-bg).
+ * - Zona superior (pestañas): --v-bg-secondary, sin min-height.
+ * - tab-content, tarjetas y tablas: blanco. No transparentar el listado.
+ */
+html,
+body {
+    background-color: var(--bs-body-bg, #FFFFFF) !important;
+}
+
+div.bg-light.pt-3,
+.nav-tabs-wrapper {
+    background-color: var(--v-bg-secondary) !important;
+}
+
+.tab-content,
+.tab-pane,
+.table-responsive,
+.card,
+.card-body {
+    background-color: var(--bs-body-bg, #FFFFFF) !important;
+}

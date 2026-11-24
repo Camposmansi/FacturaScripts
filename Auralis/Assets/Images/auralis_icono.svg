@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Auralis">
+  <defs><linearGradient id="g" x1="20" y1="15" x2="145" y2="150" gradientUnits="userSpaceOnUse"><stop stop-color="#745cff"/><stop offset=".52" stop-color="#3468bd"/><stop offset="1" stop-color="#12365f"/></linearGradient></defs>
+  <rect width="160" height="160" rx="38" fill="url(#g)"/>
+  <path d="M80 29 127 126h-24l-10-23H66l10-20h9L79 69l-25 57H31L80 29Z" fill="#fff"/>
+  <circle cx="119" cy="42" r="9" fill="#7ee2ff"/>
+</svg>
+

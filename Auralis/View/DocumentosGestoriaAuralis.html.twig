@@ -1,0 +1,272 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Informe «Documentos para la gestoría»: periodo, filtros de ventas y compras, comprobación, ZIP y envío por email.
+ #}
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/auralis-gestoria.css') }}?v={{ auralisAssetVersion('Dinamic/Assets/CSS/auralis-gestoria.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container-fluid auralis-gestoria mb-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="h3 mt-3 mb-1">
+                    <i class="fa-solid fa-file-zipper me-2" aria-hidden="true"></i>{{ trans('auralis-gestoria-titulo') }}
+                </h1>
+                <p class="text-body-secondary mb-3">{{ trans('auralis-gestoria-subtitulo') }}</p>
+            </div>
+        </div>
+
+        {% if not fsc.puedeExportar %}
+            <div class="alert alert-warning" role="alert">
+                <i class="fa-solid fa-lock me-2" aria-hidden="true"></i>{{ trans('auralis-gestoria-error-permiso') }}
+            </div>
+        {% endif %}
+
+        <form id="auralisGestoriaForm" method="post" action="{{ fsc.url() }}" autocomplete="off" novalidate
+              data-url="{{ fsc.url()|e('html_attr') }}"
+              data-msg-error="{{ trans('auralis-gestoria-error-generico')|e('html_attr') }}"
+              data-msg-descarga="{{ trans('auralis-gestoria-descarga-lista')|e('html_attr') }}"
+              data-msg-sin-adjunto="{{ trans('auralis-gestoria-sin-adjunto')|e('html_attr') }}"
+              data-msg-excede="{{ trans('auralis-gestoria-aviso-maximo')|e('html_attr') }}"
+              data-msg-denegados="{{ trans('auralis-gestoria-aviso-denegados')|e('html_attr') }}"
+              data-msg-total="{{ trans('auralis-gestoria-total-documentos')|e('html_attr') }}"
+              data-msg-todo-adjunto="{{ trans('auralis-gestoria-todas-con-adjunto')|e('html_attr') }}"
+              data-msg-sin-resultados="{{ trans('no-data')|e('html_attr') }}">
+            {{ formToken() }}
+            <input type="hidden" name="action" value=""/>
+
+            <div class="row g-3">
+                <div class="col-12 col-xl-8">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header">
+                            <i class="fa-solid fa-calendar-days me-2" aria-hidden="true"></i>{{ trans('auralis-gestoria-periodo') }}
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap gap-2 mb-3" role="group" aria-label="{{ trans('auralis-gestoria-periodo')|e('html_attr') }}">
+                                {% for atajo, rango in fsc.atajos %}
+                                    <button type="button" class="btn btn-outline-secondary auralis-gestoria-atajo"
+                                            data-desde="{{ rango.desde|e('html_attr') }}" data-hasta="{{ rango.hasta|e('html_attr') }}">
+                                        {{ trans('auralis-gestoria-atajo-' ~ atajo|replace({'_': '-'})) }}
+                                    </button>
+                                {% endfor %}
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-sm-6 col-lg-3">
+                                    <label class="form-label" for="zgDesde">{{ trans('from-date') }}</label>
+                                    <input type="date" class="form-control" id="zgDesde" name="desde" required
+                                           value="{{ fsc.desdeDefecto|e('html_attr') }}"/>
+                                </div>
+                                <div class="col-sm-6 col-lg-3">
+                                    <label class="form-label" for="zgHasta">{{ trans('until-date') }}</label>
+                                    <input type="date" class="form-control" id="zgHasta" name="hasta" required
+                                           value="{{ fsc.hastaDefecto|e('html_attr') }}"/>
+                                </div>
+                                {% if fsc.empresasLista|length > 0 %}
+                                    <div class="col-sm-6 col-lg-3">
+                                        <label class="form-label" for="zgEmpresa">{{ trans('company') }}</label>
+                                        <select class="form-select" id="zgEmpresa" name="idempresa">
+                                            <option value="">{{ trans('all') }}</option>
+                                            {% for idempresa, nombre in fsc.empresasLista %}
+                                                <option value="{{ idempresa }}">{{ nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% endif %}
+                                <div class="col-sm-6 col-lg-3">
+                                    <label class="form-label" for="zgEstadoPago">{{ trans('auralis-gestoria-estado-pago') }}</label>
+                                    <select class="form-select" id="zgEstadoPago" name="estado_pago">
+                                        <option value="todas">{{ trans('auralis-gestoria-pago-todas') }}</option>
+                                        <option value="pagadas">{{ trans('auralis-gestoria-pago-pagadas') }}</option>
+                                        <option value="pendientes">{{ trans('auralis-gestoria-pago-pendientes') }}</option>
+                                    </select>
+                                    <div class="form-text">{{ trans('auralis-gestoria-estado-pago-ayuda') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-header">
+                                    <div class="form-check mb-0">
+                                        <input class="form-check-input auralis-gestoria-ambito" type="checkbox" id="zgIncluirVentas"
+                                               name="incluir_ventas" value="1" data-ambito="ventas" checked/>
+                                        <label class="form-check-label fw-semibold" for="zgIncluirVentas">{{ trans('sales') }}</label>
+                                    </div>
+                                </div>
+                                <div class="card-body" data-ambito-cuerpo="ventas">
+                                    {% for tipo, info in fsc.tiposPantalla.ventas %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="zgVentas{{ tipo }}"
+                                                   name="tipos_ventas[]" value="{{ tipo }}"
+                                                   {% if tipo == 'facturas' and info.disponible %}checked{% endif %}
+                                                   {% if not info.disponible %}disabled{% endif %}/>
+                                            <label class="form-check-label" for="zgVentas{{ tipo }}">{{ trans(info.etiqueta) }}</label>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="mt-3 position-relative">
+                                        <label class="form-label" for="zgClienteTexto">{{ trans('customer') }}</label>
+                                        <input type="text" class="form-control auralis-gestoria-buscador" id="zgClienteTexto"
+                                               data-tipo="cliente" data-destino="zgCodcliente"
+                                               placeholder="{{ trans('auralis-gestoria-buscar-placeholder')|e('html_attr') }}"/>
+                                        <input type="hidden" id="zgCodcliente" name="codcliente" value=""/>
+                                        <div class="list-group auralis-gestoria-sugerencias d-none" role="listbox"></div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <label class="form-label" for="zgSerie">{{ trans('serie') }}</label>
+                                        <select class="form-select" id="zgSerie" name="codserie">
+                                            <option value="">{{ trans('all') }}</option>
+                                            {% for codserie, descripcion in fsc.seriesLista %}
+                                                <option value="{{ codserie }}">{{ codserie }} · {{ descripcion }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-header">
+                                    <div class="form-check mb-0">
+                                        <input class="form-check-input auralis-gestoria-ambito" type="checkbox" id="zgIncluirCompras"
+                                               name="incluir_compras" value="1" data-ambito="compras" checked/>
+                                        <label class="form-check-label fw-semibold" for="zgIncluirCompras">{{ trans('purchases') }}</label>
+                                    </div>
+                                </div>
+                                <div class="card-body" data-ambito-cuerpo="compras">
+                                    {% for tipo, info in fsc.tiposPantalla.compras %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="zgCompras{{ tipo }}"
+                                                   name="tipos_compras[]" value="{{ tipo }}"
+                                                   {% if tipo == 'facturas' and info.disponible %}checked{% endif %}
+                                                   {% if not info.disponible %}disabled{% endif %}/>
+                                            <label class="form-check-label" for="zgCompras{{ tipo }}">{{ trans(info.etiqueta) }}</label>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="mt-3 position-relative">
+                                        <label class="form-label" for="zgProveedorTexto">{{ trans('supplier') }}</label>
+                                        <input type="text" class="form-control auralis-gestoria-buscador" id="zgProveedorTexto"
+                                               data-tipo="proveedor" data-destino="zgCodproveedor"
+                                               placeholder="{{ trans('auralis-gestoria-buscar-placeholder')|e('html_attr') }}"/>
+                                        <input type="hidden" id="zgCodproveedor" name="codproveedor" value=""/>
+                                        <div class="list-group auralis-gestoria-sugerencias d-none" role="listbox"></div>
+                                    </div>
+                                    <fieldset class="mt-3">
+                                        <legend class="form-label fs-6">{{ trans('auralis-gestoria-modo-compras') }}</legend>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="modo_compras" id="zgModoPdf" value="pdf" checked/>
+                                            <label class="form-check-label" for="zgModoPdf">{{ trans('auralis-gestoria-modo-pdf') }}</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="modo_compras" id="zgModoAdjuntos" value="adjuntos"/>
+                                            <label class="form-check-label" for="zgModoAdjuntos">{{ trans('auralis-gestoria-modo-adjuntos') }}</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="modo_compras" id="zgModoAdjuntosPdf" value="adjuntos_pdf"/>
+                                            <label class="form-check-label" for="zgModoAdjuntosPdf">{{ trans('auralis-gestoria-modo-adjuntos-pdf') }}</label>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-4">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header">
+                            <i class="fa-solid fa-box-archive me-2" aria-hidden="true"></i>{{ trans('auralis-gestoria-paquete') }}
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="zgIncluirCsv" name="incluir_csv" value="1" checked/>
+                                <label class="form-check-label" for="zgIncluirCsv">{{ trans('auralis-gestoria-incluir-csv') }}</label>
+                            </div>
+                            <p class="small text-body-secondary mb-3">
+                                {{ trans('auralis-gestoria-limites', {'%maximo%': fsc.maxDocumentos, '%mb%': fsc.maxMb}) }}
+                                {% if fsc.urlAjustes is not empty %}
+                                    <a href="{{ fsc.urlAjustes|e('html_attr') }}" class="text-nowrap">
+                                        <i class="fa-solid fa-sliders me-1" aria-hidden="true"></i>{{ trans('auralis-gestoria-cambiar-limites') }}
+                                    </a>
+                                {% endif %}
+                            </p>
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-outline-secondary" data-gestoria-accion="gestoria-comprobar"
+                                        {% if not fsc.puedeExportar %}disabled{% endif %}>
+                                    <i class="fa-solid fa-list-check me-2" aria-hidden="true"></i>{{ trans('auralis-gestoria-comprobar') }}
+                                </button>
+                                <button type="button" class="btn btn-primary" data-gestoria-accion="gestoria-descargar"
+                                        {% if not fsc.puedeExportar %}disabled{% endif %}>
+                                    <i class="fa-solid fa-download me-2" aria-hidden="true"></i>{{ trans('auralis-gestoria-descargar') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header">
+                            <i class="fa-solid fa-paper-plane me-2" aria-hidden="true"></i>{{ trans('auralis-gestoria-enviar') }}
+                        </div>
+                        <div class="card-body">
+                            <label class="form-label" for="zgEmail">{{ trans('auralis-gestoria-email') }}</label>
+                            <input type="email" class="form-control" id="zgEmail" name="email" maxlength="100"
+                                   value="{{ fsc.emailGestoria|e('html_attr') }}"/>
+                            {% if fsc.puedeGuardarEmail %}
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" id="zgGuardarEmail" name="guardar_email" value="1"/>
+                                    <label class="form-check-label" for="zgGuardarEmail">{{ trans('auralis-gestoria-guardar-email') }}</label>
+                                </div>
+                            {% endif %}
+                            <div class="d-grid mt-3">
+                                <button type="button" class="btn btn-success" data-gestoria-accion="gestoria-enviar"
+                                        {% if not fsc.puedeExportar %}disabled{% endif %}>
+                                    <i class="fa-solid fa-paper-plane me-2" aria-hidden="true"></i>{{ trans('auralis-gestoria-enviar') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div id="auralisGestoriaMensaje" class="mt-3" aria-live="polite"></div>
+
+        <div id="auralisGestoriaResultado" class="card shadow-sm mt-3 d-none">
+            <div class="card-header">
+                <i class="fa-solid fa-list-check me-2" aria-hidden="true"></i>{{ trans('auralis-gestoria-comprobacion') }}
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-3">
+                        <thead>
+                        <tr>
+                            <th scope="col">{{ trans('auralis-gestoria-csv-tipo') }}</th>
+                            <th scope="col" class="text-end">{{ trans('auralis-gestoria-documentos') }}</th>
+                            <th scope="col" class="text-end">{{ trans('total') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody data-gestoria-resumen></tbody>
+                    </table>
+                </div>
+                <div data-gestoria-avisos></div>
+                <div data-gestoria-sin-adjunto-bloque class="d-none">
+                    <h2 class="h6">{{ trans('auralis-gestoria-compras-sin-adjunto') }}</h2>
+                    <ul class="list-group" data-gestoria-sin-adjunto></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('Dinamic/Assets/JS/auralis-gestoria.js') }}?v={{ auralisAssetVersion('Dinamic/Assets/JS/auralis-gestoria.js') }}"></script>
+{% endblock %}

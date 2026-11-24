@@ -1,0 +1,44 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Barra de la agenda: Hoy ‹ › rango, filtros de cabecera (header_filters, opcional), «24 h» y vistas 1d/3d/semana/mes.
+ #              La incluyen _calendar_page_shell y _calendar_page_sidebar; los ids los lee auralis-calendar.js.
+ #}
+        <div class="auralis-calendar-header d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center justify-content-between gap-2 mb-3">
+            <div class="auralis-calendar-nav d-flex align-items-center gap-2 flex-wrap">
+                <button type="button" class="btn btn-outline-secondary" id="btnCalToday">
+                    {{ trans('today') }}
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="btnCalPrev" title="{{ trans('previous') }}"
+                        aria-label="{{ trans('previous') }}">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="btnCalNext" title="{{ trans('next') }}"
+                        aria-label="{{ trans('next') }}">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+                <span class="auralis-calendar-title fw-semibold" id="calTitleRange"
+                      style="cursor: pointer; min-width: 12rem;"
+                      title="{{ trans('jump-to-date') }}">{{ trans('loading') }}</span>
+                <input type="date" id="calJumpDate"
+                       style="position: absolute; width: 0; height: 0; opacity: 0; padding: 0; border: none; overflow: hidden; pointer-events: none;">
+            </div>
+
+            <div class="auralis-calendar-filters d-flex align-items-stretch align-items-lg-center gap-2 flex-wrap">
+                {% if header_filters is defined and header_filters %}
+                    <div class="auralis-calendar-filter-selects d-flex align-items-stretch gap-2 flex-wrap">
+                        {{ header_filters|raw }}
+                    </div>
+                {% endif %}
+                <button type="button" class="btn btn-outline-secondary auralis-cal-24h d-none d-md-inline-block" id="btnCal24h"
+                        aria-pressed="false" title="{{ trans('auralis-calendario-24h-help')|e('html_attr') }}">
+                    {{ trans('auralis-calendario-24h') }}
+                </button>
+                <div class="btn-group" role="group" aria-label="{{ trans('view') }}">
+                    <button type="button" class="btn btn-outline-secondary" data-cal-view="1day">1 {{ trans('day') }}</button>
+                    <button type="button" class="btn btn-outline-secondary" data-cal-view="3days">3 {{ trans('days') }}</button>
+                    <button type="button" class="btn btn-outline-secondary" data-cal-view="week">{{ trans('week') }}</button>
+                    <button type="button" class="btn btn-outline-secondary" data-cal-view="month">{{ trans('month') }}</button>
+                </div>
+            </div>
+        </div>

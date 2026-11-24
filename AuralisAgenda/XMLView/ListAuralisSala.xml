@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Vista de listado de salas Auralis.
+ */
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="idsala"/>
+        </column>
+        <column name="name" order="110">
+            <widget type="text" fieldname="nombre"/>
+        </column>
+        <column name="warehouse" titleurl="ListAlmacen" order="120">
+            <widget type="select" fieldname="codalmacen" onclick="EditAlmacen">
+                <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="description" order="130">
+            <widget type="textarea" fieldname="descripcion"/>
+        </column>
+        <column name="active" display="center" order="140">
+            <widget type="checkbox" fieldname="activa"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="danger" fieldname="activa" title="inactive">0</option>
+        </row>
+    </rows>
+</view>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    @package FacturaScripts
+    @author MansiHost.com
+    @description Añade el textarea de aviso interno Auralis en la ficha de familia.
+-->
+<view>
+    <columns>
+        <group name="aviso-auralis" title="aviso-auralis" numcolumns="12"
+               icon="fa-solid fa-triangle-exclamation" color="warning">
+            <column name="aviso_auralis" display="left" numcolumns="12" order="2000"
+                    title="aviso-auralis-texto">
+                <widget type="textarea" fieldname="aviso_auralis" rows="3"/>
+            </column>
+        </group>
+    </columns>
+</view>

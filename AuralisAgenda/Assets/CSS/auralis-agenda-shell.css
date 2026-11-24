@@ -1,0 +1,1779 @@
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @description Estilos premium para el Dashboard de Auralis, reutilizando variables de diseño
+ */
+
+/* Contenedor del Dashboard */
+.auralis-dashboard {
+    padding: 1.5rem;
+    font-family: inherit;
+    color: var(--v-text);
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+@media (max-width: 990px) {
+    .auralis-dashboard {
+        padding: 1rem 0.75rem;
+    }
+}
+
+/* Pestañas Móviles */
+.auralis-mobile-tabs {
+    display: none;
+    gap: 0.5rem;
+    background: #FFFFFF;
+    padding: 0.4rem;
+    border-radius: var(--auralis-radius-card, 12px);
+    border: 1px solid var(--bs-border-color);
+    box-shadow: var(--bs-box-shadow-sm);
+}
+
+.auralis-mobile-tab-btn {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border: none;
+    background: transparent;
+    border-radius: var(--auralis-radius-btn, 8px);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--v-text-muted, #64748b);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auralis-mobile-tab-btn.active {
+    background: var(--v-primary, #10b981);
+    color: #FFFFFF !important;
+}
+
+@media (max-width: 990px) {
+    .auralis-mobile-tabs {
+        display: flex !important;
+    }
+    .auralis-pane-treasury {
+        display: none;
+    }
+}
+
+@media (min-width: 991px) {
+    .auralis-mobile-tabs {
+        display: none !important;
+    }
+    .auralis-pane-analytics,
+    .auralis-pane-treasury {
+        display: block !important;
+    }
+}
+
+.auralis-dashboard-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.auralis-dashboard-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--v-heading-color);
+    margin: 0;
+}
+
+.auralis-dashboard-subtitle {
+    font-size: 0.95rem;
+    color: var(--v-text-muted);
+    margin-top: 0.25rem;
+}
+
+/* Acciones Rápidas */
+.auralis-quick-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-auralis-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--auralis-radius-btn, 8px);
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.btn-auralis-action-primary {
+    background-color: var(--v-primary);
+    color: #FFFFFF !important;
+}
+
+.btn-auralis-action-primary:hover {
+    background-color: var(--v-primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-auralis-action-secondary {
+    background-color: #FFFFFF;
+    border-color: var(--bs-border-color);
+    color: var(--v-secondary) !important;
+    box-shadow: var(--bs-box-shadow-sm);
+}
+
+.btn-auralis-action-secondary:hover {
+    background-color: var(--v-bg-secondary);
+    border-color: var(--v-text-muted);
+    transform: translateY(-1px);
+}
+
+.btn-auralis-outline-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: var(--auralis-radius-btn, 8px);
+    transition: all 0.2s ease;
+    color: var(--v-primary) !important;
+    border: 1px solid var(--v-primary);
+    background-color: #FFFFFF;
+    text-decoration: none;
+}
+
+.btn-auralis-outline-primary:hover {
+    background-color: var(--v-primary);
+    color: #FFFFFF !important;
+    border-color: var(--v-primary);
+    transform: translateY(-1px);
+}
+
+/* Filtros */
+.auralis-filters-bar {
+    background: #FFFFFF;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--auralis-radius-card, 12px);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    box-shadow: var(--bs-box-shadow-sm);
+}
+
+.auralis-filters-left {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.auralis-filter-btn {
+    border: 1px solid var(--bs-border-color);
+    background: #FFFFFF;
+    padding: 0.5rem 1rem;
+    border-radius: var(--auralis-radius-btn, 8px);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--v-text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auralis-filter-btn:hover {
+    background: var(--v-bg-secondary);
+}
+
+.auralis-filter-btn.active {
+    background: var(--v-primary);
+    color: #FFFFFF;
+    border-color: var(--v-primary);
+}
+
+.auralis-datepicker-input {
+    border: 1px solid var(--bs-border-color);
+    background: #FFFFFF;
+    padding: 0.5rem 1rem;
+    border-radius: var(--auralis-radius-input, 6px);
+    font-size: 0.85rem;
+    width: 260px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+@media (max-width: 576px) {
+    .auralis-filters-bar {
+        padding: 0.75rem;
+    }
+    .auralis-filter-btn {
+        padding: 0.4rem 0.65rem;
+        font-size: 0.8rem;
+    }
+}
+
+.auralis-filters-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--v-text);
+    cursor: pointer;
+}
+
+.auralis-filters-right input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--v-primary);
+    cursor: pointer;
+}
+
+/* KPIs de Salud Financiera */
+.auralis-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.auralis-kpi-card {
+    background: #FFFFFF;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--auralis-radius-card, 12px);
+    padding: 1.25rem;
+    box-shadow: var(--bs-box-shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.auralis-kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--bs-box-shadow);
+    border-color: var(--v-primary);
+}
+
+.auralis-kpi-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.auralis-kpi-card:hover::before {
+    background: var(--v-primary);
+}
+
+.auralis-kpi-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--v-text-muted);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.auralis-kpi-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--v-heading-color);
+    line-height: 1.2;
+}
+
+.auralis-kpi-footer {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.auralis-trend-up {
+    color: var(--bs-success);
+    font-weight: 600;
+}
+
+.auralis-trend-down {
+    color: var(--bs-danger);
+    font-weight: 600;
+}
+
+.auralis-trend-neutral {
+    color: var(--v-text-muted);
+}
+
+/* Banner de Alerta Cashflow */
+.auralis-alert-cashflow {
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--auralis-radius-card, 12px);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    animation: pulseAlert 3s infinite ease-in-out;
+}
+
+@keyframes pulseAlert {
+    0%, 100% { border-color: rgba(239, 68, 68, 0.2); }
+    50% { border-color: rgba(239, 68, 68, 0.5); }
+}
+
+.auralis-alert-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--bs-danger);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.auralis-alert-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.auralis-alert-link {
+    background: #FFFFFF;
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    color: var(--v-heading-color) !important;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none !important;
+    box-shadow: var(--bs-box-shadow-sm);
+    cursor: pointer;
+}
+
+.auralis-alert-link:hover,
+.auralis-alert-link:focus {
+    background: var(--bs-danger);
+    color: #FFFFFF !important;
+    border-color: var(--bs-danger);
+    transform: translateY(-1px);
+}
+
+/* Banner Alerta descuadre recibos vs factura (warning) */
+.auralis-alert-receipts-diff {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: var(--auralis-radius-card, 12px);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    animation: pulseAlertWarning 3s infinite ease-in-out;
+}
+
+@keyframes pulseAlertWarning {
+    0%, 100% { border-color: rgba(245, 158, 11, 0.35); }
+    50% { border-color: rgba(245, 158, 11, 0.7); }
+}
+
+.auralis-alert-receipts-diff .auralis-alert-text {
+    color: #b45309;
+}
+
+.auralis-alert-receipts-diff .auralis-alert-link {
+    border-color: rgba(245, 158, 11, 0.25);
+}
+
+.auralis-alert-receipts-diff .auralis-alert-link:hover,
+.auralis-alert-receipts-diff .auralis-alert-link:focus {
+    background: #b45309;
+    border-color: #b45309;
+    color: #FFFFFF !important;
+}
+
+/* Importes del modal descuadre: semántica de alerta (independiente del primary del tema) */
+#auralisReceiptsDiffModal .auralis-diff-amount-positive {
+    color: #D32F2F !important; /* Faltante / deuda pendiente */
+}
+
+#auralisReceiptsDiffModal .auralis-diff-amount-negative {
+    color: #1976D2 !important; /* Exceso / saldo a favor (azul informativo) */
+}
+
+#auralisReceiptsDiffModal .auralis-diff-amount-zero {
+    color: #6c757d !important;
+}
+
+/* Sección Analítica */
+.auralis-analytics-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.auralis-chart-card,
+.auralis-top-card {
+    background: #FFFFFF;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--auralis-radius-card, 12px);
+    padding: 1.5rem;
+    box-shadow: var(--bs-box-shadow-sm);
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+@media (max-width: 990px) {
+    .auralis-chart-card,
+    .auralis-top-card {
+        padding: 1rem;
+    }
+}
+
+.auralis-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.auralis-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--v-heading-color);
+    margin: 0;
+}
+
+/* Top Clientes Bar List */
+.auralis-bar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.auralis-bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 100%;
+}
+
+.auralis-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    width: 100%;
+}
+
+.auralis-client-name {
+    color: var(--v-heading-color);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.auralis-client-name a {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.auralis-client-amount {
+    color: var(--v-text);
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.auralis-client-pct {
+    color: var(--v-text-muted);
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+}
+
+.auralis-bar-outer {
+    background: var(--v-bg-secondary);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.auralis-bar-inner {
+    background: var(--v-primary);
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auralis-alert-concentration {
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--bs-warning);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    min-width: 0;
+    word-break: break-word;
+}
+
+/* --- CALENDARIO BASE REUTILIZABLE --- */
+.auralis-calendar-section {
+    background: #FFFFFF;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--auralis-radius-card, 12px);
+    padding: 1.5rem;
+    box-shadow: var(--bs-box-shadow-sm);
+    margin-bottom: 2rem;
+}
+
+.auralis-calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.auralis-calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.auralis-calendar-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--v-heading-color);
+    min-width: 150px;
+    text-align: center;
+    transition: opacity 0.2s ease;
+}
+
+.auralis-calendar-title:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+.auralis-calendar-filters {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.auralis-calendar-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.auralis-calendar-checkbox input[type="checkbox"] {
+    width: 0.95rem;
+    height: 0.95rem;
+    accent-color: var(--v-primary);
+    cursor: pointer;
+}
+
+.text-indicator-green {
+    color: var(--bs-success);
+}
+
+.text-indicator-red {
+    color: var(--bs-danger);
+}
+
+/* Reusable Grid */
+.z-calendar-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* ── Grid unificado: headers + celdas en el MISMO grid CSS ──────────
+   Garantiza alineación perfecta a cualquier nivel de zoom.
+   El style="grid-template-columns: repeat(N, 1fr)" se inyecta inline
+   desde el template para que sea dinámico según la vista.
+─────────────────────────────────────────────────────────────────── */
+.z-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* fallback */
+    gap: 8px;
+    width: 100%;
+    /* align-items: stretch (default) → todas las celdas de una misma fila tienen la misma altura */
+}
+
+/* Cabecera de columna (primer "row" del grid unificado) */
+.z-calendar-header-col {
+    display: none; /* oculto en móvil */
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--v-text-muted);
+    padding: 6px 4px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 4px;
+    border: 1px solid transparent;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+    /* ↓ CLAVE: evita que el contenido expanda la columna más allá de su 1fr */
+    min-width: 0;
+    overflow: hidden;
+}
+
+@media (min-width: 992px) {
+    .z-calendar-header-col {
+        display: flex; /* visible en desktop */
+    }
+}
+
+.z-calendar-header-col.is-today {
+    color: var(--v-primary);
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* Celda de relleno: invisible, mantiene posición en el grid */
+/* ── Celda de día: base ────────────────────────────────── */
+.z-calendar-day {
+    background: var(--v-bg-light);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    min-height: 120px;
+    height: auto;
+    transition: all 0.2s ease;
+    /* ↓ CLAVE: evita que el contenido expanda la columna más allá de su 1fr */
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* ── Alturas por tipo de vista ──────────────────────────── */
+@media (min-width: 992px) {
+
+    /* Vista 3 Días: altura compacta y fija */
+    .z-calendar-grid--3days .z-calendar-day {
+        min-height: 220px;
+        max-height: 320px;
+    }
+
+    /* Vista Semana: algo de altura fija, sin aspect-ratio (evita desajuste al zoom) */
+    .z-calendar-grid--week .z-calendar-day {
+        min-height: 180px;
+    }
+
+    /* Vista Mes: celdas pequeñas que crecen con el contenido */
+    .z-calendar-grid--month .z-calendar-day {
+        min-height: 90px;
+    }
+}
+
+/* Celda de relleno: invisible, mantiene posición en el grid */
+.z-calendar-day.is-filler {
+    background: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
+    pointer-events: none;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+}
+
+.z-calendar-day.is-today {
+    background: rgba(16, 185, 129, 0.03);
+    border-color: var(--v-primary);
+    box-shadow: 0 0 0 1px var(--v-primary);
+}
+
+
+.z-calendar-day-header {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--bs-border-color);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--v-heading-color);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.z-calendar-day-body {
+    flex-grow: 1;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.z-calendar-day-footer {
+    padding: 0.6rem 0.75rem;
+    border-top: 1px solid var(--bs-border-color);
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: flex-end;
+    background: #FFFFFF;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.z-calendar-net-label {
+    color: var(--v-text-muted);
+}
+
+/* Tarjeta individual del día */
+.z-calendar-card {
+    background: #FFFFFF;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 6px;
+    padding: 0.6rem 0.85rem 0.6rem 0.6rem;
+    text-decoration: none !important;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+    /* ↓ evita que el contenido de la tarjeta empuje el ancho de la columna */
+    min-width: 0;
+    overflow: hidden;
+}
+
+.z-calendar-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--bs-box-shadow-sm);
+    border-color: var(--v-text-muted);
+}
+
+.z-calendar-card.border-left-green {
+    border-left: 3px solid var(--bs-success);
+}
+
+.z-calendar-card.border-left-red {
+    border-left: 3px solid var(--bs-danger);
+}
+
+.z-calendar-card.border-left-yellow {
+    border-left: 3px solid var(--bs-warning);
+}
+
+.z-calendar-card.border-left-blue {
+    border-left: 3px solid var(--bs-info);
+}
+
+.z-calendar-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.z-calendar-card-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--v-heading-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    line-height: 1.4;
+    padding-top: 1px;
+}
+
+.z-card-icon-inline {
+    margin-right: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.z-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2em 0.5em;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+}
+
+.z-badge-pill {
+    border-radius: 50rem;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+}
+
+.badge-green {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--bs-success);
+}
+
+.badge-red {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--bs-danger);
+}
+
+.badge-yellow {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--bs-warning);
+}
+
+.badge-blue {
+    background-color: rgba(2, 132, 199, 0.1);
+    color: var(--bs-info);
+}
+
+.badge-today {
+    background-color: var(--v-primary);
+    color: #FFFFFF;
+    font-size: 0.65rem;
+}
+
+.z-calendar-card-subtitle {
+    font-size: 0.75rem;
+    color: var(--v-text);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.z-calendar-empty {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+}
+
+.z-calendar-empty-text {
+    font-size: 0.75rem;
+    color: var(--v-text-muted);
+    font-style: italic;
+}
+
+/* Conmutador por Pestañas en Móvil */
+.auralis-mobile-tabs {
+    display: none;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.auralis-mobile-tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    color: var(--v-text-muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+}
+
+.auralis-mobile-tab-btn.active {
+    color: var(--v-primary);
+    border-bottom-color: var(--v-primary);
+}
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 992px) {
+    .auralis-kpi-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .auralis-dashboard {
+        padding: 1rem;
+    }
+    
+    .auralis-dashboard-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .auralis-quick-actions {
+        width: 100%;
+    }
+    
+    .btn-auralis-action {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .auralis-filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .auralis-datepicker-input {
+        width: 100%;
+    }
+    
+    .auralis-kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Liquidez Real en ancho completo arriba */
+    .auralis-kpi-card.kpi-liquidez {
+        grid-column: span 2;
+        order: -1;
+    }
+    
+    .auralis-analytics-row {
+        grid-template-columns: 1fr;
+    }
+    
+
+    
+    /* Transformación del Calendario a Agenda Timeline Vertical */
+    .z-calendar-wrapper {
+        overflow-x: visible;
+    }
+    
+    .z-calendar-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: auto;
+    }
+
+    /* En móvil, ocultar cabeceras y fillers (son solo decoración de escritorio) */
+    .z-calendar-header-col,
+    .z-calendar-day.is-filler {
+        display: none;
+    }
+    
+    .z-calendar-day {
+        height: auto;
+        min-height: auto;
+        max-height: none;
+        aspect-ratio: auto;
+        border-radius: 8px;
+    }
+    
+    .z-calendar-day.is-today {
+        border-left-width: 4px;
+    }
+    
+    .z-calendar-day-body {
+        max-height: none;
+        padding: 0.75rem;
+    }
+    
+    .z-calendar-empty {
+        min-height: auto;
+        padding: 0.5rem 0;
+        justify-content: flex-start;
+    }
+    
+    .z-calendar-day-footer {
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .auralis-kpi-row {
+        grid-template-columns: 1fr;
+    }
+    .auralis-kpi-card.kpi-liquidez {
+        grid-column: span 1;
+    }
+}
+
+/* Botón para ver más eventos */
+.z-btn-more-events {
+    position: relative;
+    z-index: 2;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--v-primary, var(--bs-primary, #0d6efd));
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.z-btn-more-events:hover {
+    background: rgba(13, 110, 253, 0.08);
+    text-decoration: underline;
+}
+
+/* Pestañas del modal de recibos integradas con el Tema Auralis */
+.auralis-receipts-tabs {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.auralis-receipts-tabs .nav-link {
+    border: 1px solid var(--bs-border-color, #cbd5e1) !important;
+    background-color: #ffffff !important;
+    color: var(--v-text-main, #334155) !important;
+    border-radius: 8px !important;
+    font-size: 0.8125rem !important;
+    font-weight: 600 !important;
+    padding: 0.55rem 0.5rem !important;
+    transition: all 0.2s ease-in-out !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+.auralis-receipts-tabs .nav-link:hover {
+    background-color: var(--v-bg-light, #f8fafc) !important;
+    border-color: #94a3b8 !important;
+    color: var(--v-text-heading, #0f172a) !important;
+}
+
+/* Estado activo utilizando el color primario del tema del ERP */
+.auralis-receipts-tabs .nav-link.active {
+    background-color: var(--v-primary, var(--bs-primary, #0d6efd)) !important;
+    border-color: var(--v-primary, var(--bs-primary, #0d6efd)) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+}
+
+.auralis-receipts-tabs .nav-link .z-tab-count {
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+}
+
+.auralis-receipts-tabs .nav-link.active .z-tab-count {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+
+/* ──────────────────────────────────────────────────────────
+   MODO TIMEGRID (Vista 24 Horas / Franjas Horarias por Slot)
+   ────────────────────────────────────────────────────────── */
+.z-timegrid-wrapper {
+    display: flex;
+    flex-direction: column;
+    background: var(--v-bg-light, #ffffff);
+    border: 1px solid var(--bs-border-color, #e2e8f0);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.z-timegrid-header {
+    display: grid;
+    background: var(--v-bg-card, #f8fafc);
+    border-bottom: 1px solid var(--bs-border-color, #e2e8f0);
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+}
+
+.z-timegrid-header::-webkit-scrollbar,
+.z-timegrid-allday-row::-webkit-scrollbar {
+    background: transparent;
+}
+.z-timegrid-header::-webkit-scrollbar-thumb,
+.z-timegrid-allday-row::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+.z-timegrid-time-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--v-text-muted, #64748b);
+    border-right: 1px solid var(--bs-border-color, #e2e8f0);
+    padding: 0.5rem;
+}
+
+.z-timegrid-day-header {
+    padding: 0.6rem;
+    text-align: center;
+    border-right: 1px solid var(--bs-border-color, #e2e8f0);
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    .z-timegrid-day-name {
+        display: block;
+        color: var(--v-text-muted, #64748b);
+        font-size: 0.7rem;
+    }
+    .z-timegrid-day-num {
+        font-size: 1.1rem;
+        color: var(--v-heading-color, #0f172a);
+    }
+}
+
+.z-timegrid-day-header.is-today {
+    background: rgba(16, 185, 129, 0.08);
+    .z-timegrid-day-num {
+        color: var(--v-primary, #10b981);
+    }
+}
+
+/* Franja superior de todo el día */
+.z-timegrid-allday-row {
+    display: grid;
+    border-bottom: 2px solid var(--bs-border-color, #cbd5e1);
+    background: #ffffff;
+    min-height: 40px;
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+}
+
+.z-timegrid-allday-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--bs-border-color, #e2e8f0);
+    font-size: 0.7rem;
+    padding: 0.25rem;
+    text-align: center;
+}
+
+.z-timegrid-allday-cell {
+    border-right: 1px solid var(--bs-border-color, #e2e8f0);
+    padding: 0.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.z-timegrid-allday-card {
+    display: block;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background: var(--v-bg-light, #f1f5f9);
+    border-left: 3px solid var(--v-primary, #0d6efd);
+    text-decoration: none !important;
+    color: var(--v-text-main, #334155);
+    transition: transform 0.15s ease;
+}
+
+.z-timegrid-allday-card:hover {
+    transform: translateX(2px);
+}
+
+/* Cuerpo de franjas horarias (~10 h visibles × 50px) */
+.z-timegrid-body {
+    display: grid;
+    max-height: 500px;
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+    background: #ffffff;
+}
+
+.z-timegrid-time-axis {
+    border-right: 1px solid var(--bs-border-color, #e2e8f0);
+    background: var(--v-bg-card, #f8fafc);
+}
+
+.z-timegrid-hour-slot {
+    height: 50px;
+    border-bottom: 1px solid var(--bs-border-color, #e2e8f0);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--v-text-muted, #94a3b8);
+    padding-top: 2px;
+}
+
+.z-timegrid-day-column {
+    position: relative;
+    border-right: 1px solid var(--bs-border-color, #e2e8f0);
+}
+
+.z-timegrid-day-column.is-today {
+    background: rgba(16, 185, 129, 0.02);
+}
+
+.z-timegrid-hour-cell {
+    height: 50px;
+    border-bottom: 1px dashed var(--bs-border-color, #f1f5f9);
+}
+
+/* Línea de hora actual (solo columna is-today) */
+.z-timegrid-now-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #ea4335;
+    z-index: 8;
+    pointer-events: none;
+    transform: translateY(-1px);
+}
+
+.z-timegrid-now-line::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ea4335;
+    transform: translateY(-50%);
+}
+
+.z-timegrid-event {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 6px;
+    padding: 2px 4px;
+    font-size: 0.75rem;
+    border-left: 4px solid var(--v-primary, #10b981);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    z-index: 2;
+    min-height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.z-timegrid-event:hover {
+    z-index: 5;
+}
+
+.z-timegrid-event-inner {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    line-height: 1.2;
+}
+
+.z-timegrid-event-title,
+.z-timegrid-event-subtitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+/* Eventos de corta duración (< 45 min o altura reducida): formato compacto horizontal */
+.z-timegrid-event.is-short-event,
+.z-timegrid-event[style*="height: 1."],
+.z-timegrid-event[style*="height: 2."] {
+    padding: 1px 5px !important;
+    min-height: 20px !important;
+    justify-content: center !important;
+}
+
+.z-timegrid-event.is-short-event .z-timegrid-event-inner,
+.z-timegrid-event[style*="height: 1."] .z-timegrid-event-inner,
+.z-timegrid-event[style*="height: 2."] .z-timegrid-event-inner {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.z-timegrid-event.is-short-event .z-timegrid-event-subtitle,
+.z-timegrid-event[style*="height: 1."] .z-timegrid-event-subtitle,
+.z-timegrid-event[style*="height: 2."] .z-timegrid-event-subtitle {
+    font-size: 0.68rem !important;
+    opacity: 0.9 !important;
+    font-weight: normal !important;
+}
+
+/* Soporte de clases de color dinámicas */
+.card-color-green { border-left-color: #10b981 !important; }
+.card-color-red { border-left-color: #ef4444 !important; }
+.card-color-blue { border-left-color: #3b82f6 !important; }
+.card-color-yellow { border-left-color: #f59e0b !important; }
+
+/* Estilos para creación e interacción rápida en Timegrid */
+.z-timegrid-hour-cell.is-creatable {
+    cursor: pointer;
+    position: relative;
+    transition: background 0.15s ease;
+}
+
+.z-timegrid-hour-cell.is-creatable:hover {
+    background: rgba(66, 133, 244, 0.08);
+}
+
+.z-timegrid-add-hint {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #4285f4;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.z-timegrid-hour-cell.is-creatable:hover .z-timegrid-add-hint {
+    display: inline-block;
+}
+
+/* Selector de color en modal de eventos */
+.z-event-color-picker {
+    display: flex;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.z-color-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    padding: 0;
+}
+
+.z-color-dot:hover {
+    transform: scale(1.15);
+}
+
+.z-color-dot.active {
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px var(--dot-color, #4285f4);
+}
+
+/* 9.º punto «color personalizado»: neutro (sin degradado) hasta que se elige un color libre */
+.z-color-dot.z-color-dot-custom {
+    background: var(--bs-body-bg, #ffffff);
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    color: var(--bs-secondary-color, #6c757d);
+}
+
+.auralis-event-modal-dialog {
+    max-width: 540px;
+}
+
+/* Autofill del navegador: unifica fondo blanco (evita #ffffd0 en título/fecha/inicio) */
+.auralis-event-modal-dialog input.form-control,
+.auralis-event-modal-dialog textarea.form-control,
+.auralis-event-modal-dialog select.form-select {
+    background-color: var(--bs-body-bg, #ffffff);
+}
+
+.auralis-event-modal-dialog input.form-control:-webkit-autofill,
+.auralis-event-modal-dialog input.form-control:-webkit-autofill:hover,
+.auralis-event-modal-dialog input.form-control:-webkit-autofill:focus,
+.auralis-event-modal-dialog input.form-control:-webkit-autofill:active,
+.auralis-event-modal-dialog textarea.form-control:-webkit-autofill,
+.auralis-event-modal-dialog select.form-select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--bs-body-bg, #ffffff) inset !important;
+    box-shadow: 0 0 0 1000px var(--bs-body-bg, #ffffff) inset !important;
+    -webkit-text-fill-color: var(--bs-body-color, #212529) !important;
+    caret-color: var(--bs-body-color, #212529);
+    background-color: var(--bs-body-bg, #ffffff) !important;
+    background-image: none !important;
+    transition: background-color 99999s ease-out 0s;
+    filter: none;
+}
+
+.z-ev-notif-row .form-select,
+.z-ev-notif-row .form-control {
+    font-size: 0.8125rem;
+}
+
+.z-ev-notif-row {
+    min-width: 0;
+}
+
+.z-ev-notif-row .z-ev-notif-value {
+    flex: 0 0 64px;
+    max-width: 64px;
+}
+
+/* Ancho para la unidad más larga en es_ES («semanas») + chevron del form-select */
+.z-ev-notif-row .z-ev-notif-unit {
+    flex: 0 0 8rem;
+    width: 8rem;
+    max-width: 8rem;
+    min-width: 8rem;
+}
+
+.z-ev-notif-row .z-ev-notif-type {
+    min-width: 0;
+}
+
+.z-ev-notif-row .z-ev-notif-remove:hover {
+    color: #dc3545 !important;
+}
+
+/* Click-to-create en Vista General (Día/Mes) */
+.z-calendar-day.is-creatable {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.z-calendar-day.is-creatable:hover {
+    background-color: rgba(66, 133, 244, 0.05);
+}
+
+.z-calendar-day-empty-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 70px;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    user-select: none;
+}
+
+.z-calendar-day.is-creatable:hover .z-calendar-day-empty-hint {
+    transform: scale(1.06);
+    color: #4285f4 !important;
+}
+
+.z-calendar-day.is-creatable:hover .z-calendar-day-empty-hint i {
+    opacity: 0.9 !important;
+}
+
+/* Modal de Eventos Auralis con Tokens de Diseño del Tema */
+.auralis-modal .modal-content {
+    border-radius: var(--auralis-radius-card, 12px) !important;
+    border: 1px solid var(--bs-border-color, #E2E8F0);
+    background-color: var(--theme-card-bg, #FFFFFF);
+    color: var(--bs-body-color, #475569);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    font-family: inherit;
+}
+
+.auralis-modal .modal-header {
+    background-color: var(--v-bg-secondary, #F1F5F9);
+    border-bottom: 1px solid var(--bs-border-color, #E2E8F0);
+    color: var(--v-heading-color, #0F172A);
+}
+
+.auralis-modal .modal-footer {
+    background-color: var(--v-bg-secondary, #F1F5F9);
+    border-top: 1px solid var(--bs-border-color, #E2E8F0);
+}
+
+/* Modal día del calendario: scroll + padding interno (sin clip del primer ítem) */
+#auralisCalendarDayModal .z-calendar-day-modal-dialog {
+    max-width: 440px;
+}
+
+#auralisCalendarDayModal .z-calendar-day-modal-body {
+    display: block !important;
+    max-height: min(55vh, 480px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+#auralisCalendarDayModal .z-day-overflow-list > .z-calendar-card {
+    display: flex;
+    margin-bottom: 0;
+}
+
+#auralisCalendarDayModal .z-day-overflow-event-card {
+    cursor: pointer;
+}
+
+/* Drag and Drop en TimeGrid */
+.z-timegrid-event {
+    cursor: grab;
+    user-select: none;
+    transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.z-timegrid-event:active,
+.z-timegrid-event.is-dragging {
+    cursor: grabbing;
+    opacity: 0.5 !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(0.98);
+}
+
+.z-timegrid-hour-cell.is-drag-over {
+    background-color: rgba(var(--v-primary-rgb, 16, 185, 129), 0.15) !important;
+    border-bottom: 1px dashed var(--v-primary, #10b981) !important;
+    transition: background-color 0.15s ease;
+}
+
+/* Indicador visual de tiempo en tiempo real durante Drag & Drop */
+.z-timegrid-hour-cell {
+    position: relative;
+}
+
+.z-timegrid-drag-preview-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--v-primary, #10b981);
+    box-shadow: 0 0 6px rgba(var(--v-primary-rgb, 16, 185, 129), 0.6);
+    z-index: 20;
+    pointer-events: none;
+    transition: top 0.05s ease-out;
+}
+
+.z-timegrid-drag-preview-badge {
+    position: absolute;
+    right: 6px;
+    top: -11px;
+    background: var(--v-primary, #10b981);
+    color: #ffffff;
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    letter-spacing: 0.5px;
+}
+
+/* Ranking pagadores / detalle recibos / descuadre: anular fondo blanco global SOLO en estos modales */
+#auralisPayerRankingModal .tab-content,
+#auralisPayerRankingModal .tab-pane,
+#auralisReceiptsDetailModal .tab-content,
+#auralisReceiptsDetailModal .tab-pane,
+#auralisReceiptsDiffModal .tab-content,
+#auralisReceiptsDiffModal .tab-pane {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+#auralisPayerRankingModal .z-ranking-list-group,
+#auralisReceiptsDetailModal .z-receipts-list-group,
+#auralisReceiptsDiffModal .z-receipts-list-group {
+    --bs-list-group-bg: transparent !important;
+    --bs-list-group-border-color: transparent !important;
+    background-color: transparent !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0;
+    gap: 0.5rem;
+}
+
+#auralisPayerRankingModal .z-ranking-list-group > .z-ranking-item,
+#auralisReceiptsDetailModal .z-receipts-list-group > .z-receipt-item,
+#auralisReceiptsDiffModal .z-receipts-list-group > .z-receipt-item {
+    margin-bottom: 0;
+}
+
+#auralisPayerRankingModal .z-ranking-pager,
+#auralisReceiptsDetailModal .z-receipts-pager,
+#auralisReceiptsDiffModal .z-receipts-pager {
+    margin-top: 0.75rem;
+    background-color: transparent !important;
+}
+
+/* Modal desglose diario («+X más…») — Mi calendario / receipts */
+.z-calendar-day-modal-dialog {
+    max-width: 440px;
+}
+
+#auralisCalendarDayModal .z-day-overflow-item {
+    border-left: 4px solid #4285f4;
+    cursor: pointer;
+}
+
+#auralisCalendarDayModal .z-day-overflow-item:hover {
+    background-color: var(--bs-light, #f8f9fa);
+}
+
+#auralisCalendarDayModal .z-day-overflow-item.border-left-blue {
+    border-left-color: #4285f4;
+}
+
+#auralisCalendarDayModal .z-day-overflow-item.border-left-green {
+    border-left-color: #34a853;
+}
+
+#auralisCalendarDayModal .z-day-overflow-item.border-left-red {
+    border-left-color: #ea4335;
+}
+
+#auralisCalendarDayModal .z-day-overflow-item.border-left-yellow {
+    border-left-color: #fbbc05;
+}
+/* Selector avanzado del gráfico de evolución (personalización Auralis). */
+.auralis-evolution-header {
+    display: block;
+    padding-bottom: 0;
+}
+
+.auralis-evolution-summary {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+}
+
+.auralis-evolution-heading {
+    min-width: 0;
+}
+
+.auralis-evolution-kicker {
+    display: block;
+    margin-bottom: .2rem;
+    color: var(--v-primary, var(--bs-primary));
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .14em;
+}
+
+.auralis-evolution-title-separator {
+    color: var(--bs-secondary-color, #6c757d);
+    font-weight: 400;
+}
+
+.auralis-evolution-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    flex: 0 0 1.5rem;
+    border-radius: 50%;
+    color: var(--bs-secondary-color, #6c757d);
+    background: var(--bs-tertiary-bg, #f1f3f5);
+    cursor: help;
+}
+
+.auralis-evolution-period {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    min-height: 2.25rem;
+    padding: .45rem .75rem;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: 999px;
+    color: var(--bs-body-color, #212529);
+    background: var(--bs-body-bg, #fff);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+    font-size: .78rem;
+    font-weight: 650;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.auralis-evolution-period > i:first-child {
+    color: var(--v-primary, var(--bs-primary));
+}
+
+.auralis-evolution-period-arrow {
+    color: var(--bs-secondary-color, #6c757d);
+    font-size: .7rem;
+}
+
+.auralis-evolution-controls {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: .75rem;
+    width: 100%;
+    padding: .85rem;
+    border: 1px solid var(--bs-border-color, #e5e7eb);
+    border-radius: .9rem;
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.auralis-evolution-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    margin: 0;
+}
+
+.auralis-evolution-controls label > span {
+    color: var(--bs-secondary-color, #6c757d);
+    font-size: .67rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.auralis-evolution-controls .form-select {
+    width: 100%;
+    min-width: 0;
+    min-height: 2.25rem;
+    border-radius: .65rem;
+    background-color: var(--bs-body-bg, #fff);
+}
+
+.auralis-evolution-chart {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin-top: 1rem;
+    padding-top: .75rem;
+    border-top: 1px solid var(--bs-border-color-translucent, rgba(0, 0, 0, .08));
+}
+
+@media (max-width: 1100px) {
+    .auralis-evolution-summary {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: .65rem;
+    }
+
+    .auralis-evolution-controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .auralis-evolution-controls {
+        grid-template-columns: 1fr;
+        gap: .6rem;
+        padding: .75rem;
+    }
+
+    .auralis-evolution-period {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .auralis-evolution-chart {
+        height: 260px;
+    }
+}

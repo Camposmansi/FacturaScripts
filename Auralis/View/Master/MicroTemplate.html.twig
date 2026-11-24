@@ -1,0 +1,80 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Plantilla de micro página para Auralis con favicon predeterminado auralis_icono.svg
+ #}
+{% import 'Macro/GoogleTagManager.html.twig' as GoogleTagManager %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ constant('FS_LANG') | slice(0, 2) }}" xml:lang="{{ constant('FS_LANG') | slice(0, 2) }}" >
+    <head>
+        {{ GoogleTagManager.head() }}
+        {% block meta %}
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <title>{{ fsc.title }}</title>
+            <meta name="description" content="{{ trans('meta-description') }}" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <meta name="generator" content="FacturaScripts" />
+            <meta name="robots" content="noindex" />
+        {% endblock %}
+        {% block icons %}
+            {% set customLogo = settings('auralis', 'custom_logo') %}
+            {% if customLogo %}
+                <link rel="shortcut icon" href="{{ asset(customLogo) }}"/>
+                <link rel="apple-touch-icon" href="{{ asset(customLogo) }}"/>
+            {% else %}
+                <link rel="shortcut icon" href="{{ asset('Dinamic/Assets/Images/auralis_icono.svg') }}" type="image/svg+xml"/>
+                <link rel="apple-touch-icon" href="{{ asset('Dinamic/Assets/Images/auralis_icono.svg') }}"/>
+            {% endif %}
+        {% endblock %}
+        {% block css %}
+            <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}?v=5" />
+            <link rel="stylesheet" href="{{ asset('node_modules/@fortawesome/fontawesome-free/css/all.min.css') }}?v=6"/>
+            <style>
+                .btn-link {
+                    text-decoration: none;
+                }
+            </style>
+        {% endblock %}
+        {# Adds custom CSS assets #}
+        {% for css in assetManager.get('css') %}
+            <link rel="stylesheet" href="{{ css }}" />
+        {% endfor %}
+        {% block javascripts %}
+            <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+            <script src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}?v=5"></script>
+            <script src="{{ asset('node_modules/@fortawesome/fontawesome-free/js/all.min.js') }}?v=6"></script>
+        {% endblock %}
+        {# Adds custom JS assets #}
+        {% for js in assetManager.get('js') %}
+            <script src="{{ js }}"></script>
+        {% endfor %}
+        {# Adds custom JS module assets #}
+        {% for mjs in assetManager.get('mjs') %}
+            <script type="module" src="{{ mjs }}"></script>
+        {% endfor %}
+        {% if debugBarRender %}
+            {{ debugBarRender.renderHead() | raw }}
+        {% endif %}
+    </head>
+    {% block fullBody %}
+        <body>
+            {{ GoogleTagManager.body() }}
+            {% block messages %}
+                {% include 'Macro/Toasts.html.twig' %}
+                {% from 'Macro/Utils.html.twig' import message as showMessage %}
+                <div class="px-2 pt-2">
+                    {{ showMessage(log, ['error', 'critical'], 'danger') }}
+                    {{ showMessage(log, ['warning'], 'warning') }}
+                    {{ showMessage(log, ['notice'], 'success') }}
+                    {{ showMessage(log, ['info'], 'info') }}
+                </div>
+            {% endblock %}
+            {% block body %}
+            {% endblock %}
+            {% if debugBarRender %}
+                {{ debugBarRender.render() | raw }}
+            {% endif %}
+            <!-- execution time: {{ executionTime() }} s -->
+        </body>
+    {% endblock %}
+</html>

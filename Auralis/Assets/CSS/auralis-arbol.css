@@ -1,0 +1,352 @@
+/**
+ * @package FacturaScripts
+ * @author MansiHost.com
+ * @copyright 2026 MansiHost.com. Todos los derechos reservados.
+ * @license Licencia privada Auralis. Ver LICENSE.txt
+ * Uso sujeto a los términos de LICENSE.txt.
+ * @description Estilos del visor de árbol AuralisArbol (todo bajo .auralis-arbol): tema --v-* / --bs-*, tipografía --auralis-font-size-* y modo oscuro.
+ */
+
+.auralis-arbol {
+    --za-fondo: var(--bs-body-bg, #fff);
+    --za-tarjeta: var(--bs-body-bg, #fff);
+    --za-borde: var(--bs-border-color, #dee2e6);
+    --za-texto: var(--bs-body-color, #212529);
+    --za-suave: var(--bs-secondary-color, #6c757d);
+    --za-primario: var(--v-primary, var(--bs-primary, #0d6efd));
+    --za-arista: var(--bs-gray-500, #adb5bd);
+    --za-alerta: var(--bs-warning, #ffc107);
+    --za-punto: var(--bs-border-color, #dee2e6);
+
+    position: relative;
+    height: var(--auralis-arbol-alto, 520px);
+    overflow: hidden;
+    font-family: inherit;
+    font-size: var(--auralis-font-size-base, 14px);
+    color: var(--za-texto);
+    background-color: var(--za-fondo);
+    border: 1px solid var(--za-borde);
+    border-radius: var(--bs-border-radius, 0.375rem);
+}
+
+.auralis-arbol:fullscreen {
+    height: 100vh;
+    border: 0;
+    border-radius: 0;
+}
+
+[data-bs-theme="dark"] .auralis-arbol,
+.auralis-arbol[data-bs-theme="dark"] {
+    --za-tarjeta: var(--bs-tertiary-bg, #2b3035);
+    --za-arista: var(--bs-gray-600, #6c757d);
+    --za-punto: var(--bs-gray-700, #495057);
+}
+
+/* ---------- Lienzo ---------- */
+
+.auralis-arbol-lienzo {
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(var(--za-punto) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.auralis-arbol-lienzo > svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.auralis-arbol-lienzo > svg.za-arrastrando {
+    cursor: grabbing;
+}
+
+/* ---------- Barra flotante ---------- */
+
+.auralis-arbol-barra {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.375rem;
+    max-width: calc(100% - 1rem);
+    padding: 0.375rem;
+    background-color: var(--bs-tertiary-bg, #f8f9fa);
+    border: 1px solid var(--za-borde);
+    border-radius: var(--bs-border-radius, 0.375rem);
+    box-shadow: var(--bs-box-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075));
+}
+
+.auralis-arbol-barra .btn.active {
+    color: #fff;
+    background-color: var(--za-primario);
+    border-color: var(--za-primario);
+}
+
+.auralis-arbol-barra [hidden] {
+    display: none;
+}
+
+@media (max-width: 767.98px) {
+    .auralis-arbol-barra {
+        left: 0.5rem;
+        justify-content: center;
+    }
+
+    .auralis-arbol-texto-boton {
+        display: none;
+    }
+}
+
+/* ---------- Estado, aviso y detalle (HTML dentro del contenedor) ---------- */
+
+.auralis-arbol-estado {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    color: var(--za-suave);
+    text-align: center;
+    pointer-events: none;
+}
+
+.auralis-arbol-estado[hidden],
+.auralis-arbol-aviso[hidden],
+.auralis-arbol-detalle[hidden] {
+    display: none;
+}
+
+.auralis-arbol-pista {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-size: var(--auralis-font-size-h6, 1rem);
+    color: #fff;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.auralis-arbol-pista.za-visible {
+    opacity: 1;
+}
+
+.auralis-arbol-aviso {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    z-index: 2;
+    max-width: min(24rem, calc(100% - 1rem));
+    padding: 0.5rem 0.75rem;
+    font-size: calc(var(--auralis-font-size-base, 14px) * 0.875);
+    color: var(--bs-warning-text-emphasis, #664d03);
+    background-color: var(--bs-warning-bg-subtle, #fff3cd);
+    border: 1px solid var(--bs-warning-border-subtle, #ffe69c);
+    border-radius: var(--bs-border-radius, 0.375rem);
+}
+
+.auralis-arbol-detalle {
+    position: absolute;
+    left: 0.5rem;
+    bottom: 0.5rem;
+    z-index: 3;
+    width: min(22rem, calc(100% - 1rem));
+    max-height: calc(100% - 5rem);
+    overflow: auto;
+    padding: 0.75rem;
+    background-color: var(--bs-body-bg, #fff);
+    border: 1px solid var(--za-borde);
+    border-radius: var(--bs-border-radius, 0.375rem);
+    box-shadow: var(--bs-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+}
+
+.auralis-arbol-detalle-cabecera {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.auralis-arbol-detalle-titulo {
+    font-size: var(--auralis-font-size-h6, 1rem);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.auralis-arbol-detalle-subtitulo {
+    margin-top: 0.125rem;
+    color: var(--za-suave);
+    overflow-wrap: anywhere;
+}
+
+.auralis-arbol-detalle-alerta {
+    margin-top: 0.5rem;
+    color: var(--bs-warning-text-emphasis, #664d03);
+}
+
+.auralis-arbol-detalle-valores {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.125rem 0.75rem;
+    margin: 0.5rem 0 0;
+}
+
+.auralis-arbol-detalle-valores dt {
+    font-weight: 400;
+    color: var(--za-suave);
+}
+
+.auralis-arbol-detalle-valores dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.auralis-arbol-detalle-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.auralis-arbol-detalle > .btn {
+    margin-top: 0.75rem;
+}
+
+/* ---------- SVG: tarjetas, aristas y controles ---------- */
+
+.auralis-arbol .za-arista {
+    fill: none;
+    stroke: var(--za-arista);
+    stroke-width: 1.5;
+}
+
+.auralis-arbol .za-nodo {
+    cursor: pointer;
+    outline: none;
+}
+
+.auralis-arbol .za-tarjeta {
+    fill: var(--za-tarjeta);
+    stroke: var(--za-borde);
+    stroke-width: 1;
+}
+
+.auralis-arbol .za-nodo:hover .za-tarjeta,
+.auralis-arbol .za-nodo:focus-visible .za-tarjeta {
+    stroke: var(--za-primario);
+}
+
+.auralis-arbol .za-con-alerta .za-tarjeta {
+    stroke: var(--za-alerta);
+    stroke-width: 1.5;
+}
+
+.auralis-arbol .za-seleccionado .za-tarjeta {
+    stroke: var(--za-primario);
+    stroke-width: 2.5;
+}
+
+.auralis-arbol .za-etiqueta {
+    fill: var(--za-texto);
+    font-size: var(--auralis-font-size-base, 14px);
+    font-weight: 600;
+}
+
+.auralis-arbol .za-cantidad {
+    fill: var(--za-primario);
+    font-size: var(--auralis-font-size-base, 14px);
+    font-weight: 600;
+}
+
+.auralis-arbol .za-subtitulo,
+.auralis-arbol .za-valores {
+    fill: var(--za-suave);
+    font-size: calc(var(--auralis-font-size-base, 14px) * 0.875);
+    font-weight: 400;
+}
+
+.auralis-arbol .za-badge-texto {
+    font-size: calc(var(--auralis-font-size-base, 14px) * 0.75);
+    font-weight: 600;
+}
+
+.auralis-arbol .za-franja { fill: var(--za-primario); }
+.auralis-arbol .za-franja.za-secondary { fill: var(--bs-secondary, #6c757d); }
+.auralis-arbol .za-franja.za-success { fill: var(--bs-success, #198754); }
+.auralis-arbol .za-franja.za-danger { fill: var(--bs-danger, #dc3545); }
+.auralis-arbol .za-franja.za-warning { fill: var(--bs-warning, #ffc107); }
+.auralis-arbol .za-franja.za-info { fill: var(--bs-info, #0dcaf0); }
+.auralis-arbol .za-franja.za-light { fill: var(--bs-gray-300, #dee2e6); }
+.auralis-arbol .za-franja.za-dark { fill: var(--bs-dark, #212529); }
+
+.auralis-arbol .za-badge .za-badge-fondo { fill: var(--bs-secondary-bg-subtle, #e2e3e5); }
+.auralis-arbol .za-badge .za-badge-texto { fill: var(--bs-secondary-text-emphasis, #2b2f32); }
+.auralis-arbol .za-badge.za-primary .za-badge-fondo { fill: var(--bs-primary-bg-subtle, #cfe2ff); }
+.auralis-arbol .za-badge.za-primary .za-badge-texto { fill: var(--bs-primary-text-emphasis, #052c65); }
+.auralis-arbol .za-badge.za-success .za-badge-fondo { fill: var(--bs-success-bg-subtle, #d1e7dd); }
+.auralis-arbol .za-badge.za-success .za-badge-texto { fill: var(--bs-success-text-emphasis, #0a3622); }
+.auralis-arbol .za-badge.za-danger .za-badge-fondo { fill: var(--bs-danger-bg-subtle, #f8d7da); }
+.auralis-arbol .za-badge.za-danger .za-badge-texto { fill: var(--bs-danger-text-emphasis, #58151c); }
+.auralis-arbol .za-badge.za-warning .za-badge-fondo { fill: var(--bs-warning-bg-subtle, #fff3cd); }
+.auralis-arbol .za-badge.za-warning .za-badge-texto { fill: var(--bs-warning-text-emphasis, #664d03); }
+.auralis-arbol .za-badge.za-info .za-badge-fondo { fill: var(--bs-info-bg-subtle, #cff4fc); }
+.auralis-arbol .za-badge.za-info .za-badge-texto { fill: var(--bs-info-text-emphasis, #055160); }
+.auralis-arbol .za-badge.za-light .za-badge-fondo { fill: var(--bs-light-bg-subtle, #fcfcfd); }
+.auralis-arbol .za-badge.za-light .za-badge-texto { fill: var(--bs-light-text-emphasis, #495057); }
+.auralis-arbol .za-badge.za-dark .za-badge-fondo { fill: var(--bs-dark-bg-subtle, #ced4da); }
+.auralis-arbol .za-badge.za-dark .za-badge-texto { fill: var(--bs-dark-text-emphasis, #495057); }
+
+.auralis-arbol .za-alerta-marca circle {
+    fill: var(--za-alerta);
+    stroke: var(--za-tarjeta);
+    stroke-width: 2;
+}
+
+.auralis-arbol .za-alerta-marca text {
+    fill: #000;
+    font-size: calc(var(--auralis-font-size-base, 14px) * 0.75);
+    font-weight: 700;
+}
+
+.auralis-arbol .za-control circle {
+    fill: var(--za-tarjeta);
+    stroke: var(--za-primario);
+    stroke-width: 1.5;
+}
+
+.auralis-arbol .za-control text {
+    fill: var(--za-primario);
+    font-size: var(--auralis-font-size-base, 14px);
+    font-weight: 700;
+}
+
+.auralis-arbol .za-control:hover circle {
+    fill: var(--za-primario);
+}
+
+.auralis-arbol .za-control:hover text {
+    fill: #fff;
+}
+
+@media print {
+    .auralis-arbol-barra,
+    .auralis-arbol-aviso,
+    .auralis-arbol-detalle {
+        display: none;
+    }
+}

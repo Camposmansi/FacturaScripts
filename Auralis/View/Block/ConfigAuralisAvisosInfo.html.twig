@@ -1,0 +1,211 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Bloque informativo de configuración y alcance de avisos internos adaptado al tema activo.
+ #}
+
+<style>
+    .auralis-avisos-guide-card {
+        border: 1px solid var(--bs-border-color, #dee2e6);
+        border-left: 4px solid var(--v-primary, var(--bs-primary, #10b981));
+        background-color: var(--theme-card-bg, var(--bs-body-bg, #ffffff));
+        border-radius: var(--auralis-radius-card, 8px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+    .auralis-avisos-guide-title {
+        color: var(--v-primary, var(--bs-primary, #10b981));
+        font-size: 1.05rem;
+    }
+    .auralis-avisos-badge-ventas {
+        background-color: rgba(var(--v-primary-rgb, var(--bs-primary-rgb, 16, 185, 129)), 0.12);
+        color: var(--bs-body-color, #1e293b);
+        border: 1px solid rgba(var(--v-primary-rgb, var(--bs-primary-rgb, 16, 185, 129)), 0.35);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+    .auralis-avisos-badge-ventas i {
+        color: var(--v-primary, var(--bs-primary, #10b981));
+    }
+    .auralis-avisos-badge-compras {
+        background-color: rgba(234, 88, 12, 0.12);
+        color: var(--bs-body-color, #1e293b);
+        border: 1px solid rgba(234, 88, 12, 0.35);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+    .auralis-avisos-badge-compras i {
+        color: #ea580c;
+    }
+    .auralis-avisos-badge-ambos {
+        background-color: rgba(59, 130, 246, 0.12);
+        color: var(--bs-body-color, #1e293b);
+        border: 1px solid rgba(37, 99, 235, 0.35);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+    .auralis-avisos-badge-ambos i {
+        color: #2563eb;
+    }
+    .auralis-avisos-guide-table thead th {
+        background-color: rgba(var(--v-primary-rgb, var(--bs-primary-rgb, 16, 185, 129)), 0.08);
+        color: var(--v-primary, var(--bs-primary, #10b981));
+        border-bottom: 2px solid rgba(var(--v-primary-rgb, var(--bs-primary-rgb, 16, 185, 129)), 0.25);
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    .auralis-avisos-guide-table td {
+        vertical-align: middle;
+    }
+    .auralis-avisos-guide-table a:hover code {
+        background-color: rgba(var(--v-primary-rgb, var(--bs-primary-rgb, 16, 185, 129)), 0.15);
+        text-decoration: underline;
+    }
+    .auralis-avisos-guide-icon {
+        color: var(--v-primary, var(--bs-primary, #10b981));
+    }
+</style>
+
+<div class="col-12 px-0 pb-0 mt-3">
+    <div class="auralis-avisos-guide-card p-3 p-lg-4 mb-0">
+        <div class="d-flex align-items-center gap-2 mb-2 fw-semibold auralis-avisos-guide-title">
+            <i class="fa-solid fa-circle-info auralis-avisos-guide-icon"></i>
+            <span>{{ trans('auralis-avisos-info-title') }}</span>
+        </div>
+        <p class="mb-3 small text-muted">
+            {{ trans('auralis-avisos-info-intro') }}
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered mb-0 align-middle auralis-avisos-guide-table">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 20%;">{{ trans('auralis-avisos-col-entidad') }}</th>
+                        <th scope="col" style="width: 32%;">{{ trans('auralis-avisos-col-donde') }}</th>
+                        <th scope="col" style="width: 23%;">{{ trans('auralis-avisos-col-alcance') }}</th>
+                        <th scope="col" style="width: 25%;">{{ trans('auralis-avisos-col-comportamiento') }}</th>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    <tr>
+                        <td>
+                            <span class="d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-user auralis-avisos-guide-icon"></i>
+                                <strong>{{ trans('auralis-avisos-entidad-cliente') }}</strong>
+                            </span>
+                        </td>
+                        <td>
+                            <a href="ListCliente" class="text-decoration-none" title="{{ trans('auralis-avisos-entidad-cliente') }}">
+                                <code>{{ trans('auralis-avisos-donde-cliente') }}</code>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="badge auralis-avisos-badge-ventas">
+                                <i class="fa-solid fa-cash-register me-1"></i>{{ trans('auralis-avisos-alcance-cliente') }}
+                            </span>
+                        </td>
+                        <td class="text-muted">{{ trans('auralis-avisos-desc-cliente') }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-users-rectangle auralis-avisos-guide-icon"></i>
+                                <strong>{{ trans('auralis-avisos-entidad-grupo') }}</strong>
+                            </span>
+                        </td>
+                        <td>
+                            <a href="ListCliente?activetab=ListGrupoClientes#ListGrupoClientes" class="text-decoration-none" title="{{ trans('auralis-avisos-entidad-grupo') }}">
+                                <code>{{ trans('auralis-avisos-donde-grupo') }}</code>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="badge auralis-avisos-badge-ventas">
+                                <i class="fa-solid fa-users me-1"></i>{{ trans('auralis-avisos-alcance-grupo') }}
+                            </span>
+                        </td>
+                        <td class="text-muted">{{ trans('auralis-avisos-desc-grupo') }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-truck-field auralis-avisos-guide-icon"></i>
+                                <strong>{{ trans('auralis-avisos-entidad-proveedor') }}</strong>
+                            </span>
+                        </td>
+                        <td>
+                            <a href="ListProveedor" class="text-decoration-none" title="{{ trans('auralis-avisos-entidad-proveedor') }}">
+                                <code>{{ trans('auralis-avisos-donde-proveedor') }}</code>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="badge auralis-avisos-badge-compras">
+                                <i class="fa-solid fa-cart-shopping me-1"></i>{{ trans('auralis-avisos-alcance-proveedor') }}
+                            </span>
+                        </td>
+                        <td class="text-muted">{{ trans('auralis-avisos-desc-proveedor') }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-box-open auralis-avisos-guide-icon"></i>
+                                <strong>{{ trans('auralis-avisos-entidad-producto') }}</strong>
+                            </span>
+                        </td>
+                        <td>
+                            <a href="ListProducto" class="text-decoration-none" title="{{ trans('auralis-avisos-entidad-producto') }}">
+                                <code>{{ trans('auralis-avisos-donde-producto') }}</code>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="badge auralis-avisos-badge-ambos">
+                                <i class="fa-solid fa-barcode me-1"></i>{{ trans('auralis-avisos-alcance-producto') }}
+                            </span>
+                        </td>
+                        <td class="text-muted">{{ trans('auralis-avisos-desc-producto') }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-tags auralis-avisos-guide-icon"></i>
+                                <strong>{{ trans('auralis-avisos-entidad-familia') }}</strong>
+                            </span>
+                        </td>
+                        <td>
+                            <a href="ListFamilia" class="text-decoration-none" title="{{ trans('auralis-avisos-entidad-familia') }}">
+                                <code>{{ trans('auralis-avisos-donde-familia') }}</code>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="badge auralis-avisos-badge-ambos">
+                                <i class="fa-solid fa-folder-tree me-1"></i>{{ trans('auralis-avisos-alcance-familia') }}
+                            </span>
+                        </td>
+                        <td class="text-muted">{{ trans('auralis-avisos-desc-familia') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="mb-0 mt-3 small text-muted">
+            <i class="fa-solid fa-shield-halved me-1 auralis-avisos-guide-icon"></i>{{ trans('auralis-avisos-info-footer') }}
+        </p>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const footerInfoDiv = document.getElementById('footer-auralis-avisos-info');
+        if (!footerInfoDiv) {
+            return;
+        }
+        const form = footerInfoDiv.closest('form');
+        if (form) {
+            form.classList.add('w-100');
+        }
+    })();
+</script>

@@ -1,0 +1,50 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Plantilla de menú con fondo claro que inyecta las clases body de Auralis
+ #}
+{% import 'Macro/GoogleTagManager.html.twig' as GoogleTagManager %}
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block fullBody %}
+    {% set activeModoMenu = (fsc.user and fsc.user.auralis_modo_menu) ? fsc.user.auralis_modo_menu : settings('auralis', 'modo_menu', 'horizontal') %}
+    {% set activeTemaColor = (fsc.user and fsc.user.auralis_tema_color) ? fsc.user.auralis_tema_color : settings('auralis', 'tema_color', 'default') %}
+    {% set isVertical = activeModoMenu == 'vertical' %}
+    {% set auralisTheme = activeTemaColor %}
+    {% set mobileBreakpoint = settings('auralis', 'mobile_breakpoint', '992') | number_format(0, '', '') %}
+    <body class="bg-light {{ isVertical ? 'auralis-vertical-menu' : '' }} auralis-theme-{{ auralisTheme }}">
+    <script>
+        (function() {
+            if (window.innerWidth >= {{ mobileBreakpoint }} && localStorage.getItem("auralis_sidebar") === "closed") {
+                document.body.classList.add("auralis-sidebar-closed");
+            }
+        })();
+    </script>
+    {{ GoogleTagManager.body() }}
+    {% block navbar %}
+        {{ parent() }}
+    {% endblock %}
+    <div class="pt-3">
+        {% block messages %}
+            {{ parent() }}
+        {% endblock %}
+        {% block bodyHeaderOptions %}
+            {{ parent() }}
+        {% endblock %}
+    </div>
+    {% block body %}
+        {{ parent() }}
+    {% endblock %}
+    {% for includeView in getIncludeViews('MenuTemplate', 'JsFooter') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+    {% for includeView in getIncludeViews('MenuTemplate', 'BodyEnd') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+    {{ debugBarRender.render() | raw }}
+    <br/>
+    <br/>
+    <br/>
+    <!-- execution time: {{ executionTime() }} s -->
+    </body>
+{% endblock %}

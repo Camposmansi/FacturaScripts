@@ -1,0 +1,662 @@
+{#
+ # @package FacturaScripts
+ # @author MansiHost.com
+ # @description Plantilla de menú maestra para Auralis que renderiza condicionalmente el menú horizontal o vertical colapsable
+ #}
+{% import 'Macro/GoogleTagManager.html.twig' as GoogleTagManager %}
+{% set showTopbarSearch = settings('auralis', 'topbar_show_search', true) %}
+{% set showTopbarDashboard = settings('auralis', 'topbar_show_dashboard', true) %}
+{% set showTopbarCalendar = settings('auralis', 'topbar_show_calendar', true) %}
+{% set showTopbarNotifications = settings('auralis', 'topbar_show_notifications', true) %}
+{% set showTopbarHelp = settings('auralis', 'topbar_show_help', true) %}
+{% set showTopbarUser = settings('auralis', 'topbar_show_user', true) %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ constant('FS_LANG') | slice(0, 2) }}"
+      xml:lang="{{ constant('FS_LANG') | slice(0, 2) }}">
+<head>
+    {{ GoogleTagManager.head() }}
+    {% for includeView in getIncludeViews('MenuTemplate', 'HeadFirst') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+    {% block meta %}
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>{{ fsc.title|e }}</title>
+        <meta name="description" content="{{ trans('meta-description') }}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="generator" content="FacturaScripts"/>
+        <meta name="robots" content="noindex"/>
+    {% endblock %}
+    {% block icons %}
+        {% set customLogo = settings('auralis', 'custom_logo') %}
+        {% if customLogo %}
+            <link rel="shortcut icon" href="{{ asset(customLogo) }}"/>
+            <link rel="apple-touch-icon" href="{{ asset(customLogo) }}"/>
+        {% else %}
+            <link rel="shortcut icon" href="{{ asset('Dinamic/Assets/Images/auralis_icono.svg') }}" type="image/svg+xml"/>
+            <link rel="apple-touch-icon" href="{{ asset('Dinamic/Assets/Images/auralis_icono.svg') }}"/>
+        {% endif %}
+    {% endblock %}
+    {% for includeView in getIncludeViews('MenuTemplate', 'CssBefore') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+    {% block css %}
+        <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}?v=5"/>
+        <link rel="stylesheet" href="{{ asset('node_modules/@fortawesome/fontawesome-free/css/all.min.css') }}?v=6"/>
+        <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/custom.css') }}?v={{ 'now' | date('ymd') }}"/>
+    {% endblock %}
+    {# Adds custom CSS assets #}
+    {% for css in assetManager.get('css') %}
+        <link rel="stylesheet" href="{{ css }}"/>
+    {% endfor %}
+    {% for includeView in getIncludeViews('MenuTemplate', 'CssAfter') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+
+    {% set mobileBreakpoint = settings('auralis', 'mobile_breakpoint', '992') | number_format(0, '', '') %}
+    <style>
+        /* Clases de visibilidad responsiva dinámicas */
+        @media (max-width: {{ mobileBreakpoint - 0.02 }}px) {
+            .auralis-desktop-only {
+                display: none !important;
+            }
+            .auralis-mobile-only {
+                display: flex !important;
+            }
+            .auralis-mobile-only-block {
+                display: block !important;
+            }
+            .auralis-sidebar-drawer-only {
+                /* Se muestra el sidebar en móvil */
+            }
+            #sidebar {
+                transform: translateX(-280px) !important;
+            }
+            body.auralis-sidebar-open #sidebar {
+                transform: translateX(0) !important;
+            }
+            body.auralis-vertical-menu>*:not(#sidebar):not(#sidebar-overlay):not(#phpdebugbar):not(script):not(style):not(link):not(.select2-container):not(.select2-dropdown):not(.modal):not(.modal-backdrop):not(.tooltip):not(.popover):not(.dropdown-menu):not(.flatpickr-calendar):not(.ui-autocomplete):not(.ts-dropdown):not(.ts-control):not(#auralis-notif-shared-panel):not(.auralis-notif-popup-stack):not(#auralis-notif-news-offcanvas):not(.offcanvas):not(.offcanvas-backdrop) {
+                margin-left: 0 !important;
+                max-width: 100% !important;
+            }
+            body {
+                padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important;
+            }
+        }
+        @media (min-width: {{ mobileBreakpoint }}px) {
+            .auralis-desktop-only {
+                display: flex !important;
+            }
+            .auralis-desktop-only-block {
+                display: block !important;
+            }
+            .auralis-mobile-only, .auralis-mobile-only-block {
+                display: none !important;
+            }
+            .auralis-sidebar-drawer-only {
+                display: none !important;
+            }
+            #sidebar {
+                transform: translateX(0) !important;
+            }
+            body.auralis-sidebar-closed #sidebar {
+                transform: translateX(-280px) !important;
+            }
+            body.auralis-vertical-menu>*:not(#sidebar):not(#sidebar-overlay):not(#phpdebugbar):not(script):not(style):not(link):not(.select2-container):not(.select2-dropdown):not(.modal):not(.modal-backdrop):not(.tooltip):not(.popover):not(.dropdown-menu):not(.flatpickr-calendar):not(.ui-autocomplete):not(.ts-dropdown):not(.ts-control):not(#auralis-notif-shared-panel):not(.auralis-notif-popup-stack):not(#auralis-notif-news-offcanvas):not(.offcanvas):not(.offcanvas-backdrop) {
+                margin-left: 280px !important;
+                max-width: calc(100% - 280px) !important;
+                transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            body.auralis-vertical-menu.auralis-sidebar-closed>*:not(#sidebar):not(#sidebar-overlay):not(#phpdebugbar):not(script):not(style):not(link):not(.select2-container):not(.select2-dropdown):not(.modal):not(.modal-backdrop):not(.tooltip):not(.popover):not(.dropdown-menu):not(.flatpickr-calendar):not(.ui-autocomplete):not(.ts-dropdown):not(.ts-control):not(#auralis-notif-shared-panel):not(.auralis-notif-popup-stack):not(#auralis-notif-news-offcanvas):not(.offcanvas):not(.offcanvas-backdrop) {
+                margin-left: 0 !important;
+                max-width: 100% !important;
+            }
+            .navbar:not(.navbar-custom) .auralis-chevron {
+                display: none !important;
+            }
+        }
+    </style>
+    {% for includeView in getIncludeViews('MenuTemplate', 'JsHeadBefore') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+    {% block javascripts %}
+        <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}?v=5"></script>
+        <script src="{{ asset('node_modules/pace-js/pace.min.js') }}"></script>
+        <script src="{{ asset('node_modules/@fortawesome/fontawesome-free/js/all.min.js') }}?v=6"></script>
+        <script src="{{ asset('Dinamic/Assets/JS/Custom.js') }}?v={{ 'now' | date('ymd') }}"></script>
+    {% endblock %}
+    {# Adds custom JS assets #}
+    {% for js in assetManager.get('js') %}
+        <script src="{{ js }}"></script>
+    {% endfor %}
+    {# ES modules (AssetManager::addJsModule) — requerido por zAsistente y Core 2024+ #}
+    {% for mjs in assetManager.get('mjs') %}
+        <script type="module" src="{{ mjs }}"></script>
+    {% endfor %}
+    {% for includeView in getIncludeViews('MenuTemplate', 'JsHeadAfter') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+    {% if debugBarRender %}
+        {{ debugBarRender.renderHead() | raw }}
+    {% endif %}
+    {% for includeView in getIncludeViews('MenuTemplate', 'HeadEnd') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+</head>{% block fullBody %}
+    {% set activeModoMenu = (fsc.user and fsc.user.auralis_modo_menu) ? fsc.user.auralis_modo_menu : settings('auralis', 'modo_menu', 'horizontal') %}
+    {% set activeTemaColor = (fsc.user and fsc.user.auralis_tema_color) ? fsc.user.auralis_tema_color : settings('auralis', 'tema_color', 'default') %}
+    {% set isVertical = activeModoMenu == 'vertical' %}
+    {% set auralisTheme = activeTemaColor %}
+    <body class="{{ isVertical ? 'auralis-vertical-menu' : '' }} auralis-theme-{{ auralisTheme }}">
+    <script>
+        (function() {
+            if (window.innerWidth >= {{ mobileBreakpoint }} && localStorage.getItem("auralis_sidebar") === "closed") {
+                document.body.classList.add("auralis-sidebar-closed");
+            }
+        })();
+    </script>
+    {{ GoogleTagManager.body() }}
+    {% for includeView in getIncludeViews('MenuTemplate', 'BodyFirst') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+
+    {% block navbar %}
+        {% set isVertical = activeModoMenu == 'vertical' %}
+        
+        <!-- SIDEBAR DRAWER (Siempre se renderiza para móvil, y en PC solo en vertical) -->
+        <div id="sidebar" class="{{ not isVertical ? 'auralis-sidebar-drawer-only' : '' }}">
+            <div class="sidebar-header ps-2 pt-3 pe-2 pb-3">
+                <a href="{{ (fsc.user.homepage and fsc.user.homepage != 'EditSettings') ? asset(fsc.user.homepage) : 'DashBoardAuralis' }}" class="d-block mb-2 text-center text-decoration-none">
+                    {% set customLogo = settings('auralis', 'custom_logo') %}
+                    {% set sidebarLogoHeight = settings('auralis', 'logo_height_sidebar', '90') %}
+                    {% if customLogo %}
+                        <img src="{{ asset(customLogo) }}" style="height: {{ sidebarLogoHeight }}px; width: auto;" class="d-block mx-auto mb-2 logo-custom" alt="Logo"/>
+                    {% else %}
+                        <img src="{{ asset('Dinamic/Assets/Images/auralis_icono.svg') }}" style="height: {{ sidebarLogoHeight }}px; width: auto;" class="d-none d-lg-block mx-auto mb-2" alt="Auralis"/>
+                        <img src="{{ asset('Dinamic/Assets/Images/auralis_rectangular_estrecho_facturascripts.svg') }}" style="height: {{ sidebarLogoHeight }}px; width: auto;" class="d-block d-lg-none mx-auto mb-2" alt="Auralis"/>
+                    {% endif %}
+                    <span class="fs-5 fw-bold align-middle">{{ fsc.empresa.nombrecorto }}</span>
+                </a>
+                <p class="small text-muted mb-3 text-center">{{ fsc.user.nick }}</p>
+                <form action="MegaSearch" method="post" class="px-2 position-relative mb-2" id="auralisSidebarSearchForm">
+                    <div class="auralis-search-input-container">
+                        <i class="fa-solid fa-magnifying-glass auralis-search-icon" aria-hidden="true"></i>
+                        <input type="text" class="auralis-search-input" name="query" id="auralisSidebarSearchInput" placeholder="{{ trans('search') }}..." autocomplete="off"/>
+                        <button type="submit" class="auralis-search-submit-btn" title="{{ trans('search') }}">
+                            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div id="auralisSidebarSearchResultsDropdown" class="auralis-search-results-dropdown position-absolute w-100 d-none">
+                    </div>
+                </form>
+            </div>
+            <ul class="nav flex-column" id="auralisSidebarMenu">
+                {% for menuItem in menuManager.getMenu() %}
+                    {{ _self.showMenu(menuItem, '#auralisSidebarMenu') }}
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div id="sidebar-overlay" onclick="hideAuralisSidebar();" class="{{ not isVertical ? 'auralis-sidebar-drawer-only' : '' }}"></div>
+
+        {% if isVertical %}
+            <!-- LAYOUT VERTICAL UNIFICADO (PC, TABLET, MÓVIL) -->
+            <!-- Barra superior simplificada de PC, tablet y móvil -->
+            <nav class="navbar sticky-top navbar-expand navbar-custom d-print-none auralis-desktop-only">
+                <div class="container-fluid px-0 auralis-navbar-grid">
+                    <ul class="navbar-nav align-items-center flex-row">
+                        <li class="nav-item">
+                            <a class="nav-link px-3" href="#" onclick="toggleAuralisSidebar(); return false;" id="menuIconSidebarToggle">
+                                <i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item auralis-navbar-breadcrumb">
+                            {% set pageData = fsc.getPageData() %}
+                            <span class="navbar-text fw-bold fs-6 ms-1">
+                                <span class="d-none d-xl-inline-block">{{ pageData.menu is empty ? fsc.empresa.nombrecorto : trans(pageData.menu) }}</span>
+                                {% if pageData.submenu %}
+                                    <i class="fa-solid fa-angle-right mx-1 fs-6 d-none d-xl-inline-block"></i> <span class="d-none d-xl-inline-block">{{ trans(pageData.submenu) }}</span>
+                                {% endif %}
+                                <i class="fa-solid fa-angle-right mx-1 fs-6 d-none d-xl-inline-block"></i> {{ fsc.title }}
+                            </span>
+                        </li>
+                    </ul>
+                    <!-- Buscador centrado en modo vertical con ancho compacto (UX: una palabra o frase corta) -->
+                    {% if showTopbarSearch %}
+                    <form action="MegaSearch" method="post" class="d-none d-md-block px-3 position-relative auralis-vertical-search-form" style="max-width: 450px; width: 100%;" id="auralisVerticalSearchForm">
+                        <div class="auralis-search-input-container">
+                            <i class="fa-solid fa-magnifying-glass auralis-search-icon" aria-hidden="true"></i>
+                            <input type="text" class="auralis-search-input" name="query" id="auralisVerticalSearchInput" placeholder="{{ trans('search') }}..." autocomplete="off"/>
+                            <button type="submit" class="auralis-search-submit-btn" title="{{ trans('search') }}">
+                                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div id="auralisSearchResultsDropdown" class="auralis-search-results-dropdown position-absolute w-100 d-none">
+                        </div>
+                    </form>
+                    {% endif %}
+                    <ul class="navbar-nav ms-auto align-items-center flex-row gap-2">
+                        <li id="auralis-mic-before-start" class="d-none" hidden aria-hidden="true"></li>
+                        {% for includeView in getIncludeViews('MenuTemplate', 'MenuIconBefore') %}
+                            {% include includeView['path'] %}
+                        {% endfor %}
+                        <li id="auralis-mic-before-end" class="d-none" hidden aria-hidden="true"></li>
+                        {% if showTopbarDashboard %}<li class="nav-item" title="{{ trans('dashboard') }}">
+                            <a class="nav-link{{ template == 'DashBoardAuralis.html.twig' ? ' active' : '' }}" href="DashBoardAuralis" id="menuIconDashboardPC">
+                                <i class="fa-solid fa-house" aria-hidden="true"></i>
+                            </a>
+                        </li>{% endif %}
+                        {% set calCtrl = settings('auralis_calendario', 'calendar_topbar_controller', 'CalendarioUsuario') %}
+                        {% if calCtrl is empty or not fsc.user.can(calCtrl) %}
+                            {% set calCtrl = 'CalendarioUsuario' %}
+                        {% endif %}
+                        {% if showTopbarCalendar and fsc.user.can(calCtrl) %}
+                        <li class="nav-item" title="{{ trans('mi-calendario') }}">
+                            <a class="nav-link{{ controllerName == calCtrl ? ' active' : '' }}" href="{{ calCtrl }}" id="menuIconCalendarPC">
+                                <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if showTopbarNotifications %}{% include 'Master/_auralis_notifications_bell.html.twig' with { bellId: 'menuIconAuralisNotifPC', mobile: false } %}{% endif %}
+                        {% if showTopbarHelp and not config('fs_hide_help_btn') %}
+                            <li class="nav-item" title="{{ trans('help') }}">
+                                <a class="nav-link" id="menuIconHelpPC" rel="nofollow"
+                                   href="ConfigAjustesAuralis?activetab=AuralisFuncionamiento">
+                                    <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if showTopbarUser %}<li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle mr-md-2" href="#" data-bs-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false" id="menuIconUserPC" title="{{ trans('user') }}">
+                                <i class="fa-solid fa-user-circle fa-fw me-1" aria-hidden="true"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="user-list">
+                                <a class="dropdown-item" href="{{ fsc.user.url() }}">
+                                    <i class="fa-solid fa-user-circle fa-fw me-1" aria-hidden="true"></i> {{ fsc.user.nick }}
+                                </a>
+                                <a class="dropdown-item send-email" href="SendMail">
+                                    <i class="fa-solid fa-envelope fa-fw me-1" aria-hidden="true"></i>
+                                    {{ trans('send-mail') }}
+                                </a>
+                                <div id="auralis-mic-user-start" class="d-none" hidden aria-hidden="true"></div>
+                                {% for includeView in getIncludeViews('MenuTemplate', 'MenuIconUser') %}
+                                    {% include includeView['path'] %}
+                                {% endfor %}
+                                <div id="auralis-mic-user-end" class="d-none" hidden aria-hidden="true"></div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ asset('login') }}?action=logout&multireqtoken={{ formToken(false) }}">
+                                    <i class="fa-solid fa-door-open fa-fw me-1" aria-hidden="true"></i> {{ trans('logout') }}
+                                </a>
+                            </div>
+                        </li>{% endif %}
+                        <li id="auralis-mic-after-start" class="d-none" hidden aria-hidden="true"></li>
+                        {% for includeView in getIncludeViews('MenuTemplate', 'MenuIconAfter') %}
+                            {% include includeView['path'] %}
+                        {% endfor %}
+                        <li id="auralis-mic-after-end" class="d-none" hidden aria-hidden="true"></li>
+                    </ul>
+                </div>
+            </nav>
+        {% else %}
+            <!-- LAYOUT HORIZONTAL POR DEFECTO -->
+            <!-- Barra superior para PC (oculta en móvil/tablet) -->
+            <nav class="navbar navbar-expand navbar-dark sticky-top d-print-none auralis-desktop-only auralis-topbar-horizontal">
+                <div class="container-fluid">
+                {% block navbarContent %}
+                    <a class="navbar-brand d-none d-sm-inline" href="{{ (fsc.user.homepage and fsc.user.homepage != 'EditSettings') ? asset(fsc.user.homepage) : 'DashBoardAuralis' }}" title="{{ trans('homepage') }}">
+                        {% set customLogo = settings('auralis', 'custom_logo') %}
+                        {% set navbarLogoHeight = settings('auralis', 'logo_height_navbar', '40') %}
+                        {% if customLogo %}
+                            <img src="{{ asset(customLogo) }}" style="height: {{ navbarLogoHeight }}px; width: auto;"
+                                 class="d-inline-block align-top logo-custom" alt="FacturaScripts"/>
+                        {% else %}
+                            <img src="{{ asset('Dinamic/Assets/Images/auralis_icono.svg') }}" style="height: {{ navbarLogoHeight }}px; width: auto;"
+                                 class="d-inline-block align-top me-2" alt="Auralis"/>
+                        {% endif %}
+                        {% if settings('auralis', 'menu_horizontal_hide_empresa', '0') != '1' %}
+                        <span class="d-none d-xl-inline-block auralis-topbar-empresa" title="{{ fsc.empresa.nombrecorto | e }}">{{ fsc.empresa.nombrecorto | e }}</span>
+                        {% endif %}
+                    </a>
+                    <div class="navbar-collapse collapse">
+                        <ul class="navbar-nav pt-1 auralis-menu-principal" data-auralis-menu-mas>
+                            {% import 'Macro/Menu.html.twig' as macros %}
+                            {% for menuItem in menuManager.getMenu() %}
+                                {{ macros.showMenu(menuItem) }}
+                            {% endfor %}
+                            {# Menú «Más»: auralis-menu-mas.js pasa aquí los menús que no caben (README § Menú «Más») #}
+                            <li class="nav-item dropdown auralis-menu-mas d-none" id="auralisMenuMas">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                   aria-haspopup="true" aria-expanded="false" id="auralisMenuMasToggle">{{ trans('more') }}</a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="auralisMenuMasToggle"></ul>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav flex-row ms-auto">
+                            {% block navbarMenuIcon %}
+                                <li id="auralis-mic-before-start" class="d-none" hidden aria-hidden="true"></li>
+                                {% for includeView in getIncludeViews('MenuTemplate', 'MenuIconBefore') %}
+                                    {% include includeView['path'] %}
+                                {% endfor %}
+                                <li id="auralis-mic-before-end" class="d-none" hidden aria-hidden="true"></li>
+                                {% if showTopbarSearch %}<li class="nav-item auralis-search-expand" id="auralisHorizontalSearchRoot" title="{{ trans('search') }}">
+                                    <button type="button" class="nav-link auralis-search-expand-trigger" id="menuIconSearch" aria-label="{{ trans('search') }}">
+                                        <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                    </button>
+                                    <form action="MegaSearch" method="post" class="auralis-search-expand-panel" id="auralisHorizontalSearchForm">
+                                        <div class="auralis-search-input-container">
+                                            <i class="fa-solid fa-magnifying-glass auralis-search-icon" aria-hidden="true"></i>
+                                            <input type="text" class="auralis-search-input" name="query" id="auralisHorizontalSearchInput" placeholder="{{ trans('search') }}..." autocomplete="off"/>
+                                            <button type="submit" class="auralis-search-submit-btn" title="{{ trans('search') }}">
+                                                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                        <div id="auralisHorizontalSearchResultsDropdown" class="auralis-search-results-dropdown position-absolute w-100 d-none"></div>
+                                    </form>
+                                </li>{% endif %}
+                                {% if showTopbarDashboard %}<li class="nav-item" title="{{ trans('dashboard') }}">
+                                    <a class="nav-link{{ template == 'DashBoardAuralis.html.twig' ? ' active' : '' }}" href="DashBoardAuralis" id="menuIconDashboard">
+                                        <i class="fa-solid fa-house" aria-hidden="true"></i>
+                                    </a>
+                                </li>{% endif %}
+                                {% set calCtrl = settings('auralis_calendario', 'calendar_topbar_controller', 'CalendarioUsuario') %}
+                                {% if calCtrl is empty or not fsc.user.can(calCtrl) %}
+                                    {% set calCtrl = 'CalendarioUsuario' %}
+                                {% endif %}
+                                {% if showTopbarCalendar and fsc.user.can(calCtrl) %}
+                                <li class="nav-item" title="{{ trans('mi-calendario') }}">
+                                    <a class="nav-link{{ controllerName == calCtrl ? ' active' : '' }}" href="{{ calCtrl }}" id="menuIconCalendar">
+                                        <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                {% if showTopbarNotifications %}{% include 'Master/_auralis_notifications_bell.html.twig' with { bellId: 'menuIconAuralisNotif', mobile: false } %}{% endif %}
+                                {% if showTopbarHelp %}<li class="nav-item" title="{{ trans('help') }}">
+                                    <a class="nav-link" id="menuIconHelp" rel="nofollow"
+                                       href="ConfigAjustesAuralis?activetab=AuralisFuncionamiento">
+                                        <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                                    </a>
+                                </li>{% endif %}
+                                {% if showTopbarUser %}<li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle mr-md-2" href="#" data-bs-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false" id="menuIconUser" title="{{ trans('user') }}">
+                                        <i class="fa-solid fa-user-circle fa-fw me-1" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="user-list">
+                                        <a class="dropdown-item" href="{{ fsc.user.url() }}">
+                                            <i class="fa-solid fa-user-circle fa-fw me-1" aria-hidden="true"></i> {{ fsc.user.nick }}
+                                        </a>
+                                        <a class="dropdown-item send-email" href="SendMail">
+                                            <i class="fa-solid fa-envelope fa-fw me-1" aria-hidden="true"></i>
+                                            {{ trans('send-mail') }}
+                                        </a>
+                                        <div id="auralis-mic-user-start" class="d-none" hidden aria-hidden="true"></div>
+                                        {% for includeView in getIncludeViews('MenuTemplate', 'MenuIconUser') %}
+                                            {% include includeView['path'] %}
+                                        {% endfor %}
+                                        <div id="auralis-mic-user-end" class="d-none" hidden aria-hidden="true"></div>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{{ asset('login') }}?action=logout&multireqtoken={{ formToken(false) }}">
+                                            <i class="fa-solid fa-door-open fa-fw me-1" aria-hidden="true"></i> {{ trans('logout') }}
+                                        </a>
+                                    </div>
+                                </li>{% endif %}
+                                <li id="auralis-mic-after-start" class="d-none" hidden aria-hidden="true"></li>
+                                {% for includeView in getIncludeViews('MenuTemplate', 'MenuIconAfter') %}
+                                    {% include includeView['path'] %}
+                                {% endfor %}
+                                <li id="auralis-mic-after-end" class="d-none" hidden aria-hidden="true"></li>
+                            {% endblock %}
+                        </ul>
+                    </div>
+                {% endblock %}
+                </div>
+            </nav>
+            {# Síncrono justo tras la barra: calcula «Más» antes del primer pintado #}
+            <script src="{{ asset('Dinamic/Assets/JS/auralis-menu-mas.js') }}?v={{ auralisAssetVersion('Dinamic/Assets/JS/auralis-menu-mas.js') }}"></script>
+
+        {% endif %}
+
+        <!-- CABECERA MÓVIL FIJA (MÓVIL Y TABLET) -->
+        <nav class="navbar sticky-top navbar-expand navbar-custom d-print-none auralis-mobile-only mobile-top-header">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center text-truncate me-2">
+                    {% set customLogo = settings('auralis', 'custom_logo') %}
+                    <a href="{{ (fsc.user.homepage and fsc.user.homepage != 'EditSettings') ? asset(fsc.user.homepage) : 'DashBoardAuralis' }}" class="text-decoration-none d-flex align-items-center">
+                        {% if customLogo %}
+                            <img src="{{ asset(customLogo) }}" style="height: 28px; width: auto;" class="logo-custom me-2" alt="Logo"/>
+                        {% else %}
+                            <img src="{{ asset('Dinamic/Assets/Images/auralis_rectangular_estrecho_facturascripts.svg') }}" style="height: 28px; width: auto;" class="me-2" alt="Auralis"/>
+                        {% endif %}
+                    </a>
+                </div>
+                <ul class="navbar-nav align-items-center flex-row gap-3">
+                    <li id="auralis-mobile-mic-before-slot" class="d-none" hidden aria-hidden="true"></li>
+                    {% if showTopbarHelp and not config('fs_hide_help_btn') %}
+                        <li class="nav-item" title="{{ trans('help') }}">
+                            <a class="nav-link px-1 py-0" id="menuIconHelpMobile" rel="nofollow"
+                               href="ConfigAjustesAuralis?activetab=AuralisFuncionamiento">
+                                <i class="fa-solid fa-question-circle fa-lg" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% set calCtrl = settings('auralis_calendario', 'calendar_topbar_controller', 'CalendarioUsuario') %}
+                    {% if calCtrl is empty or not fsc.user.can(calCtrl) %}
+                        {% set calCtrl = 'CalendarioUsuario' %}
+                    {% endif %}
+                    {% if showTopbarCalendar and fsc.user.can(calCtrl) %}
+                    <li class="nav-item" title="{{ trans('mi-calendario') }}">
+                        <a class="nav-link px-1 py-0{{ controllerName == calCtrl ? ' active' : '' }}" id="menuIconCalendarMobile" href="{{ calCtrl }}">
+                            <i class="fa-solid fa-calendar-days fa-lg" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if showTopbarNotifications %}{% include 'Master/_auralis_notifications_bell.html.twig' with { bellId: 'menuIconAuralisNotifMobile', mobile: true } %}{% endif %}
+                    {% if showTopbarUser %}<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle px-1 py-0" href="#" data-bs-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false" id="menuIconUserMobile" title="{{ trans('user') }}">
+                            <i class="fa-solid fa-user-circle fa-lg fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="user-list">
+                            <a class="dropdown-item" href="{{ fsc.user.url() }}">
+                                <i class="fa-solid fa-user-circle fa-fw me-1" aria-hidden="true"></i> {{ fsc.user.nick }}
+                            </a>
+                            <a class="dropdown-item send-email" href="SendMail">
+                                <i class="fa-solid fa-envelope fa-fw me-1" aria-hidden="true"></i>
+                                {{ trans('send-mail') }}
+                            </a>
+                            <div id="auralis-mobile-mic-user-slot" class="d-none" hidden aria-hidden="true"></div>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ asset('login') }}?action=logout&multireqtoken={{ formToken(false) }}">
+                                <i class="fa-solid fa-door-open fa-fw me-1" aria-hidden="true"></i> {{ trans('logout') }}
+                            </a>
+                        </div>
+                    </li>{% endif %}
+                    <li id="auralis-mobile-mic-after-slot" class="d-none" hidden aria-hidden="true"></li>
+                </ul>
+            </div>
+        </nav>
+
+        <script src="{{ asset('Dinamic/Assets/JS/auralis-menu-plugin-icons.js') }}?v=1.34"></script>
+        {% include 'Master/_auralis_notifications_panel.html.twig' %}
+
+        {# Índice de páginas del menú + motor de búsqueda (compartido horizontal / vertical / móvil) #}
+        <script>
+            window.auralisSearchI18n = {
+                noResults: "{{ trans('sin-resultados-para') | e('js') }}"
+            };
+            window.auralisMenuPages = [
+                {% for menuItem in menuManager.getMenu() %}
+                    {% for child in menuItem.menu %}
+                        {% if child.menu is not empty %}
+                            {% for subchild in child.menu %}
+                                {% set subUrl = subchild.url and subchild.url != '#' ? subchild.url : subchild.name %}
+                                {% if subUrl and subUrl != '#' %}
+                                    { title: "{{ trans(subchild.title) | e('js') }}", menu: "{{ trans(menuItem.title) | e('js') }}", url: "{{ subUrl | e('js') }}", icon: "{{ (subchild.icon ?: 'fa-solid fa-file') | e('js') }}" },
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% set childUrl = child.url and child.url != '#' ? child.url : child.name %}
+                            {% if childUrl and childUrl != '#' %}
+                                { title: "{{ trans(child.title) | e('js') }}", menu: "{{ trans(menuItem.title) | e('js') }}", url: "{{ childUrl | e('js') }}", icon: "{{ (child.icon ?: 'fa-solid fa-file') | e('js') }}" },
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if menuItem.menu is empty %}
+                        {% set itemUrl = menuItem.url and menuItem.url != '#' ? menuItem.url : menuItem.name %}
+                        {% if itemUrl and itemUrl != '#' %}
+                            { title: "{{ trans(menuItem.title) | e('js') }}", menu: "", url: "{{ itemUrl | e('js') }}", icon: "{{ (menuItem.icon ?: 'fa-solid fa-folder') | e('js') }}" },
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            ];
+        </script>
+        <script src="{{ asset('Dinamic/Assets/JS/auralis-search.js') }}?v=1.46.3"></script>
+
+        <!-- NAVEGACIÓN INFERIOR MÓVIL FIJA (MÓVIL Y TABLET) -->
+        <nav class="mobile-bottom-nav auralis-mobile-only d-print-none">
+            {% if showTopbarDashboard %}<a href="{{ asset('DashBoardAuralis') }}" class="mobile-bottom-nav-item{{ template == 'DashBoardAuralis.html.twig' ? ' active' : '' }}" title="{{ trans('dashboard') }}">
+                <i class="fa-solid fa-house" aria-hidden="true"></i>
+            </a>{% endif %}
+            {% if showTopbarSearch %}<button type="button" class="mobile-bottom-nav-item" id="menuIconSearchMobile" title="{{ trans('search') }}" aria-label="{{ trans('search') }}">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </button>{% endif %}
+            <a href="#" class="mobile-bottom-nav-item" onclick="toggleAuralisSidebar(); return false;" title="{{ trans('menu') }}">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </a>
+        </nav>
+
+        <div id="auralisMobileSearchPanel" class="auralis-mobile-search-overlay d-none d-print-none" role="dialog" aria-modal="true" aria-label="{{ trans('search') }}">
+            <div class="auralis-mobile-search-dialog">
+                <form action="MegaSearch" method="post" class="auralis-mobile-search-form" id="auralisMobileSearchForm">
+                    <div class="auralis-search-input-container">
+                        <i class="fa-solid fa-magnifying-glass auralis-search-icon" aria-hidden="true"></i>
+                        <input type="text" class="auralis-search-input" name="query" id="auralisMobileSearchInput" placeholder="{{ trans('search') }}..." autocomplete="off" enterkeyhint="search"/>
+                        <button type="submit" class="auralis-search-submit-btn" title="{{ trans('search') }}">
+                            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="auralis-mobile-search-close" title="{{ trans('close')|default('Cerrar') }}" aria-label="{{ trans('close')|default('Cerrar') }}">
+                            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div id="auralisMobileSearchResultsDropdown" class="auralis-search-results-dropdown auralis-mobile-search-results d-none"></div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function toggleAuralisSidebar() {
+                const body = document.body;
+                if (window.innerWidth >= {{ mobileBreakpoint }}) {
+                    body.classList.toggle("auralis-sidebar-closed");
+                    localStorage.setItem("auralis_sidebar", body.classList.contains("auralis-sidebar-closed") ? "closed" : "open");
+                } else {
+                    body.classList.toggle("auralis-sidebar-open");
+                    const overlay = document.getElementById("sidebar-overlay");
+                    if (overlay) {
+                        if (body.classList.contains("auralis-sidebar-open")) {
+                            overlay.style.display = "block";
+                        } else {
+                            overlay.style.display = "none";
+                        }
+                    }
+                }
+            }
+
+            function showAuralisSidebar() {
+                const body = document.body;
+                if (window.innerWidth < {{ mobileBreakpoint }}) {
+                    body.classList.add("auralis-sidebar-open");
+                    const overlay = document.getElementById("sidebar-overlay");
+                    if (overlay) overlay.style.display = "block";
+                } else {
+                    body.classList.remove("auralis-sidebar-closed");
+                    localStorage.setItem("auralis_sidebar", "open");
+                }
+            }
+
+            function hideAuralisSidebar() {
+                const body = document.body;
+                if (window.innerWidth < {{ mobileBreakpoint }}) {
+                    body.classList.remove("auralis-sidebar-open");
+                    const overlay = document.getElementById("sidebar-overlay");
+                    if (overlay) overlay.style.display = "none";
+                } else {
+                    body.classList.add("auralis-sidebar-closed");
+                    localStorage.setItem("auralis_sidebar", "closed");
+                }
+            }
+        </script>
+    {% endblock %}
+
+    <div id="auralis-content-wrapper">
+        <div class="pt-3">
+            {% block messages %}
+                {% include 'Macro/Toasts.html.twig' %}
+                {% from 'Macro/Utils.html.twig' import message as showMessage %}
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            {{ showMessage(log, ['error', 'critical'], 'danger') }}
+                            {{ showMessage(log, ['warning'], 'warning') }}
+                            {{ showMessage(log, ['notice'], 'success') }}
+                            {{ showMessage(log, ['info'], 'info') }}
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+            {% block bodyHeaderOptions %}
+            {% endblock %}
+        </div>
+        {% block body %}
+        {% endblock %}
+        {% for includeView in getIncludeViews('MenuTemplate', 'JsFooter') %}
+            {% include includeView['path'] %}
+        {% endfor %}
+    </div>
+    {% for includeView in getIncludeViews('MenuTemplate', 'BodyEnd') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+    {% if debugBarRender %}
+        {{ debugBarRender.render() | raw }}
+    {% endif %}
+    <br/>
+    <br/>
+    <br/>
+    </body>
+{% endblock %}
+</html>
+<!-- execution time: {{ executionTime() }} s -->
+{% macro showMenu(item, parentCollapseId) %}
+    {% import _self as macros %}
+    {% set active = item.active ? 'active' : '' %}
+    {% set menuItemClass = item.active ? 'sidebar-menu-item-active' : '' %}
+    {% set collapseId = 'sideMenu' ~ item.name %}
+    {% set collapseParent = ' data-bs-parent="' ~ parentCollapseId ~ '"' %}
+    <li class="nav-item {{ active }}">
+        {% if item.menu is empty %}
+            <a href="{{ item.url }}" class="nav-link {{ menuItemClass }}">
+                <i class="{{ item.icon }} fa-fw me-1" aria-hidden="true"></i> {{ item.title }}
+            </a>
+        {% elseif item.active %}
+            <a href="#{{ collapseId }}" data-bs-toggle="collapse" aria-expanded="true"
+               class="nav-link dropdown-toggle pt-2 pb-2">
+                <i class="fa-solid fa-folder-open fa-fw me-1" aria-hidden="true"></i> {{ item.title }}
+            </a>
+            <ul class="collapse show" id="{{ collapseId }}"{{ collapseParent|raw }}>
+                {% for subitem in item.menu %}
+                    {{ _self.showMenu(subitem, '#' ~ collapseId) }}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <a href="#{{ collapseId }}" data-bs-toggle="collapse" aria-expanded="false"
+               class="nav-link dropdown-toggle pt-2 pb-2">
+                <i class="fa-solid fa-folder fa-fw me-1" aria-hidden="true"></i> {{ item.title }}
+            </a>
+            <ul class="collapse" id="{{ collapseId }}"{{ collapseParent|raw }}>
+                {% for subitem in item.menu %}
+                    {{ _self.showMenu(subitem, '#' ~ collapseId) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}
